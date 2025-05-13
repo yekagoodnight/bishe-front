@@ -455,61 +455,41 @@
 											const qicheData = listRes.data.data.list[0];
 											const qichediqu = qicheData.diqu;
 											
-											if(qichediqu && qichediqu !== this.ruleForm.huandiqu) {
-												// 异地还车，更新车辆数据
-												const updateData = {
-													id: qicheData.id,
-													diqu: this.ruleForm.huandiqu
-												};
-												
-												// 保留其他必要字段避免后端验证失败
-												if(qicheData.zulinbiaoti) {
-													updateData.zulinbiaoti = qicheData.zulinbiaoti;
-												}
-												
-												await this.$http.post('qichechuzu/update', updateData).then(updateRes => {
-													if(updateRes.data.code == 0) {
+											// 无论是否异地还车，都更新车辆数据
+											const updateData = {
+												id: qicheData.id,
+												diqu: this.ruleForm.huandiqu,
+												zhuangtai: '待租赁'
+											};
+											
+											// 保留其他必要字段避免后端验证失败
+											if(qicheData.zulinbiaoti) {
+												updateData.zulinbiaoti = qicheData.zulinbiaoti;
+											}
+											
+											await this.$http.post('qichechuzu/update', updateData).then(updateRes => {
+												if(updateRes.data.code == 0) {
+													if(qichediqu && qichediqu !== this.ruleForm.huandiqu) {
 														this.$message({
-															message: '异地还车成功，车辆地区已从"' + qichediqu + '"更新为"' + this.ruleForm.huandiqu + '"',
+															message: '异地还车成功，车辆地区已从"' + qichediqu + '"更新为"' + this.ruleForm.huandiqu + '"，状态已更新为"待租赁"',
 															type: 'success',
 															duration: 1500
 														});
 													} else {
 														this.$message({
-															message: '还车成功，但车辆地区更新失败：' + updateRes.data.msg,
-															type: 'warning',
-															duration: 1500
-														});
-													}
-												});
-											} else if(!qichediqu) {
-												// 原车辆无地区信息，直接更新
-												const updateData = {
-													id: qicheData.id,
-													diqu: this.ruleForm.huandiqu
-												};
-												
-												// 保留其他必要字段避免后端验证失败
-												if(qicheData.zulinbiaoti) {
-													updateData.zulinbiaoti = qicheData.zulinbiaoti;
-												}
-												
-												await this.$http.post('qichechuzu/update', updateData).then(updateRes => {
-													if(updateRes.data.code == 0) {
-														this.$message({
-															message: '还车成功，已设置车辆地区为"' + this.ruleForm.huandiqu + '"',
+															message: '还车成功，车辆地区设为"' + this.ruleForm.huandiqu + '"，状态已更新为"待租赁"',
 															type: 'success',
 															duration: 1500
 														});
 													}
-												});
-											} else {
-												this.$message({
-													message: '还车成功，车辆归还到原地区"' + qichediqu + '"',
-													type: 'success',
-													duration: 1500
-												});
-											}
+												} else {
+													this.$message({
+														message: '还车成功，但车辆数据更新失败：' + updateRes.data.msg,
+														type: 'warning',
+														duration: 1500
+													});
+												}
+											});
 										} else {
 											// 未找到车辆数据，尝试使用query接口
 											const queryEntity = { qichechepai: this.ruleForm.qichechepai };
@@ -520,40 +500,41 @@
 													const qicheData = queryRes.data.data;
 													const qichediqu = qicheData.diqu;
 													
-													if(qichediqu && qichediqu !== this.ruleForm.huandiqu) {
-														// 异地还车，更新车辆数据
-														const updateData = {
-															id: qicheData.id,
-															diqu: this.ruleForm.huandiqu
-														};
-														
-														// 保留其他必要字段避免后端验证失败
-														if(qicheData.zulinbiaoti) {
-															updateData.zulinbiaoti = qicheData.zulinbiaoti;
-														}
-														
-														await this.$http.post('qichechuzu/update', updateData).then(updateRes => {
-															if(updateRes.data.code == 0) {
+													// 无论是否异地还车，都更新车辆数据
+													const updateData = {
+														id: qicheData.id,
+														diqu: this.ruleForm.huandiqu,
+														zhuangtai: '待租赁'
+													};
+													
+													// 保留其他必要字段避免后端验证失败
+													if(qicheData.zulinbiaoti) {
+														updateData.zulinbiaoti = qicheData.zulinbiaoti;
+													}
+													
+													await this.$http.post('qichechuzu/update', updateData).then(updateRes => {
+														if(updateRes.data.code == 0) {
+															if(qichediqu && qichediqu !== this.ruleForm.huandiqu) {
 																this.$message({
-																	message: '异地还车成功，车辆地区已从"' + qichediqu + '"更新为"' + this.ruleForm.huandiqu + '"',
+																	message: '异地还车成功，车辆地区已从"' + qichediqu + '"更新为"' + this.ruleForm.huandiqu + '"，状态已更新为"待租赁"',
 																	type: 'success',
 																	duration: 1500
 																});
 															} else {
 																this.$message({
-																	message: '还车成功，但车辆地区更新失败：' + updateRes.data.msg,
-																	type: 'warning',
+																	message: '还车成功，车辆地区设为"' + this.ruleForm.huandiqu + '"，状态已更新为"待租赁"',
+																	type: 'success',
 																	duration: 1500
 																});
 															}
-														});
-													} else {
-														this.$message({
-															message: '还车成功',
-															type: 'success',
-															duration: 1500
-														});
-													}
+														} else {
+															this.$message({
+																message: '还车成功，但车辆数据更新失败：' + updateRes.data.msg,
+																type: 'warning',
+																duration: 1500
+															});
+														}
+													});
 												} else {
 													this.$message({
 														message: '无法获取车辆信息，但还车已完成',
@@ -1019,3 +1000,5 @@
 		width: auto;
 	}
 </style>
+
+

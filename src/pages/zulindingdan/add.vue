@@ -33,9 +33,35 @@
 			<el-form-item class="add-item" label="日租金" prop="rizujin">
 				<el-input-number v-model="ruleForm.rizujin" placeholder="日租金" :disabled="true ||ro.rizujin"></el-input-number>
 			</el-form-item>
-			<el-form-item class="add-item" label="天数" prop="tianshu">
-				<el-input v-model.number="ruleForm.tianshu" 
-					placeholder="天数" clearable :disabled=" false  ||ro.tianshu"></el-input>
+			<div style="width: 100%;"></div>
+			<el-form-item class="add-item" label="租车时间" prop="zucheshijian">
+				<el-date-picker
+					v-model="zuche_datetime"
+					type="datetime"
+					placeholder="选择租车日期时间"
+					align="right"
+					:picker-options="pickerOptions"
+					@change="calculatePrice">
+				</el-date-picker>
+				<!-- 隐藏原始日期时间选择器，但保留它用于后端交互 -->
+				<el-date-picker
+					:disabled="true"
+					value-format="yyyy-MM-dd HH:mm:ss"
+					v-model="ruleForm.zucheshijian" 
+					type="datetime"
+					placeholder="租车时间"
+					style="display: none;">
+				</el-date-picker>
+			</el-form-item>
+			<el-form-item class="add-item" label="还车时间" prop="tianshu">
+				<el-date-picker
+					v-model="huanche_datetime"
+					type="datetime"
+					placeholder="选择还车日期时间"
+					align="right"
+					:picker-options="pickerOptions"
+					@change="calculatePrice">
+				</el-date-picker>
 			</el-form-item>
 			<el-form-item class="add-item" label="应付价格" prop="yingfujiage">
 				<el-input v-model="yingfujiage" placeholder="应付价格" disabled></el-input>
@@ -51,17 +77,8 @@
 					></file-upload>
 			</el-form-item>
 			<el-form-item class="add-item" v-else label="汽车图片" prop="qichetupian">
-				<img v-if="ruleForm.qichetupian.substring(0,4)=='http'" class="upload-img" v-bind:key="index" :src="ruleForm.qichetupian.split(',')[0]">
+				<img v-if="ruleForm.qichetupian.substring(0,4)=='http'" class="upload-img" :key="'http-img'" :src="ruleForm.qichetupian.split(',')[0]">
 				<img v-else class="upload-img" v-bind:key="index" v-for="(item,index) in ruleForm.qichetupian.split(',')" :src="baseUrl+item">
-			</el-form-item>
-			<el-form-item class="add-item" label="租车时间" prop="zucheshijian">
-				<el-date-picker
-					:disabled="true  ||ro.zucheshijian"
-					value-format="yyyy-MM-dd HH:mm:ss"
-					v-model="ruleForm.zucheshijian" 
-					type="datetime"
-					placeholder="租车时间">
-				</el-date-picker>
 			</el-form-item>
 			<el-form-item class="add-item" label="租车备注" prop="zuchebeizhu">
 				<el-input v-model="ruleForm.zuchebeizhu" 
@@ -100,6 +117,31 @@
 			return {
 				id: '',
 				baseUrl: '',
+				xiaoshishu: '',
+				zuche_datetime: new Date(),
+				huanche_datetime: new Date(new Date().getTime() + 2 * 60 * 60 * 1000),
+				pickerOptions: {
+					shortcuts: [{
+						text: '现在',
+						onClick(picker) {
+							picker.$emit('pick', new Date());
+						}
+					}, {
+						text: '2小时后',
+						onClick(picker) {
+							const date = new Date();
+							date.setTime(date.getTime() + 3600 * 1000 * 2);
+							picker.$emit('pick', date);
+						}
+					}, {
+						text: '1天后',
+						onClick(picker) {
+							const date = new Date();
+							date.setTime(date.getTime() + 3600 * 1000 * 24);
+							picker.$emit('pick', date);
+						}
+					}]
+				},
 				ro:{
 					dingdanbianhao : false,
 					qichechepai : false,
@@ -158,8 +200,7 @@
 						{ validator: this.$validate.isNumber, trigger: 'blur' },
 					],
 					tianshu: [
-						{ required: true, message: '天数不能为空', trigger: 'blur' },
-						{ validator: this.$validate.isIntNumer, trigger: 'blur' },
+						{ required: true, message: '小时数不能为空', trigger: 'blur' },
 					],
 					yingfujiage: [
 						{ validator: this.$validate.isNumber, trigger: 'blur' },
@@ -190,7 +231,11 @@
 
 			yingfujiage:{
 				get: function () {
-					return 1*this.ruleForm.rizujin*this.ruleForm.tianshu
+					if(this.zuche_datetime && this.huanche_datetime && this.ruleForm.rizujin) {
+						let hours = this.getHoursDiff(this.zuche_datetime, this.huanche_datetime);
+						return (hours * (this.ruleForm.rizujin / 24)).toFixed(2);
+					}
+					return '0';
 				}
 			},
 
@@ -205,7 +250,10 @@
 			let type = this.$route.query.type ? this.$route.query.type : '';
 			this.init(type);
 			this.baseUrl = this.$config.baseUrl;
-			this.ruleForm.zucheshijian = this.getCurDateTime()
+			this.ruleForm.zucheshijian = this.getCurDateTime();
+			this.zuche_datetime = new Date();
+			this.huanche_datetime = new Date(new Date().getTime() + 2 * 60 * 60 * 1000);
+			this.calculatePrice();
 		},
 		methods: {
 			getMakeZero(s) {
@@ -258,6 +306,15 @@
 						}
 						if(o=='tianshu'){
 							this.ruleForm.tianshu = obj[o];
+							
+							if(obj[o] && this.zuche_datetime) {
+								let hours = obj[o] * 24;
+								this.xiaoshishu = hours;
+								
+								let zucheDate = new Date(this.zuche_datetime);
+								this.huanche_datetime = new Date(zucheDate.getTime() + hours * 60 * 60 * 1000);
+							}
+							
 							this.ro.tianshu = true;
 							continue;
 						}
@@ -273,6 +330,9 @@
 						}
 						if(o=='zucheshijian'){
 							this.ruleForm.zucheshijian = obj[o];
+							if(obj[o]) {
+								this.zuche_datetime = new Date(obj[o]);
+							}
 							this.ro.zucheshijian = true;
 							continue;
 						}
@@ -342,6 +402,9 @@
 				if(this.ruleForm.dingdanbianhao){
 					this.ruleForm.dingdanbianhao = String(this.ruleForm.dingdanbianhao)
 				}
+				
+				this.calculatePrice();
+				
 				this.ruleForm.yingfujiage = this.yingfujiage
 				await this.$refs["ruleForm"].validate(async valid => {
 					if(valid) {
@@ -408,6 +471,51 @@
 			},
 			qichetupianUploadChange(fileUrls) {
 				this.ruleForm.qichetupian = fileUrls.replace(new RegExp(this.$config.baseUrl,"g"),"");
+			},
+			getHoursDiff(startTime, endTime) {
+				let diff = 0;
+				// 计算毫秒差并转换为小时
+				diff = (endTime - startTime) / (60 * 60 * 1000);
+				return parseFloat(diff.toFixed(2));
+			},
+			calculatePrice() {
+				if(this.zuche_datetime && this.huanche_datetime) {
+					// 同步日期时间到后端格式
+					if(this.zuche_datetime) {
+						let date = new Date(this.zuche_datetime);
+						this.ruleForm.zucheshijian = this.formatDateTime(date);
+					}
+					
+					// 计算小时差
+					let hours = this.getHoursDiff(this.zuche_datetime, this.huanche_datetime);
+					
+					// 如果小时差为负数，提示用户
+					if(hours <= 0) {
+						this.$message({
+							message: '还车时间必须晚于租车时间',
+							type: 'warning',
+							duration: 1500
+						});
+						// 自动修正：将还车时间设为租车时间后2小时
+						this.huanche_datetime = new Date(new Date(this.zuche_datetime).getTime() + 2 * 60 * 60 * 1000);
+						hours = 2;
+					}
+					
+					// 将小时转换为天数，存入ruleForm.tianshu
+					this.ruleForm.tianshu = (hours / 24).toFixed(4);
+					// 小时数存入xiaoshishu
+					this.xiaoshishu = hours;
+				}
+			},
+			// 格式化日期时间为yyyy-MM-dd HH:mm:ss
+			formatDateTime(date) {
+				const year = date.getFullYear();
+				const month = this.getMakeZero(date.getMonth() + 1);
+				const day = this.getMakeZero(date.getDate());
+				const hours = this.getMakeZero(date.getHours());
+				const minutes = this.getMakeZero(date.getMinutes());
+				const seconds = this.getMakeZero(date.getSeconds());
+				return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 			},
 		}
 	};
