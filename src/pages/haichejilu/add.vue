@@ -48,6 +48,16 @@
 					placeholder="还车时间">
 				</el-date-picker>
 			</el-form-item>
+			<el-form-item class="add-item" label="归还地区" prop="huandiqu">
+				<el-select v-model="ruleForm.huandiqu" placeholder="请选择归还地区">
+					<el-option
+						v-for="item in diquOptions"
+						:key="item.value"
+						:label="item.label"
+						:value="item.value">
+					</el-option>
+				</el-select>
+			</el-form-item>
 			<el-form-item class="add-item" label="还车备注" prop="haichebeizhu">
 				<el-input v-model="ruleForm.haichebeizhu" 
 					placeholder="还车备注" clearable :disabled=" false  ||ro.haichebeizhu"></el-input>
@@ -63,7 +73,7 @@
 					></file-upload>
 			</el-form-item>
 			<el-form-item class="add-item" v-else label="汽车图片" prop="qichetupian">
-				<img v-if="ruleForm.qichetupian.substring(0,4)=='http'" class="upload-img" v-bind:key="index" :src="ruleForm.qichetupian.split(',')[0]">
+				<img v-if="ruleForm.qichetupian.substring(0,4)=='http'" class="upload-img" :key="'http'" :src="ruleForm.qichetupian.split(',')[0]">
 				<img v-else class="upload-img" v-bind:key="index" v-for="(item,index) in ruleForm.qichetupian.split(',')" :src="baseUrl+item">
 			</el-form-item>
 			<el-form-item class="add-item" label="车商账号" prop="cheshangzhanghao">
@@ -108,6 +118,7 @@
 					rizujin : false,
 					zucheshijian : false,
 					haicheshijian : false,
+					huandiqu : false,
 					haichebeizhu : false,
 					qichetupian : false,
 					cheshangzhanghao : false,
@@ -129,6 +140,7 @@
 					rizujin: '',
 					zucheshijian: '',
 					haicheshijian: '',
+					huandiqu: '',
 					haichebeizhu: '',
 					qichetupian: '',
 					cheshangzhanghao: '',
@@ -137,8 +149,48 @@
 					crossuserid: '',
 					crossrefid: '',
 				},
-
-
+				diquOptions: [
+					{
+						value: '黄岛',
+						label: '黄岛'
+					}, 
+					{
+						value: '市南',
+						label: '市南'
+					}, 
+					{
+						value: '市北',
+						label: '市北'
+					},
+					{
+						value: '李沧',
+						label: '李沧'
+					},
+					{
+						value: '崂山',
+						label: '崂山'
+					},
+					{
+						value: '城阳',
+						label: '城阳'
+					},
+					{
+						value: '即墨',
+						label: '即墨'
+					},
+					{
+						value: '胶州',
+						label: '胶州'
+					},
+					{
+						value: '平度',
+						label: '平度'
+					},
+					{
+						value: '莱西',
+						label: '莱西'
+					}
+				],
 				rules: {
 					dingdanbianhao: [
 					],
@@ -156,6 +208,9 @@
 					zucheshijian: [
 					],
 					haicheshijian: [
+					],
+					huandiqu: [
+						{ required: true, message: '归还地区不能为空', trigger: 'change' },
 					],
 					haichebeizhu: [
 						{ required: true, message: '还车备注不能为空', trigger: 'blur' },
@@ -284,6 +339,11 @@
 							this.ro.haicheshijian = true;
 							continue;
 						}
+						if(o=='huandiqu'){
+							this.ruleForm.huandiqu = obj[o];
+							this.ro.huandiqu = true;
+							continue;
+						}
 						if(o=='haichebeizhu'){
 							this.ruleForm.haichebeizhu = obj[o];
 							this.ro.haichebeizhu = true;
@@ -370,6 +430,157 @@
 				var finishNum = 0;
 				await this.$refs["ruleForm"].validate(async valid => {
 					if(valid) {
+						// 检查异地还车
+						if(this.type=='cross' && this.ruleForm.huandiqu) {
+							var obj = JSON.parse(localStorage.getItem('crossObj'));
+							// 通过车牌号查询车辆信息
+							if(obj && this.ruleForm.qichechepai) {
+								try {
+									// 构建查询参数，使用车牌号进行查询
+									const params = {
+										page: 1,
+										limit: 1
+									};
+									// 创建查询对象
+									const qichechuzuEntity = {
+										qichechepai: this.ruleForm.qichechepai
+									};
+									
+									// 使用 list 接口查询车辆数据
+									await this.$http.post('qichechuzu/list', params, {
+										params: qichechuzuEntity
+									}).then(async listRes => {
+										if(listRes.data.code == 0 && listRes.data.data.list && listRes.data.data.list.length > 0) {
+											// 找到了车辆数据
+											const qicheData = listRes.data.data.list[0];
+											const qichediqu = qicheData.diqu;
+											
+											if(qichediqu && qichediqu !== this.ruleForm.huandiqu) {
+												// 异地还车，更新车辆数据
+												const updateData = {
+													id: qicheData.id,
+													diqu: this.ruleForm.huandiqu
+												};
+												
+												// 保留其他必要字段避免后端验证失败
+												if(qicheData.zulinbiaoti) {
+													updateData.zulinbiaoti = qicheData.zulinbiaoti;
+												}
+												
+												await this.$http.post('qichechuzu/update', updateData).then(updateRes => {
+													if(updateRes.data.code == 0) {
+														this.$message({
+															message: '异地还车成功，车辆地区已从"' + qichediqu + '"更新为"' + this.ruleForm.huandiqu + '"',
+															type: 'success',
+															duration: 1500
+														});
+													} else {
+														this.$message({
+															message: '还车成功，但车辆地区更新失败：' + updateRes.data.msg,
+															type: 'warning',
+															duration: 1500
+														});
+													}
+												});
+											} else if(!qichediqu) {
+												// 原车辆无地区信息，直接更新
+												const updateData = {
+													id: qicheData.id,
+													diqu: this.ruleForm.huandiqu
+												};
+												
+												// 保留其他必要字段避免后端验证失败
+												if(qicheData.zulinbiaoti) {
+													updateData.zulinbiaoti = qicheData.zulinbiaoti;
+												}
+												
+												await this.$http.post('qichechuzu/update', updateData).then(updateRes => {
+													if(updateRes.data.code == 0) {
+														this.$message({
+															message: '还车成功，已设置车辆地区为"' + this.ruleForm.huandiqu + '"',
+															type: 'success',
+															duration: 1500
+														});
+													}
+												});
+											} else {
+												this.$message({
+													message: '还车成功，车辆归还到原地区"' + qichediqu + '"',
+													type: 'success',
+													duration: 1500
+												});
+											}
+										} else {
+											// 未找到车辆数据，尝试使用query接口
+											const queryEntity = { qichechepai: this.ruleForm.qichechepai };
+											await this.$http.get('qichechuzu/query', {
+												params: queryEntity
+											}).then(async queryRes => {
+												if(queryRes.data.code == 0 && queryRes.data.data) {
+													const qicheData = queryRes.data.data;
+													const qichediqu = qicheData.diqu;
+													
+													if(qichediqu && qichediqu !== this.ruleForm.huandiqu) {
+														// 异地还车，更新车辆数据
+														const updateData = {
+															id: qicheData.id,
+															diqu: this.ruleForm.huandiqu
+														};
+														
+														// 保留其他必要字段避免后端验证失败
+														if(qicheData.zulinbiaoti) {
+															updateData.zulinbiaoti = qicheData.zulinbiaoti;
+														}
+														
+														await this.$http.post('qichechuzu/update', updateData).then(updateRes => {
+															if(updateRes.data.code == 0) {
+																this.$message({
+																	message: '异地还车成功，车辆地区已从"' + qichediqu + '"更新为"' + this.ruleForm.huandiqu + '"',
+																	type: 'success',
+																	duration: 1500
+																});
+															} else {
+																this.$message({
+																	message: '还车成功，但车辆地区更新失败：' + updateRes.data.msg,
+																	type: 'warning',
+																	duration: 1500
+																});
+															}
+														});
+													} else {
+														this.$message({
+															message: '还车成功',
+															type: 'success',
+															duration: 1500
+														});
+													}
+												} else {
+													this.$message({
+														message: '无法获取车辆信息，但还车已完成',
+														type: 'warning',
+														duration: 1500
+													});
+												}
+											});
+										}
+									});
+								} catch(error) {
+									console.error('获取或更新车辆信息时出错:', error);
+									this.$message({
+										message: '还车已完成，但车辆信息处理出错',
+										type: 'warning',
+										duration: 1500
+									});
+								}
+							} else {
+								this.$message({
+									message: '无法获取车牌信息，但还车已完成',
+									type: 'warning',
+									duration: 1500
+								});
+							}
+						}
+						
 						if(this.type=='cross'){
 							var statusColumnName = localStorage.getItem('statusColumnName');
 							var statusColumnValue = localStorage.getItem('statusColumnValue');
