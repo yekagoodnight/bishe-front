@@ -1,7 +1,5 @@
 <template>
-	<div class="menu-preview">
-		<!-- 竖向-2 -->
-		<el-scrollbar :wrap-class="isCollapse ? 'scrollbar-wrapper scrollbar-wrapper-close' : 'scrollbar-wrapper scrollbar-wrapper-open'">
+	<div class="menu-preview">		<!-- 竖向-2 -->		<el-scrollbar :wrap-class="isCollapse ? 'scrollbar-wrapper scrollbar-wrapper-close' : 'scrollbar-wrapper scrollbar-wrapper-open'" :native="false" :noresize="false">
 			<el-button :style="verticalStyle2[isCollapse?'close':'open'].btn.default" type="primary" @click="collapse">
 				<span class="icon iconfont"
 					:style="verticalStyle2[isCollapse?'close':'open'].btn.icon.default"
@@ -21,8 +19,6 @@
 				class="el-menu-vertical-2" :collapse-transition="false" :collapse="isCollapse">
 				<el-menu-item class="home" :popper-append-to-body="false" popper-class="home" @click.native="menuHandler('')" :style="verticalStyle2[isCollapse?'close':'open'].home.one.box.default" index="/">
 					<div class="el-tooltip">
-						<i :style="verticalStyle2[isCollapse?'close':'open'].home.one.icon.default"
-							class="icon iconfont icon-shouye-zhihui"></i>
 							<span :style="verticalStyle2[isCollapse?'close':'open'].home.one.title.default"
 							slot="title">{{verticalStyle2.open.home.one.title.text}}</span>
 					</div>
@@ -30,8 +26,6 @@
 				<el-submenu class="user" popper-class="user" :popper-append-to-body="false"
 					:style="verticalStyle2[isCollapse?'close':'open'].user.one.box.default" index="1">
 					<template slot="title">
-						<i :style="verticalStyle2[isCollapse?'close':'open'].user.one.icon.default"
-							class="icon iconfont icon-kuaijiezhifu"></i>
 						<span :style="verticalStyle2[isCollapse?'close':'open'].user.one.title.default"
 							slot="title">{{verticalStyle2.open.user.one.title.text}}</span>
 					</template>
@@ -114,7 +108,7 @@ export default {
 			menulistBorderBottom: {},
 			verticalFlag: false,
 			isCollapse: false,
-			verticalStyle2: {"isCollapse":false,"close":{"contentBox":{"hover":{},"active":{"margin":"0 0 0 54px"},"default":{"minHeight":"100%","padding":"0","margin":"0 0 0 64px","position":"relative","display":"block"}},"box":{"hover":{},"active":{"width":"54px"},"default":{"boxShadow":"1px 0 6px  rgba(64, 158, 255, .3)","overflow":"hidden","top":"0","left":"0","background":"#304156","bottom":"0","width":"64px","fontSize":"0px","position":"fixed","transition":"width 0.3s","height":"100%","zIndex":"1001"}},"title":{"img":{"hover":{},"default":{"width":"44px","objectFit":"cover","borderRadius":"100%","height":"44px"},"flag":true,"url":"http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg"},"box":{"hover":{},"default":{"width":"100%","padding":"20px","display":"none","height":"auto"}},"text":{"hover":{},"showType":true,"default":{"padding":"0 0 0 12px","lineHeight":"44px","fontSize":"12px","color":"rgba(64, 158, 255, 1)"},"text":"欢迎使用"}},"menu":{"two":{"title":{"hover":{"padding":"0 20px","backgroundColor":"red !important","lineHeight":"56px","color":"#fff","height":"56px"},"active":{"padding":"0 20px","backgroundColor":"blue !important","lineHeight":"56px","color":"#fff","height":"56px"},"default":{"padding":"0 20px","backgroundColor":"#fff","lineHeight":"56px","color":"#666","height":"56px"}},"box":{"hover":{},"default":{"border":"none"}}},"box":{"hover":{},"default":{"border":0,"padding":"0","listStyle":"none","margin":"0","position":"relative","background":"#FFF"}},"one":{"box1":{"hover":{"color":"#fff","background":"blue"},"active":{"color":"#fff","background":"blue"},"default":{"cursor":"pointer","padding":"0 20px","whiteSpace":"nowrap","position":"relative","color":"#333","background":"#fff"}},"icon":{"hover":{},"default":{"verticalAlign":"middle","margin":"0","color":"inherit","textAlign":"center","display":"inline-block","width":"24px","fontSize":"18px"},"flag":true},"box":{"hover":{},"default":{"padding":"0","listStyle":"none","margin":"0"}},"title":{"hover":{},"default":{"width":"0","verticalAlign":"middle","fontSize":"14px","color":"inherit","height":"0"}},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"20px"}}}},"btn":{"icon":{"hover":{},"default":{"margin":"0 2px","fontSize":"14px","color":"#fff","height":"40px"},"text":"icon-xihuan"},"hover":{"opacity":"0.8"},"default":{"border":"0","cursor":"pointer","padding":"0 9px","margin":"0 0 10px","outline":"none","color":"#fff","borderRadius":"0","background":"rgba(64, 158, 255, 1)","width":"auto","fontSize":"14px","height":"40px"},"text":"切换"},"user":{"two":{"title":{"hover":{"padding":"0 20px","backgroundColor":"red !important","lineHeight":"56px","color":"#fff","height":"56px"},"active":{"padding":"0 20px","backgroundColor":"blue !important","lineHeight":"56px","color":"#fff","height":"56px"},"default":{"padding":"0 20px","backgroundColor":"#fff","lineHeight":"56px","color":"#656","height":"56px"}},"box":{"hover":{},"default":{"border":"none"}}},"one":{"box1":{"hover":{"color":"#fff","background":"blue"},"active":{"color":"#fff","background":"blue"},"default":{"cursor":"pointer","padding":"0 20px","whiteSpace":"nowrap","position":"relative","color":"#323","background":"#fff"}},"icon":{"hover":{},"default":{"verticalAlign":"middle","margin":"0","color":"inherit","textAlign":"center","display":"inline-block","width":"24px","fontSize":"18px"},"flag":true,"text":"icon-kuaijiezhifu"},"box":{"hover":{},"default":{"padding":"0","listStyle":"none","margin":"0"}},"title":{"hover":{},"default":{"width":"0","verticalAlign":"middle","fontSize":"14px","color":"inherit","height":"0"}},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"20px"}}}},"userinfo":{"nickname":{"hover":{},"default":{"fontSize":"24px","lineHeight":"1.5","color":"#fff","textAlign":"center"}},"img":{"hover":{},"default":{"width":"100%","objectFit":"cover","borderRadius":"20px","display":"block","height":"170px"}},"box":{"hover":{},"default":{"width":"100%","padding":"20px","display":"none","height":"auto"}}},"home":{"two":{"title":{"hover":{"padding":"0 20px","backgroundColor":"red !important","lineHeight":"56px","color":"#fff","height":"56px"},"active":{"padding":"0 20px","backgroundColor":"blue !important","lineHeight":"56px","color":"#fff","height":"56px"},"default":{"padding":"0 20px","backgroundColor":"#fff","lineHeight":"56px","color":"#646","height":"56px"}},"box":{"hover":{},"default":{"border":"none"}}},"one":{"box1":{"hover":{"color":"#fff","background":"blue"},"active":{"color":"#fff","background":"blue"},"default":{"cursor":"pointer","padding":"0 20px","whiteSpace":"nowrap","position":"relative","color":"#313","background":"#fff"}},"icon":{"hover":{},"default":{"verticalAlign":"middle","margin":"0","color":"inherit","textAlign":"center","display":"inline-block","width":"24px","fontSize":"18px"},"flag":true,"text":"icon-shouye-zhihui"},"box":{"hover":{},"default":{"padding":"0","listStyle":"none","margin":"0"}},"title":{"hover":{},"default":{"width":"0","verticalAlign":"middle","fontSize":"14px","color":"inherit","height":"0"}},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"20px"}}}}},"open":{"contentBox":{"hover":{},"default":{"minHeight":"100%","padding":"0px 0 0 220px","margin":"0","position":"relative","background":"#f2f5f5","display":"block"}},"box":{"hover":{},"default":{"boxShadow":"0px 0 9px  rgba(0, 0, 0, .3)","padding":"20px 0 60px","bottom":"0","transition":"width 0.0s","overflow":"hidden","top":"0px","borderRadius":"0","left":"0","background":"url(http://codegen.caihongy.cn/20240925/60c42bef134b40d0a6a05a7ef912c4c2.png) no-repeat center bottom / 100% auto,#1a3194","width":"220px","fontSize":"15px","position":"fixed","height":"100%","zIndex":"1001"}},"title":{"img":{"hover":{},"default":{"width":"44px","objectFit":"cover","borderRadius":"100%","height":"44px"},"flag":false,"url":"http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg"},"box":{"hover":{},"default":{"width":"100%","padding":"0 10px","margin":"10px 0 0","alignItems":"center","display":"none","height":"auto"}},"text":{"hover":{},"showType":true,"default":{"padding":"0 0 0 12px","lineHeight":"1.5","fontSize":"16px","color":"#fff"},"text":"欢迎使用"}},"menu":{"two":{"title":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"padding":"0 20px 0 56px","color":"#fff","background":"none","width":"100%","lineHeight":"40px","fontSize":"inherit","transition":"all 0s","height":"40px"}},"box":{"hover":{},"default":{"border":"none","borderColor":"#88d8fb","margin":"0 0 5px","borderWidth":"0px","background":"none","width":"100%","borderStyle":"solid"}}},"box":{"hover":{},"default":{"border":0,"padding":"0 0 60px","listStyle":"none","margin":"0","alignItems":"flex-start","flexWrap":"wrap","background":"none","display":"flex","position":"relative"}},"one":{"box1":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"cursor":"pointer","padding":"0 10px 0 30px","whiteSpace":"nowrap","color":"#fff","background":"none","lineHeight":"60px","fontSize":"inherit","position":"relative","transition":"all 0s","height":"auto"}},"icon":{"hover":{},"default":{"width":"auto","verticalAlign":"middle","margin":"0 3px","fontSize":"18px","color":"inherit","textAlign":"center"},"flag":true},"box":{"hover":{},"default":{"width":"100%","padding":"0","listStyle":"none","margin":"0 auto","fontSize":"inherit","height":"auto"}},"title":{"hover":{},"default":{"color":"inherit","verticalAlign":"middle","fontSize":"inherit"}},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"8px"}}}},"btn":{"icon":{"hover":{},"default":{"margin":"0 2px","fontSize":"40px","color":"#000","height":"40px"},"text":"icon-kaiguan4"},"hover":{"opacity":"0.8"},"default":{"border":"0","cursor":"pointer","padding":"0 9px","color":"#000","borderRadius":"4px","background":"none","display":"none","width":"auto","fontSize":"14px","height":"30px"},"text":""},"user":{"two":{"title":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"padding":"0 20px 0 56px","color":"#fff","background":"none","lineHeight":"40px","fontSize":"inherit","transition":"all 0s","height":"40px"}},"box":{"hover":{},"default":{"border":"none","borderColor":"#88d8fb","margin":"0 0 5px","borderStyle":"solid","borderWidth":"0px","background":"none"}}},"one":{"box1":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"cursor":"pointer","padding":"0 10px 0 30px","whiteSpace":"nowrap","color":"#fff","background":"none","lineHeight":"60px","fontSize":"inherit","position":"relative","transition":"all 0s","height":"auto"}},"icon":{"hover":{},"default":{"width":"auto","verticalAlign":"middle","margin":"0 3px","fontSize":"18px","color":"inherit","textAlign":"center"},"flag":true,"text":"icon-touxiang03"},"box":{"hover":{},"default":{"padding":"0","listStyle":"none","margin":"0","width":"100%","fontSize":"inherit","height":"auto","order":"2"}},"title":{"hover":{},"default":{"color":"inherit","verticalAlign":"middle","fontSize":"inherit"},"text":"个人中心"},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"8px"}}}},"userinfo":{"nickname":{"hover":{},"default":{"fontSize":"24px","lineHeight":"1.5","color":"#fff","textAlign":"center"}},"img":{"hover":{},"default":{"width":"100%","objectFit":"cover","borderRadius":"20px","display":"block","height":"170px"}},"box":{"hover":{},"default":{"width":"100%","padding":"20px","display":"none","height":"auto"}}},"home":{"two":{"title":{"hover":{"padding":"0 40px","lineHeight":"50px","color":"#fff","background":"red","height":"50px"},"active":{"padding":"0 40px","lineHeight":"50px","color":"#fff","background":"blue","height":"50px"},"default":{"padding":"0 40px","lineHeight":"50px","color":"#664","background":"#fff","height":"50px"}},"box":{"hover":{},"default":{"border":"none","display":"none"}}},"one":{"box1":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"cursor":"pointer","padding":"0 10px 0 30px","whiteSpace":"nowrap","color":"#fff","background":"none","lineHeight":"60px","fontSize":"inherit","position":"relative","transition":"all 0s","height":"auto"}},"icon":{"hover":{},"default":{"width":"auto","verticalAlign":"middle","margin":"0 3px","fontSize":"18px","color":"inherit","textAlign":"center"},"flag":true,"text":"icon-shouye-zhihui"},"box":{"hover":{},"default":{"width":"100%","padding":"0","listStyle":"none","margin":"0","fontSize":"inherit","height":"auto"}},"title":{"hover":{},"default":{"color":"inherit","verticalAlign":"middle","fontSize":"inherit"},"text":"主页"},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","fontSize":"12px","position":"absolute","right":"20px"}}}}}},
+			verticalStyle2: {"isCollapse":false,"close":{"contentBox":{"hover":{},"active":{"margin":"0 0 0 54px"},"default":{"minHeight":"100%","padding":"0","margin":"0 0 0 64px","position":"relative","display":"block"}},"box":{"hover":{},"active":{"width":"54px"},"default":{"boxShadow":"1px 0 6px  rgba(64, 158, 255, .3)","overflow":"hidden","top":"0","left":"0","background":"#304156","bottom":"0","width":"64px","fontSize":"0px","position":"fixed","transition":"width 0.3s","height":"100%","zIndex":"1001"}},"title":{"img":{"hover":{},"default":{"width":"44px","objectFit":"cover","borderRadius":"100%","height":"44px"},"flag":true,"url":"http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg"},"box":{"hover":{},"default":{"width":"100%","padding":"20px","display":"none","height":"auto"}},"text":{"hover":{},"showType":true,"default":{"padding":"0 0 0 12px","lineHeight":"44px","fontSize":"12px","color":"rgba(64, 158, 255, 1)"},"text":"欢迎使用"}},"menu":{"two":{"title":{"hover":{"padding":"0 20px","backgroundColor":"red !important","lineHeight":"56px","color":"#fff","height":"56px"},"active":{"padding":"0 20px","backgroundColor":"blue !important","lineHeight":"56px","color":"#fff","height":"56px"},"default":{"padding":"0 20px","backgroundColor":"#fff","lineHeight":"56px","color":"#666","height":"56px"}},"box":{"hover":{},"default":{"border":"none"}}},"box":{"hover":{},"default":{"border":0,"padding":"0","listStyle":"none","margin":"0","position":"relative","background":"#FFF"}},"one":{"box1":{"hover":{"color":"#fff","background":"blue"},"active":{"color":"#fff","background":"blue"},"default":{"cursor":"pointer","padding":"0 20px","whiteSpace":"nowrap","position":"relative","color":"#333","background":"#fff"}},"icon":{"hover":{},"default":{"verticalAlign":"middle","margin":"0","color":"inherit","textAlign":"center","display":"inline-block","width":"24px","fontSize":"18px"},"flag":true},"box":{"hover":{},"default":{"padding":"0","listStyle":"none","margin":"0"}},"title":{"hover":{},"default":{"width":"0","verticalAlign":"middle","fontSize":"14px","color":"inherit","height":"0"}},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"20px"}}}},"btn":{"icon":{"hover":{},"default":{"margin":"0 2px","fontSize":"14px","color":"#fff","height":"40px"},"text":"icon-xihuan"},"hover":{"opacity":"0.8"},"default":{"border":"0","cursor":"pointer","padding":"0 9px","margin":"0 0 10px","outline":"none","color":"#fff","borderRadius":"0","background":"rgba(64, 158, 255, 1)","width":"auto","fontSize":"14px","height":"40px"},"text":"切换"},"user":{"two":{"title":{"hover":{"padding":"0 20px","backgroundColor":"red !important","lineHeight":"56px","color":"#fff","height":"56px"},"active":{"padding":"0 20px","backgroundColor":"blue !important","lineHeight":"56px","color":"#fff","height":"56px"},"default":{"padding":"0 20px","backgroundColor":"#fff","lineHeight":"56px","color":"#656","height":"56px"}},"box":{"hover":{},"default":{"border":"none"}}},"one":{"box1":{"hover":{"color":"#fff","background":"blue"},"active":{"color":"#fff","background":"blue"},"default":{"cursor":"pointer","padding":"0 20px","whiteSpace":"nowrap","position":"relative","color":"#323","background":"#fff"}},"icon":{"hover":{},"default":{"verticalAlign":"middle","margin":"0","color":"inherit","textAlign":"center","display":"inline-block","width":"24px","fontSize":"18px"},"flag":false,"text":"icon-kuaijiezhifu"},"box":{"hover":{},"default":{"padding":"0","listStyle":"none","margin":"0"}},"title":{"hover":{},"default":{"width":"0","verticalAlign":"middle","fontSize":"14px","color":"inherit","height":"0"}},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"20px"}}}},"userinfo":{"nickname":{"hover":{},"default":{"fontSize":"24px","lineHeight":"1.5","color":"#fff","textAlign":"center"}},"img":{"hover":{},"default":{"width":"100%","objectFit":"cover","borderRadius":"20px","display":"block","height":"170px"}},"box":{"hover":{},"default":{"width":"100%","padding":"20px","display":"none","height":"auto"}}},"home":{"two":{"title":{"hover":{"padding":"0 20px","backgroundColor":"red !important","lineHeight":"56px","color":"#fff","height":"56px"},"active":{"padding":"0 20px","backgroundColor":"blue !important","lineHeight":"56px","color":"#fff","height":"56px"},"default":{"padding":"0 20px","backgroundColor":"#fff","lineHeight":"56px","color":"#646","height":"56px"}},"box":{"hover":{},"default":{"border":"none"}}},"one":{"box1":{"hover":{"color":"#fff","background":"blue"},"active":{"color":"#fff","background":"blue"},"default":{"cursor":"pointer","padding":"0 20px","whiteSpace":"nowrap","position":"relative","color":"#313","background":"#fff"}},"icon":{"hover":{},"default":{"verticalAlign":"middle","margin":"0","color":"inherit","textAlign":"center","display":"inline-block","width":"24px","fontSize":"18px"},"flag":true,"text":"icon-shouye-zhihui"},"box":{"hover":{},"default":{"padding":"0","listStyle":"none","margin":"0","fontSize":"inherit","height":"auto"}},"title":{"hover":{},"default":{"color":"inherit","verticalAlign":"middle","fontSize":"inherit"},"text":"主页"},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","fontSize":"12px","position":"absolute","right":"20px"}}}}},"open":{"contentBox":{"hover":{},"default":{"minHeight":"100%","padding":"0px 0 0 220px","margin":"0","position":"relative","background":"#f2f5f5","display":"block"}},"box":{"hover":{},"default":{"boxShadow":"0px 0 9px  rgba(0, 0, 0, .3)","padding":"20px 0 60px","bottom":"0","transition":"width 0.0s","overflow":"hidden","top":"0px","borderRadius":"0","left":"0","background":"url(http://codegen.caihongy.cn/20240925/60c42bef134b40d0a6a05a7ef912c4c2.png) no-repeat center bottom / 100% auto,#1a3194","width":"220px","fontSize":"15px","position":"fixed","height":"100%","zIndex":"1001"}},"title":{"img":{"hover":{},"default":{"width":"44px","objectFit":"cover","borderRadius":"100%","height":"44px"},"flag":false,"url":"http://codegen.caihongy.cn/20201114/7856ba26477849ea828f481fa2773a95.jpg"},"box":{"hover":{},"default":{"width":"100%","padding":"0 10px","margin":"10px 0 0","alignItems":"center","display":"none","height":"auto"}},"text":{"hover":{},"showType":true,"default":{"padding":"0 0 0 12px","lineHeight":"1.5","fontSize":"16px","color":"#fff"},"text":"欢迎使用"}},"menu":{"two":{"title":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"padding":"0 20px 0 56px","color":"#fff","background":"none","width":"100%","lineHeight":"40px","fontSize":"inherit","transition":"all 0s","height":"40px"}},"box":{"hover":{},"default":{"border":"none","borderColor":"#88d8fb","margin":"0 0 5px","borderWidth":"0px","background":"none","width":"100%","borderStyle":"solid"}}},"box":{"hover":{},"default":{"border":0,"padding":"0 0 60px","listStyle":"none","margin":"0","alignItems":"flex-start","flexWrap":"wrap","background":"none","display":"flex","position":"relative"}},"one":{"box1":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"cursor":"pointer","padding":"0 10px 0 30px","whiteSpace":"nowrap","color":"#fff","background":"none","lineHeight":"60px","fontSize":"inherit","position":"relative","transition":"all 0s","height":"auto"}},"icon":{"hover":{},"default":{"width":"auto","verticalAlign":"middle","margin":"0 3px","fontSize":"18px","color":"inherit","textAlign":"center"},"flag":true},"box":{"hover":{},"default":{"width":"100%","padding":"0","listStyle":"none","margin":"0 auto","fontSize":"inherit","height":"auto"}},"title":{"hover":{},"default":{"color":"inherit","verticalAlign":"middle","fontSize":"inherit"}},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"8px"}}}},"btn":{"icon":{"hover":{},"default":{"margin":"0 2px","fontSize":"40px","color":"#000","height":"40px"},"text":"icon-kaiguan4"},"hover":{"opacity":"0.8"},"default":{"border":"0","cursor":"pointer","padding":"0 9px","color":"#000","borderRadius":"4px","background":"none","display":"none","width":"auto","fontSize":"14px","height":"30px"},"text":""},"user":{"two":{"title":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"padding":"0 20px 0 56px","color":"#fff","background":"none","lineHeight":"40px","fontSize":"inherit","transition":"all 0s","height":"40px"}},"box":{"hover":{},"default":{"border":"none","borderColor":"#88d8fb","margin":"0 0 5px","borderStyle":"solid","borderWidth":"0px","background":"none"}}},"one":{"box1":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"cursor":"pointer","padding":"0 10px 0 30px","whiteSpace":"nowrap","color":"#fff","background":"none","lineHeight":"60px","fontSize":"inherit","position":"relative","transition":"all 0s","height":"auto"}},"icon":{"hover":{},"default":{"width":"auto","verticalAlign":"middle","margin":"0 3px","fontSize":"18px","color":"inherit","textAlign":"center"},"flag":false,"text":"icon-touxiang03"},"box":{"hover":{},"default":{"padding":"0","listStyle":"none","margin":"0","width":"100%","fontSize":"inherit","height":"auto","order":"2"}},"title":{"hover":{},"default":{"color":"inherit","verticalAlign":"middle","fontSize":"inherit"},"text":"个人中心"},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","display":"none","fontSize":"12px","position":"absolute","right":"8px"}}}},"userinfo":{"nickname":{"hover":{},"default":{"fontSize":"24px","lineHeight":"1.5","color":"#fff","textAlign":"center"}},"img":{"hover":{},"default":{"width":"100%","objectFit":"cover","borderRadius":"20px","display":"block","height":"170px"}},"box":{"hover":{},"default":{"width":"100%","padding":"20px","display":"none","height":"auto"}}},"home":{"two":{"title":{"hover":{"padding":"0 40px","lineHeight":"50px","color":"#fff","background":"red","height":"50px"},"active":{"padding":"0 40px","lineHeight":"50px","color":"#fff","background":"blue","height":"50px"},"default":{"padding":"0 40px","lineHeight":"50px","color":"#664","background":"#fff","height":"50px"}},"box":{"hover":{},"default":{"border":"none","display":"none"}}},"one":{"box1":{"hover":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"active":{"borderColor":"#28f5ff","color":"#fff","borderStyle":"solid","background":"#2051c2","borderWidth":"0 8px 0 0"},"default":{"cursor":"pointer","padding":"0 10px 0 30px","whiteSpace":"nowrap","color":"#fff","background":"none","lineHeight":"60px","fontSize":"inherit","position":"relative","transition":"all 0s","height":"auto"}},"icon":{"hover":{},"default":{"width":"auto","verticalAlign":"middle","margin":"0 3px","fontSize":"18px","color":"inherit","textAlign":"center"},"flag":true,"text":"icon-shouye-zhihui"},"box":{"hover":{},"default":{"width":"100%","padding":"0","listStyle":"none","margin":"0","fontSize":"inherit","height":"auto"}},"title":{"hover":{},"default":{"color":"inherit","verticalAlign":"middle","fontSize":"inherit"},"text":"主页"},"arrow":{"hover":{},"default":{"verticalAlign":"middle","margin":"-7px 0 0 0","top":"50%","color":"inherit","fontSize":"12px","position":"absolute","right":"20px"}}}}}},
 			verticalIsMultiple: true,
 		}
 	},
@@ -226,90 +220,42 @@ export default {
 </script>
 <style lang="css" scoped>
 	.menu-preview {
-		.el-scrollbar {
 			height: 100%;
+	}
 	
-			& /deep/ .scrollbar-wrapper {
-				overflow-x: hidden;
+	.menu-preview /deep/ .el-scrollbar {
+		height: 100%;
+		overflow: hidden;
 			}
 		
-			.el-menu-vertical-demo {
-				.el-submenu:first-of-type /deep/ .el-submenu__title .el-submenu__icon-arrow {
-					display: none;
-				}
+	.menu-preview /deep/ .scrollbar-wrapper {
+		overflow-y: auto !important;
+		height: 100%;
 			}
 			
-			.el-menu-vertical-demo>.el-menu-item {
-				cursor: pointer;
-				padding: 0 20px;
-				color: #333;
-				white-space: nowrap;
-				background: #fff;
-				position: relative;
+	.menu-preview /deep/ .scrollbar-wrapper::-webkit-scrollbar {
+		width: 6px;
+		height: 6px;
 			}
 			
-			.el-menu-vertical-demo>.el-menu-item:hover {
-				color: #fff;
-				background: blue;
+	.menu-preview /deep/ .scrollbar-wrapper::-webkit-scrollbar-thumb {
+		background-color: rgba(144, 147, 153, 0.3);
+		border-radius: 6px;
 			}
 			
-			.el-menu-vertical-demo .el-submenu /deep/ .el-submenu__title {
-				cursor: pointer;
-				padding: 0 20px;
-				color: #333;
-				white-space: nowrap;
-				background: #fff;
-				position: relative;
+	.menu-preview /deep/ .scrollbar-wrapper::-webkit-scrollbar-track {
+		background-color: transparent;
 			}
 			
-			.el-menu-vertical-demo .el-submenu /deep/ .el-submenu__title:hover {
-				color: #fff;
-				background: blue;
+	.menu-preview /deep/ .el-scrollbar__wrap {
+		overflow-x: hidden !important;
+		overflow-y: auto;
 			}
 			
-			.el-menu-vertical-demo .el-submenu /deep/ .el-submenu__title .el-submenu__icon-arrow {
-				margin: -7px 0 0 0;
-				top: 50%;
-				color: inherit;
-				vertical-align: middle;
-				font-size: 12px;
-				position: absolute;
-				right: 20px;
+	.menu-preview /deep/ .el-scrollbar__view {
+		min-height: 100%;
 			}
-			
-			.el-menu-vertical-demo .el-submenu {
-				padding: 0;
-				margin: 0;
-				list-style: none;
-			}
-			
-
-			
-			.el-menu-vertical-demo .el-submenu /deep/ .el-menu .el-menu-item {
-				padding: 0 40px;
-				color: #666;
-				background: #fff;
-				line-height: 50px;
-				height: 50px;
-			}
-			
-			.el-menu-vertical-demo .el-submenu /deep/ .el-menu .el-menu-item:hover {
-				padding: 0 40px;
-				color: #fff;
-				background: red;
-				line-height: 50px;
-				height: 50px;
-			}
-			
-			.el-menu-vertical-demo .el-submenu /deep/ .el-menu .el-menu-item.is-active {
-				padding: 0 40px;
-				color: #fff;
-				background: blue;
-				line-height: 50px;
-				height: 50px;
-			}
-		}
-	}
+	
 	.scrollbar-wrapper-open .el-menu-vertical-2>.el-menu-item.other {
 		font-size: inherit;
 		background: none;

@@ -1,0 +1,70 @@
+/* 滚动条样式 */
+.el-scrollbar {
+  height: 100%;
+  overflow: hidden;
+}
+
+.el-scrollbar .el-scrollbar__wrap {
+  overflow-x: hidden !important;
+}
+
+.scrollbar-wrapper-open,
+.scrollbar-wrapper-close {
+  overflow-y: auto !important;
+  height: 100%;
+}
+
+/* 自定义滚动条样式 */
+.scrollbar-wrapper-open::-webkit-scrollbar,
+.scrollbar-wrapper-close::-webkit-scrollbar,
+.el-scrollbar__wrap::-webkit-scrollbar,
+.menu-preview::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-wrapper-open::-webkit-scrollbar-thumb,
+.scrollbar-wrapper-close::-webkit-scrollbar-thumb,
+.el-scrollbar__wrap::-webkit-scrollbar-thumb,
+.menu-preview::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  background-color: rgba(144, 147, 153, 0.3);
+  border-radius: 6px;
+  transition: background-color 0.3s;
+}
+
+.scrollbar-wrapper-open::-webkit-scrollbar-thumb:hover,
+.scrollbar-wrapper-close::-webkit-scrollbar-thumb:hover,
+.el-scrollbar__wrap::-webkit-scrollbar-thumb:hover,
+.menu-preview::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(144, 147, 153, 0.5);
+}
+
+.scrollbar-wrapper-open::-webkit-scrollbar-track,
+.scrollbar-wrapper-close::-webkit-scrollbar-track,
+.el-scrollbar__wrap::-webkit-scrollbar-track,
+.menu-preview::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.el-scrollbar__view {
+  height: 100%;
+}
+
+/* 侧边栏元素样式 */
+.menu-preview {
+  overflow: auto !important;
+  height: 100%;
+}
+
+/* 修复Safari浏览器下滚动问题 */
+@supports (-webkit-touch-callout: none) {
+  .menu-preview,
+  .scrollbar-wrapper-open,
+  .scrollbar-wrapper-close {
+    -webkit-overflow-scrolling: touch;
+  }
+} 

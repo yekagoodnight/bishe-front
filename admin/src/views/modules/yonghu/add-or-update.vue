@@ -1,33 +1,48 @@
 <template>
-	<div class="addEdit-block">
+	<div class="addEdit-block" style="background: #f5f7fa; padding: 20px; border-radius: 8px;">
+		<el-card shadow="hover" :style='{"border":"none","padding":"20px","borderRadius":"12px","boxShadow":"0 2px 12px 0 rgba(0, 0, 0, 0.1)","background":"#fff","width":"100%"}'>
+			<div slot="header" class="card-header">
+				<span style="font-size: 18px; font-weight: 500; color: #333;">{{ type == 'info' ? '详情' : (type == 'add' ? '添加' : '修改') }}</span>
+			</div>
 		<el-form
 			class="add-update-preview"
 			ref="ruleForm"
 			:model="ruleForm"
 			:rules="rules"
-			label-width="180px"
+				label-width="120px"
+				:style='{"padding":"0","margin":"0 auto"}'
 		>
-			<template >
-				<el-form-item class="input" v-if="type!='info'"  label="用户账号" prop="yonghuzhanghao" >
-					<el-input v-model="ruleForm.yonghuzhanghao" placeholder="用户账号" clearable  :readonly="ro.yonghuzhanghao"></el-input>
+				<el-row :gutter="20">
+					<el-col :span="12">
+						<el-form-item class="input" :label="type!='info'?'用户账号':''" prop="yonghuzhanghao" :class="type=='info'?'textinfo':''">
+							<el-input v-if="type!='info'" v-model="ruleForm.yonghuzhanghao" placeholder="用户账号" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.yonghuzhanghao"></el-input>
+							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
+								<div style="font-weight: bold; margin-bottom: 5px;">用户账号:</div>
+								<div style="padding: 0 12px;">{{ruleForm.yonghuzhanghao}}</div>
+							</div>
 				</el-form-item>
-				<el-form-item v-else class="input" label="用户账号" prop="yonghuzhanghao" >
-					<el-input v-model="ruleForm.yonghuzhanghao" placeholder="用户账号" readonly></el-input>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item class="input" :label="type!='info'?'密码':''" prop="mima" :class="type=='info'?'textinfo':''">
+							<el-input v-if="type!='info'" v-model="ruleForm.mima" placeholder="密码" :type="true ? 'password' : 'text'" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.mima"></el-input>
+							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
+								<div style="font-weight: bold; margin-bottom: 5px;">密码:</div>
+								<div style="padding: 0 12px;">{{ruleForm.mima}}</div>
+							</div>
 				</el-form-item>
-				<el-form-item class="input" v-if="type!='info'"  label="密码" prop="mima" >
-					<el-input v-model="ruleForm.mima" placeholder="密码" clearable  :readonly="ro.mima"></el-input>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item class="input" :label="type!='info'?'用户姓名':''" prop="yonghuxingming" :class="type=='info'?'textinfo':''">
+							<el-input v-if="type!='info'" v-model="ruleForm.yonghuxingming" placeholder="用户姓名" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.yonghuxingming"></el-input>
+							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
+								<div style="font-weight: bold; margin-bottom: 5px;">用户姓名:</div>
+								<div style="padding: 0 12px;">{{ruleForm.yonghuxingming}}</div>
+							</div>
 				</el-form-item>
-				<el-form-item v-else class="input" label="密码" prop="mima" >
-					<el-input v-model="ruleForm.mima" placeholder="密码" readonly></el-input>
-				</el-form-item>
-				<el-form-item class="input" v-if="type!='info'"  label="用户姓名" prop="yonghuxingming" >
-					<el-input v-model="ruleForm.yonghuxingming" placeholder="用户姓名" clearable  :readonly="ro.yonghuxingming"></el-input>
-				</el-form-item>
-				<el-form-item v-else class="input" label="用户姓名" prop="yonghuxingming" >
-					<el-input v-model="ruleForm.yonghuxingming" placeholder="用户姓名" readonly></el-input>
-				</el-form-item>
-				<el-form-item class="select" v-if="type!='info'"  label="性别" prop="xingbie" >
-					<el-select :disabled="ro.xingbie" v-model="ruleForm.xingbie" placeholder="请选择性别" >
+					</el-col>
+					<el-col :span="12">
+						<el-form-item class="select" :label="type!='info'?'性别':''" prop="xingbie" :class="type=='info'?'textinfo':''">
+							<el-select v-if="type!='info'" v-model="ruleForm.xingbie" placeholder="请选择性别" :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :disabled="ro.xingbie">
 						<el-option
 							v-for="(item,index) in xingbieOptions"
 							v-bind:key="index"
@@ -35,56 +50,73 @@
 							:value="item">
 						</el-option>
 					</el-select>
+							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
+								<div style="font-weight: bold; margin-bottom: 5px;">性别:</div>
+								<div style="padding: 0 12px;">{{ruleForm.xingbie}}</div>
+							</div>
 				</el-form-item>
-				<el-form-item v-else class="input" label="性别" prop="xingbie" >
-					<el-input v-model="ruleForm.xingbie"
-						placeholder="性别" readonly></el-input>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item class="input" :label="type!='info'?'手机':''" prop="shouji" :class="type=='info'?'textinfo':''">
+							<el-input v-if="type!='info'" v-model="ruleForm.shouji" placeholder="手机" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.shouji"></el-input>
+							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
+								<div style="font-weight: bold; margin-bottom: 5px;">手机:</div>
+								<div style="padding: 0 12px;">{{ruleForm.shouji}}</div>
+							</div>
 				</el-form-item>
-				<el-form-item class="input" v-if="type!='info'"  label="手机" prop="shouji" >
-					<el-input v-model="ruleForm.shouji" placeholder="手机" clearable  :readonly="ro.shouji"></el-input>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item class="input" :label="type!='info'?'身份证':''" prop="shenfenzheng" :class="type=='info'?'textinfo':''">
+							<el-input v-if="type!='info'" v-model="ruleForm.shenfenzheng" placeholder="身份证" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.shenfenzheng"></el-input>
+							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
+								<div style="font-weight: bold; margin-bottom: 5px;">身份证:</div>
+								<div style="padding: 0 12px;">{{ruleForm.shenfenzheng}}</div>
+							</div>
 				</el-form-item>
-				<el-form-item v-else class="input" label="手机" prop="shouji" >
-					<el-input v-model="ruleForm.shouji" placeholder="手机" readonly></el-input>
-				</el-form-item>
-				<el-form-item class="input" v-if="type!='info'"  label="身份证" prop="shenfenzheng" >
-					<el-input v-model="ruleForm.shenfenzheng" placeholder="身份证" clearable  :readonly="ro.shenfenzheng"></el-input>
-				</el-form-item>
-				<el-form-item v-else class="input" label="身份证" prop="shenfenzheng" >
-					<el-input v-model="ruleForm.shenfenzheng" placeholder="身份证" readonly></el-input>
-				</el-form-item>
-				<el-form-item class="upload" v-if="type!='info' && !ro.touxiang" label="头像" prop="touxiang" >
+					</el-col>
+					<el-col :span="24">
+						<el-form-item class="upload" :label="type!='info'?'头像':''" prop="touxiang" :class="type=='info'?'textinfo':''">
+							<template v-if="type!='info' && !ro.touxiang">
 					<file-upload
 						tip="点击上传头像"
 						action="file/upload"
-						:limit="3"
-						:multiple="true"
+									:limit="1"
+									:multiple="false"
 						:fileUrls="ruleForm.touxiang?ruleForm.touxiang:''"
 						@change="touxiangUploadChange"
+									:style='{"width":"100%","margin":"0 0 20px"}'
 					></file-upload>
+							</template>
+							<template v-if="type=='info'">
+								<div style="font-size: 14px; line-height: 40px; color: #333;">
+									<div style="font-weight: bold; margin-bottom: 5px;">头像:</div>
+									<div class="avatar-box" v-if="ruleForm.touxiang" style="display: flex; align-items: center;">
+										<el-image 
+											:src="ruleForm.touxiang && ruleForm.touxiang.substring(0,4) == 'http' ? 
+												(ruleForm.touxiang.split(',w').length > 1 ? ruleForm.touxiang : ruleForm.touxiang.split(',')[0]) : 
+												$base.url + ruleForm.touxiang.split(',')[0]"
+											style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-right: 20px;">
+										</el-image>
+									</div>
+									<div v-else>无头像</div>
+								</div>
+							</template>
 				</el-form-item>
-				<el-form-item class="upload" v-else-if="ruleForm.touxiang" label="头像" prop="touxiang" >
-					<img v-if="ruleForm.touxiang.substring(0,4)=='http'&&ruleForm.touxiang.split(',w').length>1" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.touxiang" width="100" height="100">
-					<img v-else-if="ruleForm.touxiang.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.touxiang.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.touxiang.split(',')" :src="$base.url+item" width="100" height="100">
-				</el-form-item>
-			</template>
+					</el-col>
+				</el-row>
 			<el-form-item class="btn">
-				<el-button class="btn3"  v-if="type!='info'" type="success" @click="onSubmit">
-					<span class="icon iconfont icon-xihuan"></span>
+					<el-button v-if="type!='info'" type="primary" @click="onSubmit" style="border: none; cursor: pointer; padding: 0 20px; margin: 0 10px 0 0; color: #fff; border-radius: 4px; background: #409EFF; font-size: 14px; height: 40px;">
 					确定
 				</el-button>
-				<el-button class="btn4" v-if="type!='info'" type="success" @click="back()">
-					<span class="icon iconfont icon-xihuan"></span>
+					<el-button v-if="type!='info'" @click="back()" style="border: 1px solid #dcdfe6; cursor: pointer; padding: 0 20px; margin: 0 10px 0 0; color: #333; border-radius: 4px; background: #fff; font-size: 14px; height: 40px;">
 					取消
 				</el-button>
-				<el-button class="btn5" v-if="type=='info'" type="success" @click="back()">
-					<span class="icon iconfont icon-xihuan"></span>
+					<el-button v-if="type=='info'" @click="back()" style="border: none; cursor: pointer; padding: 0 20px; margin: 0 10px 0 0; color: #fff; border-radius: 4px; background: #909399; font-size: 14px; height: 40px;">
 					返回
 				</el-button>
 			</el-form-item>
 		</el-form>
-    
-
+		</el-card>
 	</div>
 </template>
 <script>
@@ -335,425 +367,79 @@
 		}
 	};
 </script>
-<style lang="css" scoped>
+<style scoped>
 	.addEdit-block {
-		padding: 30px;
-	}
-	.add-update-preview {
-		padding: 40px 30px;
-		background: none;
-		border-color: #eee;
-		border-width: 0px 0 0;
-		border-style: solid;
-	}
-	.amap-wrapper {
-		width: 100%;
-		height: 500px;
+  min-height: calc(100vh - 160px);
 	}
 	
-	.search-box {
-		position: absolute;
+.el-card {
+  margin-bottom: 20px;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !important;
 	}
 	
-	.el-date-editor.el-input {
-		width: auto;
+.el-card .card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 	}
-	.add-update-preview /deep/ .el-form-item {
-		border: 0px solid #eee;
-		padding: 0;
-		margin: 0 0 26px 0;
-		display: inline-block;
-		width: 49%;
+
+.add-update-preview .el-form-item {
+  padding: 0;
+  margin-bottom: 20px;
 	}
-	.add-update-preview .el-form-item /deep/ .el-form-item__label {
-		padding: 0 10px 0 0;
-		color: #6e6e6e;
-		font-weight: 500;
-		width: 180px;
-		font-size: 15px;
-		line-height: 40px;
-		text-align: right;
-	}
-	
-	.add-update-preview .el-form-item /deep/ .el-form-item__content {
-		margin-left: 180px;
-	}
-	.add-update-preview .el-form-item span.text {
-		padding: 0 10px;
-		color: #666;
-		background: none;
-		font-weight: 500;
-		display: inline-block;
-		font-size: 15px;
-		line-height: 40px;
-		min-width: 100%;
-	}
-	
-	.add-update-preview .el-input {
-		width: 100%;
-	}
-	.add-update-preview .el-input /deep/ .el-input__inner {
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 0 12px;
-		color: #666;
-		width: 100%;
-		font-size: 15px;
-		min-width: 50%;
-		height: 40px;
-	}
-	.add-update-preview .el-input /deep/ .el-input__inner[readonly="readonly"] {
-		border: 0px solid #ccc;
-		cursor: not-allowed;
-		border-radius: 0px;
-		padding: 0 12px;
-		color: #666;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		height: 40px;
-	}
-	.add-update-preview .el-input-number {
-		text-align: left;
-		width: 100%;
-	}
-	.add-update-preview .el-input-number /deep/ .el-input__inner {
-		text-align: left;
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 0 12px;
-		color: #666;
-		width: 100%;
-		font-size: 15px;
-		min-width: 50%;
-		height: 40px;
-	}
-	.add-update-preview .el-input-number /deep/ .is-disabled .el-input__inner {
-		text-align: left;
-		border: 0px solid #ccc;
-		cursor: not-allowed;
-		border-radius: 0px;
-		padding: 0 12px;
-		color: #666;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		height: 40px;
-	}
-	.add-update-preview .el-input-number /deep/ .el-input-number__decrease {
-		display: none;
-	}
-	.add-update-preview .el-input-number /deep/ .el-input-number__increase {
-		display: none;
-	}
-	.add-update-preview .el-select {
-		width: 100%;
-	}
-	.add-update-preview .el-select /deep/ .el-input__inner {
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 0 10px;
-		color: #666;
-		width: 100%;
-		font-size: 15px;
-		height: 40px;
-	}
-	.add-update-preview .el-select /deep/ .is-disabled .el-input__inner {
-		border: 0;
-		cursor: not-allowed;
-		border-radius: 4px;
-		padding: 0 10px;
-		color: #666;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		height: 34px;
-	}
+
+.add-update-preview .el-input,
+.add-update-preview .el-select,
 	.add-update-preview .el-date-editor {
 		width: 100%;
 	}
-	.add-update-preview .el-date-editor /deep/ .el-input__inner {
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 0 10px 0 30px;
-		color: #666;
-		background: #fff;
-		width: 100%;
-		font-size: 15px;
-		height: 40px;
-	}
-	.add-update-preview .el-date-editor /deep/ .el-input__inner[readonly="readonly"] {
-		border: 0;
-		cursor: not-allowed;
-		border-radius: 0px;
-		padding: 0 10px 0 30px;
-		color: #666;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		height: 40px;
-	}
-	.add-update-preview .viewBtn {
-		border: 1px solid #E8E8E8;
-		cursor: pointer;
-		border-radius: 0px;
-		padding: 0 15px;
-		margin: 0 20px 0 0;
-		color: #666;
-		background: #fff;
-		width: auto;
-		font-size: 15px;
-		line-height: 34px;
-		height: 34px;
-		.iconfont {
-			margin: 0 2px;
-			color: #666;
-			font-size: 16px;
-			height: 34px;
-		}
-	}
-	.add-update-preview .viewBtn:hover {
-		opacity: 0.8;
-	}
-	.add-update-preview .downBtn {
-		border: 1px solid #E8E8E8;
-		cursor: pointer;
-		border-radius: 0px;
-		padding: 0 15px;
-		margin: 0 20px 0 0;
-		color: #666;
-		background: #fff;
-		width: auto;
-		font-size: 15px;
-		line-height: 34px;
-		height: 34px;
-		.iconfont {
-			margin: 0 2px;
-			color: #666;
-			font-size: 16px;
-			height: 34px;
-		}
-	}
-	.add-update-preview .downBtn:hover {
-		opacity: 0.8;
-	}
-	.add-update-preview .unBtn {
-		border: 0;
-		cursor: not-allowed;
-		border-radius: 4px;
-		padding: 0 0px;
-		margin: 0 20px 0 0;
-		outline: none;
-		color: #999;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		line-height: 40px;
-		height: 40px;
-		.iconfont {
-			margin: 0 2px;
-			color: #fff;
-			display: none;
+
+.add-update-preview .textinfo {
 			font-size: 14px;
-			height: 34px;
-		}
+  padding: 10px 0;
+  color: #333;
 	}
-	.add-update-preview .unBtn:hover {
-		opacity: 0.8;
-	}
-	.add-update-preview /deep/ .el-upload--picture-card {
-		background: transparent;
-		border: 0;
-		border-radius: 0;
-		width: auto;
-		height: auto;
-		line-height: initial;
-		vertical-align: middle;
-	}
-	
-	.add-update-preview /deep/ .upload .upload-img {
-		border: 1px solid #E8E8E8;
-		cursor: pointer;
-		border-radius: 0px;
-		color: #666;
-		background: #fff;
-		width: 90px;
-		font-size: 24px;
-		line-height: 60px;
-		text-align: center;
-		height: 60px;
+
+.add-update-preview .textinfo:before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 14px;
+  background: #409EFF;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 	}
 	
-	.add-update-preview /deep/ .el-upload-list .el-upload-list__item {
-		border: 1px solid #E8E8E8;
-		cursor: pointer;
-		border-radius: 0px;
-		color: #666;
-		background: #fff;
-		width: 90px;
-		font-size: 24px;
-		line-height: 60px;
-		text-align: center;
-		height: 60px;
+.add-update-preview .avatar-box {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 	}
 	
-	.add-update-preview /deep/ .el-upload .el-icon-plus {
-		border: 1px solid #E8E8E8;
-		cursor: pointer;
-		border-radius: 0px;
-		color: #666;
-		background: #fff;
-		width: 90px;
-		font-size: 24px;
-		line-height: 60px;
-		text-align: center;
-		height: 60px;
-	}
-	.add-update-preview /deep/ .el-upload__tip {
-		color: #666;
-		font-size: 15px;
-	}
-	
-	.add-update-preview .el-textarea /deep/ .el-textarea__inner {
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 12px;
-		color: #666;
-		background: #fff;
-		width: auto;
-		font-size: 15px;
-		min-width: 100%;
-		height: 120px;
-	}
-	.add-update-preview .el-textarea /deep/ .el-textarea__inner[readonly="readonly"] {
-				border: 0;
-				cursor: not-allowed;
-				border-radius: 0px;
-				padding: 12px;
-				color: #666;
-				background: none;
-				width: auto;
-				font-size: 15px;
-				min-width: 400px;
-				height: auto;
+.add-update-preview .avatar-box .el-image {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
 			}
-	.add-update-preview .el-form-item.btn {
-		padding: 0;
-		margin: 20px 0 0;
-		.btn1 {
-			border: 0px solid #ccc;
-			cursor: pointer;
-			border-radius: 4px;
-			padding: 0 10px;
-			margin: 0 10px 0 0;
-			color: #fff;
-			background: #1a3194;
-			width: auto;
-			font-size: 16px;
-			min-width: 110px;
-			height: 40px;
-			.iconfont {
-				margin: 0 2px;
-				color: #fff;
-				display: none;
-				font-size: 14px;
-				height: 40px;
+
+.add-update-preview .avatar-box .el-image:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 			}
-		}
-		.btn1:hover {
-			opacity: 0.8;
-		}
-		.btn2 {
-			border: 0px solid #ccc;
-			cursor: pointer;
-			border-radius: 4px;
-			padding: 0 10px;
-			margin: 0 10px 0 0;
-			color: #fff;
-			background: #1fc3cb;
-			width: auto;
-			font-size: 16px;
-			min-width: 110px;
-			height: 40px;
-			.iconfont {
-				margin: 0 2px;
-				color: #fff;
-				display: none;
-				font-size: 14px;
-				height: 34px;
+
+.btn {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
 			}
+
+.btn .el-button {
+  transition: all 0.3s;
 		}
-		.btn2:hover {
-			opacity: 0.8;
-		}
-		.btn3 {
-			border: 0px solid #ccc;
-			cursor: pointer;
-			border-radius: 4px;
-			padding: 0 10px;
-			margin: 0 10px 0 0;
-			color: #fff;
-			background: #32c67a;
-			width: auto;
-			font-size: 16px;
-			min-width: 110px;
-			height: 40px;
-			.iconfont {
-				margin: 0 2px;
-				color: #fff;
-				display: none;
-				font-size: 14px;
-				height: 40px;
-			}
-		}
-		.btn3:hover {
-			opacity: 0.8;
-		}
-		.btn4 {
-			border: 0px solid #ccc;
-			cursor: pointer;
-			border-radius: 4px;
-			padding: 0 10px;
-			margin: 0 10px 0 0;
-			color: #fff;
-			background: #b3b3b3;
-			width: auto;
-			font-size: 16px;
-			min-width: 110px;
-			height: 40px;
-			.iconfont {
-				margin: 0 2px;
-				color: #fff;
-				display: none;
-				font-size: 14px;
-				height: 40px;
-			}
-		}
-		.btn4:hover {
-			opacity: 0.8;
-		}
-		.btn5 {
-			border: 0px solid #ccc;
-			cursor: pointer;
-			border-radius: 4px;
-			padding: 0 10px;
-			margin: 0 10px 0 0;
-			color: #fff;
-			background: #156286;
-			width: auto;
-			font-size: 16px;
-			min-width: 110px;
-			height: 40px;
-			.iconfont {
-				margin: 0 2px;
-				color: #fff;
-				display: none;
-				font-size: 14px;
-				height: 40px;
-			}
-		}
-		.btn5:hover {
-			opacity: 0.8;
-		}
+
+.btn .el-button:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
 	}
 </style>

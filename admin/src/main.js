@@ -1,13 +1,15 @@
 import Vue from 'vue'
 import App from '@/App.vue'
 import store from './store'
+import '@/assets/css/scrollbar.css'
+import '@/assets/css/icons.css'
+// import '@/assets/css/menu-enhancements.css' // 此文件已删除，不再需要引入
 // element ui 完全引入
 import ElementUI from 'element-ui'
 // 加载路由
 // import router from '@/router/router-static.js';
 import router from '@/router/router-static.js';
-// 面包屑导航，注册为全局组件
-import BreadCrumbs from '@/components/common/BreadCrumbs'
+// 面包屑导航已移除
 // 引入echart
 import * as echarts from 'echarts'
 import 'echarts-wordcloud'
@@ -69,7 +71,6 @@ Vue.prototype.getCurDate = getCurDate
 Vue.use(ElementUI, { size: 'medium', zIndex: 3000 });
 Vue.config.productionTip = false
 // 组件全局组件
-Vue.component('bread-crumbs', BreadCrumbs)
 Vue.component('file-upload', FileUpload)
 Vue.component('excel-file-upload', ExcelFileUpload)
 Vue.component('editor', Editor)

@@ -10,7 +10,7 @@
 				<index-aside :style='{"boxShadow":"1px 0 6px  rgba(64, 158, 255, .3)","overflow":"hidden","top":"0","left":"0","background":"#304156","bottom":"0","width":"210px","fontSize":"0px","position":"fixed","height":"100%","zIndex":"1001"}'></index-aside>
 			  </template>
 			  <template v-if="2 == 2">
-				<index-aside :is-collapse="isCollapse" @oncollapsechange="collapseChange" :style='isCollapse ? {"boxShadow":"1px 0 6px  rgba(64, 158, 255, .3)","overflow":"hidden","top":"0","left":"0","background":"#304156","bottom":"0","width":"64px","fontSize":"0px","position":"fixed","transition":"width 0.3s","height":"100%","zIndex":"1001"} : {"boxShadow":"0px 0 9px  rgba(0, 0, 0, .3)","padding":"20px 0 60px","bottom":"0","transition":"width 0.0s","overflow":"hidden","top":"0px","borderRadius":"0","left":"0","background":"url(http://codegen.caihongy.cn/20240925/60c42bef134b40d0a6a05a7ef912c4c2.png) no-repeat center bottom / 100% auto,#1a3194","width":"220px","fontSize":"15px","position":"fixed","height":"100%","zIndex":"1001"}'></index-aside>
+				<index-aside :is-collapse="isCollapse" @oncollapsechange="collapseChange" :style='isCollapse ? {"boxShadow":"1px 0 6px  rgba(64, 158, 255, .3)","overflow":"auto","top":"0","left":"0","background":"#304156","bottom":"0","width":"64px","fontSize":"0px","position":"fixed","transition":"width 0.3s","height":"100%","zIndex":"1001"} : {"boxShadow":"0px 0 9px  rgba(0, 0, 0, .3)","padding":"20px 0 60px","bottom":"0","transition":"width 0.0s","overflow":"auto","top":"0px","borderRadius":"0","left":"0","background":"url(http://codegen.caihongy.cn/20240925/60c42bef134b40d0a6a05a7ef912c4c2.png) no-repeat center bottom / 100% auto,#1a3194","width":"220px","fontSize":"15px","position":"fixed","height":"100%","zIndex":"1001"}'></index-aside>
 			  </template>
 			</template>
 			<template v-if="'vertical' == 'horizontal'">
@@ -22,9 +22,7 @@
 			  </template>
 			</template>
 			
-			<!-- breadcrumb -->
-			<bread-crumbs :title="title" :style='{"padding":"40px 0px 0","margin":"0px auto 0 40px","borderColor":"#3b6885","top":"-10px","left":"40%","borderWidth":"0 0 0px 0","background":"none","width":"auto","fontSize":"16px","position":"absolute","borderStyle":"solid","zIndex":"1001"}' class="bread-crumbs"></bread-crumbs>
-			
+						<!-- breadcrumb removed -->						
 			<!-- TagsView -->
 			<tags-view />
 			<transition name="el-zoom-in-top">

@@ -1,0 +1,90 @@
+/* 自定义图标样式 */
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+
+/* 为统计卡片定制图标样式 */
+.statis-box .left {
+  position: relative;
+  /* 确保圆形区域居中、无边距 */
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.statis-box .left .iconfont {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 38px;
+  color: #fff;
+  z-index: 3;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+}
+
+/* 解决图标定位问题的特殊样式 */
+.stats-icon-fix {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 40px !important;
+  height: 40px !important;
+}
+
+/* 调整圆形背景位置 */
+.statis-box .left::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+  content: '';
+}
+
+/* 各图标的样式 */
+.iconfont.icon-car:before,
+.iconfont.icon-order:before,
+.iconfont.icon-warning:before,
+.iconfont.icon-bianji:before {
+  display: block;
+  font-size: 38px;
+  line-height: 1;
+}
+
+/* 各图标的内容 */
+.iconfont.icon-car:before {
+  content: "🚗";
+}
+
+.iconfont.icon-order:before {
+  content: "📋";
+}
+
+.iconfont.icon-warning:before {
+  content: "⚠️";
+}
+
+.iconfont.icon-bianji:before {
+  content: "✏️";
+} 
