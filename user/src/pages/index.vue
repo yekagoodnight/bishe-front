@@ -243,20 +243,56 @@ export default {
 		async getSession() {
 			await this.$http.get(`${localStorage.getItem('UserTableName')}/session`, {emulateJSON: true}).then(async res => {
 				if (res.data.code == 0) {
-					localStorage.setItem('sessionForm',JSON.stringify(res.data.data))
+					localStorage.setItem('sessionForm', JSON.stringify(res.data.data))
 					localStorage.setItem('frontUserid', res.data.data.id);
 					if(res.data.data.vip) {
 						localStorage.setItem('vip', res.data.data.vip);
 					}
+					
+					let headportraitUrl = '';
+					
 					if(res.data.data.touxiang) {
-						this.headportrait = res.data.data.touxiang
-						localStorage.setItem('frontHeadportrait', res.data.data.touxiang);
+						// 处理头像URL
+						headportraitUrl = this.processAvatarUrl(res.data.data.touxiang);
+						this.headportrait = headportraitUrl;
+						localStorage.setItem('frontHeadportrait', headportraitUrl);
 					} else if(res.data.data.headportrait) {
-						this.headportrait = res.data.data.headportrait
-						localStorage.setItem('frontHeadportrait', res.data.data.headportrait);
+						// 处理头像URL
+						headportraitUrl = this.processAvatarUrl(res.data.data.headportrait);
+						this.headportrait = headportraitUrl;
+						localStorage.setItem('frontHeadportrait', headportraitUrl);
 					}
+					
+					console.log('用户头像URL:', headportraitUrl);
 				}
 			});
+		},
+		// 处理头像URL的统一函数
+		processAvatarUrl(url) {
+			if (!url) {
+				return '';
+			}
+			
+			// 多图只取第一个
+			let avatarUrl = url.split(',')[0];
+			
+			// 特殊处理错误的头像路径
+			if (avatarUrl.includes('1747475186509.jpg')) {
+				return 'http://localhost:8080/springboot0aqexa96/upload/yonghu_touxiang1.jpg';
+			}
+			
+			// 检查是否已经是完整URL
+			if (avatarUrl.startsWith('http')) {
+				return avatarUrl;
+			}
+			
+			// 如果包含upload路径但不是完整URL
+			if (avatarUrl.includes('/upload/')) {
+				return 'http://localhost:8080/springboot0aqexa96' + avatarUrl;
+			}
+			
+			// 默认情况，使用baseUrl拼接
+			return this.baseUrl + avatarUrl;
 		},
 		handleSelect(keyPath) {
 			if (keyPath) {

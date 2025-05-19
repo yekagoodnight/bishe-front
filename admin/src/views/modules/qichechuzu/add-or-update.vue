@@ -1,11 +1,50 @@
 <template>
 	<div class="addEdit-block">
-		<el-form
+		<template v-if="type=='info'||type=='msg'">
+			<div class="info-view">
+				<div class="info-row"><span class="info-label">租赁标题：</span><span class="info-value">{{ruleForm.zulinbiaoti}}</span></div>
+				<div class="info-row"><span class="info-label">汽车车牌：</span><span class="info-value">{{ruleForm.qichechepai}}</span></div>
+				<div class="info-row"><span class="info-label">汽车类型：</span><span class="info-value">{{ruleForm.qicheleixing}}</span></div>
+				<div class="info-row"><span class="info-label">地区：</span><span class="info-value">{{ruleForm.diqu}}</span></div>
+				<div class="info-row"><span class="info-label">品牌：</span><span class="info-value">{{ruleForm.pinpai}}</span></div>
+				<div class="info-row"><span class="info-label">型号：</span><span class="info-value">{{ruleForm.xinghao}}</span></div>
+				<div class="info-row"><span class="info-label">年份：</span><span class="info-value">{{ruleForm.nianfen}}</span></div>
+				<div class="info-row"><span class="info-label">状态：</span><span class="info-value">{{ruleForm.zhuangtai}}</span></div>
+				<div class="info-row"><span class="info-label">日租金：</span><span class="info-value">{{ruleForm.rizujin}}</span></div>
+				<div class="info-row"><span class="info-label">检测报告：</span>
+					<span class="info-value">
+						<span v-if="ruleForm.jiancebaogao">
+							<el-button type="text" size="small" @click="download($base.url+ruleForm.jiancebaogao)">下载</el-button>
+						</span>
+						<span v-else>暂无</span>
+					</span>
+				</div>
+				<div class="info-row"><span class="info-label">汽车图片：</span>
+					<span class="info-value">
+						<span v-if="ruleForm.qichetupian" key="qichetupian-has">
+							<img v-if="ruleForm.qichetupian.substring(0,4)=='http'&&ruleForm.qichetupian.split(',w').length>1" :src="ruleForm.qichetupian" width="60" height="60" style="border-radius:8px;object-fit:cover;" key="qichetupian-img1">
+							<img v-else-if="ruleForm.qichetupian.substring(0,4)=='http'" :src="ruleForm.qichetupian.split(',')[0]" width="60" height="60" style="border-radius:8px;object-fit:cover;" key="qichetupian-img2">
+							<img v-else v-for="(item,index) in ruleForm.qichetupian.split(',')" :key="'qichetupian-img-'+index" :src="$base.url+item" width="60" height="60" style="border-radius:8px;object-fit:cover;margin-right:8px;">
+						</span>
+						<span v-else key="qichetupian-none">无图片</span>
+					</span>
+				</div>
+				<div class="info-row"><span class="info-label">车商账号：</span><span class="info-value">{{ruleForm.cheshangzhanghao}}</span></div>
+				<div class="info-row"><span class="info-label">车商姓名：</span><span class="info-value">{{ruleForm.cheshangxingming}}</span></div>
+				<div class="info-row"><span class="info-label">汽车配置：</span>
+					<span class="info-value"><span v-html="ruleForm.qichepeizhi"></span></span>
+				</div>
+				<el-button @click="back()" style="border: none; cursor: pointer; padding: 0 20px; color: #fff; border-radius: 4px; background: #909399; font-size: 14px; height: 40px; margin-top: 24px;">返回</el-button>
+			</div>
+		</template>
+		<el-form v-else
 			class="add-update-preview"
 			ref="ruleForm"
 			:model="ruleForm"
 			:rules="rules"
 			label-width="180px"
+			label-position="right"
+			style="max-width: 800px; margin: 0 auto;"
 		>
 			<template >
 				<el-form-item class="input" v-if="type!='info'"  label="租赁标题" prop="zulinbiaoti" >
@@ -102,19 +141,23 @@
 					</el-button>
 				</el-form-item>
 				<el-form-item class="upload" v-if="type!='info' && !ro.qichetupian" label="汽车图片" prop="qichetupian" >
-					<file-upload
-						tip="点击上传汽车图片"
-						action="file/upload"
-						:limit="3"
-						:multiple="true"
-						:fileUrls="ruleForm.qichetupian?ruleForm.qichetupian:''"
-						@change="qichetupianUploadChange"
-					></file-upload>
-				</el-form-item>
-				<el-form-item class="upload" v-else-if="ruleForm.qichetupian" label="汽车图片" prop="qichetupian" >
-					<img v-if="ruleForm.qichetupian.substring(0,4)=='http'&&ruleForm.qichetupian.split(',w').length>1" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.qichetupian" width="100" height="100">
-					<img v-else-if="ruleForm.qichetupian.substring(0,4)=='http'" class="upload-img" style="margin-right:20px;" v-bind:key="index" :src="ruleForm.qichetupian.split(',')[0]" width="100" height="100">
-					<img v-else class="upload-img" style="margin-right:20px;" v-bind:key="index" v-for="(item,index) in ruleForm.qichetupian.split(',')" :src="$base.url+item" width="100" height="100">
+					<div class="qichetupian-upload-flex">
+						<div class="qichetupian-upload-btn">
+							<file-upload
+								tip="点击上传汽车图片"
+								action="file/upload"
+								:limit="3"
+								:multiple="true"
+								:fileUrls="ruleForm.qichetupian?ruleForm.qichetupian:''"
+								@change="qichetupianUploadChange"
+							></file-upload>
+						</div>
+						<div v-if="ruleForm.qichetupian" class="qichetupian-preview-area">
+							<img v-if="ruleForm.qichetupian.substring(0,4)=='http'&&ruleForm.qichetupian.split(',w').length>1" class="upload-img" :src="ruleForm.qichetupian" key="qichetupian-img1">
+							<img v-else-if="ruleForm.qichetupian.substring(0,4)=='http'" class="upload-img" :src="ruleForm.qichetupian.split(',')[0]" key="qichetupian-img2">
+							<img v-else v-for="(item,index) in ruleForm.qichetupian.split(',')" :key="'qichetupian-img-'+index" class="upload-img" :src="$base.url+item">
+						</div>
+					</div>
 				</el-form-item>
 				<el-form-item class="input" v-if="type!='info'"  label="车商账号" prop="cheshangzhanghao" >
 					<el-input v-model="ruleForm.cheshangzhanghao" placeholder="车商账号" clearable  :readonly="ro.cheshangzhanghao"></el-input>
@@ -155,8 +198,6 @@
 				</el-button>
 			</el-form-item>
 		</el-form>
-    
-
 	</div>
 </template>
 <script>
@@ -554,6 +595,8 @@
 		border-color: #eee;
 		border-width: 0px 0 0;
 		border-style: solid;
+		max-width: 800px;
+		margin: 0 auto;
 	}
 	.amap-wrapper {
 		width: 100%;
@@ -568,139 +611,73 @@
 		width: auto;
 	}
 	.add-update-preview /deep/ .el-form-item {
-		border: 0px solid #eee;
-		padding: 0;
-		margin: 0 0 26px 0;
-		display: inline-block;
-		width: 49%;
+		display: flex;
+		align-items: center;
+		margin-bottom: 22px;
+		width: 100%;
 	}
 	.add-update-preview .el-form-item /deep/ .el-form-item__label {
-		padding: 0 10px 0 0;
+		width: 180px;
+		text-align: right;
+		margin-right: 16px;
+		padding: 0;
+		line-height: 40px;
+		font-size: 15px;
 		color: #6e6e6e;
 		font-weight: 500;
-		width: 180px;
-		font-size: 15px;
-		line-height: 40px;
-		text-align: right;
 	}
-	
 	.add-update-preview .el-form-item /deep/ .el-form-item__content {
-		margin-left: 180px;
+		margin-left: 0 !important;
+		flex: 1;
+		min-width: 0;
 	}
-	.add-update-preview .el-form-item span.text {
-		padding: 0 10px;
-		color: #666;
-		background: none;
-		font-weight: 500;
-		display: inline-block;
-		font-size: 15px;
-		line-height: 40px;
-		min-width: 100%;
-	}
-	
-	.add-update-preview .el-input {
-		width: 100%;
-	}
-	.add-update-preview .el-input /deep/ .el-input__inner {
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 0 12px;
-		color: #666;
-		width: 100%;
-		font-size: 15px;
-		min-width: 50%;
-		height: 40px;
-	}
-	.add-update-preview .el-input /deep/ .el-input__inner[readonly="readonly"] {
-		border: 0px solid #ccc;
-		cursor: not-allowed;
-		border-radius: 0px;
-		padding: 0 12px;
-		color: #666;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		height: 40px;
-	}
-	.add-update-preview .el-input-number {
-		text-align: left;
-		width: 100%;
-	}
-	.add-update-preview .el-input-number /deep/ .el-input__inner {
-		text-align: left;
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 0 12px;
-		color: #666;
-		width: 100%;
-		font-size: 15px;
-		min-width: 50%;
-		height: 40px;
-	}
-	.add-update-preview .el-input-number /deep/ .is-disabled .el-input__inner {
-		text-align: left;
-		border: 0px solid #ccc;
-		cursor: not-allowed;
-		border-radius: 0px;
-		padding: 0 12px;
-		color: #666;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		height: 40px;
-	}
-	.add-update-preview .el-input-number /deep/ .el-input-number__decrease {
-		display: none;
-	}
-	.add-update-preview .el-input-number /deep/ .el-input-number__increase {
-		display: none;
-	}
-	.add-update-preview .el-select {
-		width: 100%;
-	}
-	.add-update-preview .el-select /deep/ .el-input__inner {
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 0 10px;
-		color: #666;
-		width: 100%;
-		font-size: 15px;
-		height: 40px;
-	}
-	.add-update-preview .el-select /deep/ .is-disabled .el-input__inner {
-		border: 0;
-		cursor: not-allowed;
-		border-radius: 4px;
-		padding: 0 10px;
-		color: #666;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		height: 34px;
-	}
+	.add-update-preview .el-input,
+	.add-update-preview .el-select,
+	.add-update-preview .el-input-number,
 	.add-update-preview .el-date-editor {
 		width: 100%;
 	}
+	.add-update-preview .el-input /deep/ .el-input__inner,
+	.add-update-preview .el-select /deep/ .el-input__inner,
+	.add-update-preview .el-input-number /deep/ .el-input__inner,
 	.add-update-preview .el-date-editor /deep/ .el-input__inner {
-		border: 1px solid #E8E8E8;
-		border-radius: 0px;
-		padding: 0 10px 0 30px;
-		color: #666;
-		background: #fff;
 		width: 100%;
 		font-size: 15px;
 		height: 40px;
+		padding-left: 0 !important;
 	}
-	.add-update-preview .el-date-editor /deep/ .el-input__inner[readonly="readonly"] {
-		border: 0;
-		cursor: not-allowed;
-		border-radius: 0px;
-		padding: 0 10px 0 30px;
-		color: #666;
-		background: none;
-		width: auto;
-		font-size: 15px;
-		height: 40px;
+	.qichetupian-upload-flex {
+		display: flex;
+		align-items: flex-start;
+		gap: 32px;
+		width: 100%;
+		flex-wrap: wrap;
+	}
+	.qichetupian-upload-btn {
+		min-width: 160px;
+		max-width: 220px;
+	}
+	.qichetupian-preview-area {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+		background: #fff;
+		border-radius: 10px;
+		box-shadow: 0 2px 12px 0 rgba(0,0,0,0.08);
+		padding: 18px 12px;
+		min-width: 220px;
+		min-height: 120px;
+		align-items: center;
+		justify-content: flex-start;
+	}
+	.qichetupian-preview-area .upload-img {
+		max-width: 100px;
+		max-height: 100px;
+		border-radius: 8px;
+		object-fit: cover;
+		border: 1px solid #E8E8E8;
+		background: #fafbfc;
+		box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
 	}
 	.add-update-preview .viewBtn {
 		border: 1px solid #E8E8E8;
@@ -780,7 +757,7 @@
 		vertical-align: middle;
 	}
 	
-	.add-update-preview /deep/ .upload .upload-img {
+	.add-update-preview /deep/ .el-upload .el-icon-plus {
 		border: 1px solid #E8E8E8;
 		cursor: pointer;
 		border-radius: 0px;
@@ -964,5 +941,45 @@
 		.btn5:hover {
 			opacity: 0.8;
 		}
+	}
+	.info-view {
+		margin-bottom: 10px;
+	}
+	.info-row {
+		display: flex;
+		align-items: center;
+		margin-bottom: 18px;
+	}
+	.info-label {
+		width: 180px;
+		color: #666;
+		font-size: 15px;
+		text-align: right;
+		flex-shrink: 0;
+	}
+	.info-value {
+		color: #333;
+		font-size: 15px;
+		margin-left: 16px;
+		word-break: break-all;
+	}
+	@media (max-width: 600px) {
+		.qichetupian-upload-flex {
+			flex-direction: column;
+			gap: 16px;
+		}
+		.qichetupian-preview-area {
+			min-width: 0;
+			width: 100%;
+			justify-content: flex-start;
+		}
+	}
+	/* 隐藏el-upload的图片列表缩略图 */
+	::v-deep .el-upload-list--picture-card {
+		display: none !important;
+	}
+	/* 隐藏el-upload图片列表中的删除提示 */
+	::v-deep .el-icon-close-tip {
+		display: none !important;
 	}
 </style>

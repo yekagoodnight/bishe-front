@@ -8,13 +8,13 @@
 			:model="ruleForm"
 			label-width="180px"
 		>
-			<el-form-item :style='{"border":"0px solid #eee","width":"49%","padding":"0","margin":"0 0 26px 0","display":"inline-block"}' label="原密码" prop="password">
+			<el-form-item label="原密码" prop="password">
 				<el-input type="password" v-model="ruleForm.password" ></el-input>
 			</el-form-item>
-			<el-form-item :style='{"border":"0px solid #eee","width":"49%","padding":"0","margin":"0 0 26px 0","display":"inline-block"}' label="新密码" prop="newpassword">
+			<el-form-item label="新密码" prop="newpassword">
 				<el-input type="password" v-model="ruleForm.newpassword" ></el-input>
 			</el-form-item>
-			<el-form-item :style='{"border":"0px solid #eee","width":"49%","padding":"0","margin":"0 0 26px 0","display":"inline-block"}' label="确认密码" prop="repassword">
+			<el-form-item label="确认密码" prop="repassword">
 				<el-input type="password" v-model="ruleForm.repassword" ></el-input>
 			</el-form-item>
 			<el-form-item :style='{"padding":"0","margin":"20px 0 0"}'>
@@ -168,51 +168,59 @@ export default {
 		width: auto;
 	}
 	
+	.add-update-preview .el-form-item {
+		display: flex;
+		align-items: center;
+		margin-bottom: 24px;
+	}
+	
 	.add-update-preview .el-form-item /deep/ .el-form-item__label {
-	  	  padding: 0 10px 0 0;
-	  	  color: #6e6e6e;
-	  	  font-weight: 500;
-	  	  width: 180px;
-	  	  font-size: 15px;
-	  	  line-height: 40px;
-	  	  text-align: right;
-	  	}
+		width: 180px;
+		text-align: right;
+		margin-right: 16px;
+		padding: 0;
+		line-height: 40px;
+		font-size: 15px;
+		color: #6e6e6e;
+		font-weight: 500;
+	}
 	
 	.add-update-preview .el-form-item /deep/ .el-form-item__content {
-	  margin-left: 180px;
+		flex: 1;
+		margin-left: 0 !important;
 	}
 	
 	.add-update-preview .el-input /deep/ .el-input__inner {
-	  	  border: 1px solid #E8E8E8;
-	  	  border-radius: 0px;
-	  	  padding: 0 12px;
-	  	  color: #666;
-	  	  width: 100%;
-	  	  font-size: 15px;
-	  	  min-width: 50%;
-	  	  height: 40px;
-	  	}
+		border: 1px solid #E8E8E8;
+		border-radius: 0px;
+		padding: 0 12px;
+		color: #666;
+		width: 100%;
+		font-size: 15px;
+		min-width: 50%;
+		height: 40px;
+	}
 	
 	.add-update-preview .el-select /deep/ .el-input__inner {
-	  	  border: 1px solid #E8E8E8;
-	  	  border-radius: 0px;
-	  	  padding: 0 10px;
-	  	  color: #666;
-	  	  width: 100%;
-	  	  font-size: 15px;
-	  	  height: 40px;
-	  	}
+		border: 1px solid #E8E8E8;
+		border-radius: 0px;
+		padding: 0 10px;
+		color: #666;
+		width: 100%;
+		font-size: 15px;
+		height: 40px;
+	}
 	
 	.add-update-preview .el-date-editor /deep/ .el-input__inner {
-	  	  border: 1px solid #E8E8E8;
-	  	  border-radius: 0px;
-	  	  padding: 0 10px 0 30px;
-	  	  color: #666;
-	  	  background: #fff;
-	  	  width: 100%;
-	  	  font-size: 15px;
-	  	  height: 40px;
-	  	}
+		border: 1px solid #E8E8E8;
+		border-radius: 0px;
+		padding: 0 10px 0 30px;
+		color: #666;
+		background: #fff;
+		width: 100%;
+		font-size: 15px;
+		height: 40px;
+	}
 	
 	.add-update-preview /deep/ .el-upload--picture-card {
 		background: transparent;
@@ -225,58 +233,58 @@ export default {
 	}
 	
 	.add-update-preview /deep/ .el-upload-list .el-upload-list__item {
-	  	  border: 1px solid #E8E8E8;
-	  	  cursor: pointer;
-	  	  border-radius: 0px;
-	  	  color: #666;
-	  	  background: #fff;
-	  	  width: 90px;
-	  	  font-size: 24px;
-	  	  line-height: 60px;
-	  	  text-align: center;
-	  	  height: 60px;
-	  	}
+		border: 1px solid #E8E8E8;
+		cursor: pointer;
+		border-radius: 0px;
+		color: #666;
+		background: #fff;
+		width: 90px;
+		font-size: 24px;
+		line-height: 60px;
+		text-align: center;
+		height: 60px;
+	}
 	
 	.add-update-preview /deep/ .el-upload .el-icon-plus {
-	  	  border: 1px solid #E8E8E8;
-	  	  cursor: pointer;
-	  	  border-radius: 0px;
-	  	  color: #666;
-	  	  background: #fff;
-	  	  width: 90px;
-	  	  font-size: 24px;
-	  	  line-height: 60px;
-	  	  text-align: center;
-	  	  height: 60px;
-	  	}
+		border: 1px solid #E8E8E8;
+		cursor: pointer;
+		border-radius: 0px;
+		color: #666;
+		background: #fff;
+		width: 90px;
+		font-size: 24px;
+		line-height: 60px;
+		text-align: center;
+		height: 60px;
+	}
 	
 	.add-update-preview .el-textarea /deep/ .el-textarea__inner {
-	  	  border: 1px solid #E8E8E8;
-	  	  border-radius: 0px;
-	  	  padding: 12px;
-	  	  color: #666;
-	  	  background: #fff;
-	  	  width: auto;
-	  	  font-size: 15px;
-	  	  min-width: 100%;
-	  	  height: 120px;
-	  	}
+		border: 1px solid #E8E8E8;
+		border-radius: 0px;
+		padding: 12px;
+		color: #666;
+		background: #fff;
+		width: auto;
+		font-size: 15px;
+		min-width: 100%;
+		height: 120px;
+	}
 	
 	.add-update-preview .btn3 {
-				border: 0px solid #ccc;
-				cursor: pointer;
-				border-radius: 4px;
-				padding: 0 10px;
-				margin: 0 10px 0 0;
-				color: #fff;
-				background: #32c67a;
-				width: auto;
-				font-size: 16px;
-				min-width: 110px;
-				height: 40px;
-			}
+		border: 0px solid #ccc;
+		cursor: pointer;
+		border-radius: 4px;
+		padding: 0 10px;
+		margin: 0 10px 0 0;
+		color: #fff;
+		background: #32c67a;
+		width: auto;
+		font-size: 16px;
+		min-width: 110px;
+		height: 40px;
+	}
 	
 	.add-update-preview .btn3:hover {
-				opacity: 0.8;
-			}
+		opacity: 0.8;
+	}
 </style>

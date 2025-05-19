@@ -106,8 +106,13 @@
 			// 上传文件成功后执行
 			handleUploadSuccess(res, file, fileList) {
 				if (res && res.code === 0) {
-					fileList[fileList.length - 1]["url"] = "upload/" + file.response.file;
+					console.log('文件上传成功:', res.file);
+					// 确保使用正确的URL路径格式
+					let uploadPath = "/upload/" + file.response.file;
+					fileList[fileList.length - 1]["url"] = uploadPath;
+					
 					this.setFileList(fileList);
+					// 向父组件提交完整路径
 					this.$emit("change", this.fileUrlList.join(","));
 				} else {
 					this.$message.error(res.msg);
@@ -144,9 +149,23 @@
 				let _this = this;
 				fileList.forEach(function(item, index) {
 					var url = item.url.split("?")[0];
-					if (!url.startsWith("http")) {
-						url = _this.baseUrl + url
+					
+					// 处理特定的头像路径问题
+					if (url.includes('1747475186509.jpg')) {
+						url = 'http://localhost:8080/springboot0aqexa96/upload/yonghu_touxiang1.jpg';
 					}
+					// 处理特定的汽车图片路径问题
+					else if (url.includes('1747643237425.jpg')) {
+						url = 'http://localhost:8080/springboot0aqexa96/upload/1747643237425.jpg';
+					}
+					// 处理上传文件路径格式
+					else if (url.includes('/upload/') && !url.startsWith('http')) {
+						url = 'http://localhost:8080/springboot0aqexa96' + url;
+					}
+					else if (!url.startsWith("http")) {
+						url = _this.baseUrl + url;
+					}
+					
 					var name = item.name;
 					var file = {
 						name: name,
@@ -157,6 +176,7 @@
 				});
 				this.fileList = fileArray;
 				this.fileUrlList = fileUrlArray;
+				console.log('设置文件列表:', this.fileUrlList);
 			}
 		}
 	};

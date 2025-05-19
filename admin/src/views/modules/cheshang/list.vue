@@ -242,7 +242,7 @@
 						<template slot-scope="scope">
 							<div class="operation-buttons">
 								<el-button type="text" icon="el-icon-view" size="small" v-if="isAuth('cheshang','查看')" @click="addOrUpdateHandler(scope.row.id,'info')" class="view-btn">查看</el-button>
-								<el-button type="text" icon="el-icon-edit" size="small" v-if="isAuth('cheshang','修改') && scope.row.sfsh=='待审核'" @click="addOrUpdateHandler(scope.row.id)" class="edit-btn">修改</el-button>
+								<el-button type="text" icon="el-icon-edit" size="small" v-if="isAuth('cheshang','修改')" @click="addOrUpdateHandler(scope.row.id)" class="edit-btn">修改</el-button>
 								<el-button type="text" icon="el-icon-delete" size="small" v-if="isAuth('cheshang','删除')" @click="deleteHandler(scope.row.id)" class="delete-btn">删除</el-button>
 							</div>
 						</template>
@@ -834,17 +834,21 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		gap: 8px;
+		flex-wrap: nowrap;
+		gap: 5px;
 	}
 
 	.operation-buttons .el-button {
-		padding: 6px 10px;
-		margin: 0 4px;
+		padding: 4px 8px;
+		margin: 0;
 		border-radius: 4px;
 		transition: all 0.3s;
 		border: none;
 		position: relative;
 		overflow: hidden;
+		flex-shrink: 0;
+		min-width: 52px;
+		white-space: nowrap;
 	}
 
 	.operation-buttons .el-button::before {

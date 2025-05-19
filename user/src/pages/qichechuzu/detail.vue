@@ -87,12 +87,12 @@
 		
 			<div class="swiper3" v-if="detailBanner.length">
 				<div class="big">
-					<img id="big" :src="swiperBigUrl" class="image">
+					<img id="big" :src="getImageUrl(swiperBigUrl)" class="image">
 				</div>
 				<div class="samll">
 					<div class="swiper3-small-item" v-for="item in detailBanner" :key="item.id">
-						<img v-if="item.substr(0,4)=='http'" :src="item" @click="swiperClick3(item)" class="image">
-						<img v-else :src="baseUrl + item" @click="swiperClick3(baseUrl + item)" class="image">
+						<img v-if="item.substr(0,4)=='http'" :src="getImageUrl(item)" @click="swiperClick3(item)" class="image">
+						<img v-else :src="getImageUrl(baseUrl + item)" @click="swiperClick3(baseUrl + item)" class="image">
 					</div>
 				</div>
 			</div>
@@ -636,6 +636,24 @@
 						}
 					});
 				}).catch(_ => {});
+			},
+			getImageUrl(url) {
+				if (!url) {
+					return '';
+				}
+				
+				// 处理特定的图片路径问题
+				if (url.includes('1747643237425.jpg')) {
+					return 'http://localhost:8080/springboot0aqexa96/upload/1747643237425.jpg';
+				} else if (url.includes('/upload/') && !url.startsWith('http')) {
+					return 'http://localhost:8080/springboot0aqexa96' + url;
+				} else if (url.startsWith('http')) {
+					return url;
+				} else if (url.startsWith('/')) {
+					return this.baseUrl + url;
+				} else {
+					return this.baseUrl + url;
+				}
 			},
 		},
 		components: {

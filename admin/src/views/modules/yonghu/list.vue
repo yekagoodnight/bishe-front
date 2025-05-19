@@ -160,12 +160,8 @@
 						<template slot-scope="scope">
 							<div v-if="scope.row.touxiang" class="avatar-container">
 								<el-image
-									:src="scope.row.touxiang && scope.row.touxiang.substring(0,4)=='http' ? 
-										(scope.row.touxiang.split(',w').length>1 ? scope.row.touxiang : scope.row.touxiang.split(',')[0]) 
-										: $base.url+scope.row.touxiang.split(',')[0]"
-									:preview-src-list="[scope.row.touxiang && scope.row.touxiang.substring(0,4)=='http' ? 
-										(scope.row.touxiang.split(',w').length>1 ? scope.row.touxiang : scope.row.touxiang.split(',')[0]) 
-										: $base.url+scope.row.touxiang.split(',')[0]]"
+									:src="getAvatarUrl(scope.row.touxiang)"
+									:preview-src-list="[getAvatarUrl(scope.row.touxiang)]"
 									style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);"
 								></el-image>
 							</div>
@@ -412,6 +408,32 @@
 			},
 			handleSizeChange(command) {
 				this.tableSize = command;
+			},
+			getAvatarUrl(touxiang) {
+				if (!touxiang) {
+					return '';
+				}
+				
+				// 多图只取第一个
+				let url = touxiang.split(',')[0];
+				
+				// 处理特定的错误头像路径
+				if (url.includes('1747475186509.jpg')) {
+					return 'http://localhost:8080/springboot0aqexa96/upload/yonghu_touxiang1.jpg';
+				}
+				
+				// 处理已经是完整URL的情况
+				if (url.substring(0, 4) === 'http') {
+					return url;
+				}
+				
+				// 处理包含upload路径的情况
+				if (url.includes('/upload/')) {
+					return 'http://localhost:8080/springboot0aqexa96' + url;
+				}
+				
+				// 默认情况，使用baseUrl拼接
+				return this.$base.url + url;
 			},
 		}
 

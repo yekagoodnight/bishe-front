@@ -1,0 +1,36 @@
+/* Global styles for operation buttons */
+.operation-buttons {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+.operation-buttons .el-button {
+  margin: 0 4px !important;
+  padding: 5px 8px !important;
+}
+
+/* Ensure view, edit, and delete buttons have consistent widths */
+.operation-buttons .view-btn,
+.operation-buttons .edit-btn,
+.operation-buttons .delete-btn {
+  min-width: 52px !important;
+}
+
+/* Specific fix for the buttons in the screenshot */
+.el-table_4_column_42 .operation-buttons {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.el-table_4_column_42 .operation-buttons .el-button {
+  margin: 0 3px !important;
+  padding: 4px 6px !important;
+  flex-shrink: 0 !important;
+  min-width: auto !important;
+  white-space: nowrap !important;
+} 

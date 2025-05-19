@@ -1,11 +1,42 @@
 <template>
 	<div class="addEdit-block">
-		<el-form
+		<template v-if="type=='info'">
+			<div class="info-view">
+				<div class="info-row"><span class="info-label">订单编号：</span><span class="info-value">{{ruleForm.dingdanbianhao}}</span></div>
+				<div class="info-row"><span class="info-label">汽车车牌：</span><span class="info-value">{{ruleForm.qichechepai}}</span></div>
+				<div class="info-row"><span class="info-label">汽车类型：</span><span class="info-value">{{ruleForm.qicheleixing}}</span></div>
+				<div class="info-row"><span class="info-label">品牌：</span><span class="info-value">{{ruleForm.pinpai}}</span></div>
+				<div class="info-row"><span class="info-label">型号：</span><span class="info-value">{{ruleForm.xinghao}}</span></div>
+				<div class="info-row"><span class="info-label">年份：</span><span class="info-value">{{ruleForm.nianfen}}</span></div>
+				<div class="info-row"><span class="info-label">日租金：</span><span class="info-value">{{ruleForm.rizujin}}</span></div>
+				<div class="info-row"><span class="info-label">天数：</span><span class="info-value">{{ruleForm.tianshu}}</span></div>
+				<div class="info-row"><span class="info-label">应付价格：</span><span class="info-value">{{ruleForm.yingfujiage}}</span></div>
+				<div class="info-row"><span class="info-label">汽车图片：</span>
+					<span class="info-value">
+						<span v-if="ruleForm.qichetupian">
+							<img v-if="ruleForm.qichetupian.substring(0,4)=='http'&&ruleForm.qichetupian.split(',w').length>1" :src="ruleForm.qichetupian" width="60" height="60" style="border-radius:8px;object-fit:cover;margin-right:8px;" key="qichetupian-img1">
+							<img v-else-if="ruleForm.qichetupian.substring(0,4)=='http'" :src="ruleForm.qichetupian.split(',')[0]" width="60" height="60" style="border-radius:8px;object-fit:cover;margin-right:8px;" key="qichetupian-img2">
+							<img v-else v-for="(item,index) in ruleForm.qichetupian.split(',')" :key="'qichetupian-img-'+index" :src="$base.url+item" width="60" height="60" style="border-radius:8px;object-fit:cover;margin-right:8px;">
+						</span>
+						<span v-else>无图片</span>
+					</span>
+				</div>
+				<div class="info-row"><span class="info-label">租车时间：</span><span class="info-value">{{ruleForm.zucheshijian}}</span></div>
+				<div class="info-row"><span class="info-label">租车备注：</span><span class="info-value">{{ruleForm.zuchebeizhu}}</span></div>
+				<div class="info-row"><span class="info-label">车商账号：</span><span class="info-value">{{ruleForm.cheshangzhanghao}}</span></div>
+				<div class="info-row"><span class="info-label">用户账号：</span><span class="info-value">{{ruleForm.yonghuzhanghao}}</span></div>
+				<div class="info-row"><span class="info-label">用户姓名：</span><span class="info-value">{{ruleForm.yonghuxingming}}</span></div>
+				<el-button @click="back()" style="border: none; cursor: pointer; padding: 0 20px; color: #fff; border-radius: 4px; background: #909399; font-size: 14px; height: 40px; margin-top: 24px;">返回</el-button>
+			</div>
+		</template>
+		<el-form v-else
 			class="add-update-preview"
 			ref="ruleForm"
 			:model="ruleForm"
 			:rules="rules"
 			label-width="180px"
+			label-position="right"
+			style="max-width: 800px; margin: 0 auto;"
 		>
 			<template >
 				<el-form-item class="input" v-if="type!='info'" label="订单编号" prop="dingdanbianhao" >
@@ -129,8 +160,6 @@
 				</el-button>
 			</el-form-item>
 		</el-form>
-    
-
 	</div>
 </template>
 <script>
@@ -954,5 +983,70 @@
 		.btn5:hover {
 			opacity: 0.8;
 		}
+	}
+	.info-view {
+		margin-bottom: 10px;
+	}
+	.info-row {
+		display: flex;
+		align-items: center;
+		margin-bottom: 18px;
+	}
+	.info-label {
+		width: 180px;
+		color: #666;
+		font-size: 15px;
+		text-align: right;
+		flex-shrink: 0;
+	}
+	.info-value {
+		color: #333;
+		font-size: 15px;
+		margin-left: 16px;
+		word-break: break-all;
+	}
+	.add-update-preview /deep/ .el-form-item {
+		display: flex;
+		align-items: center;
+		margin-bottom: 22px;
+		width: 100%;
+	}
+	.add-update-preview .el-form-item /deep/ .el-form-item__label {
+		width: 180px;
+		text-align: right;
+		margin-right: 16px;
+		padding: 0;
+		line-height: 40px;
+		font-size: 15px;
+		color: #6e6e6e;
+		font-weight: 500;
+	}
+	.add-update-preview .el-form-item /deep/ .el-form-item__content {
+		margin-left: 0 !important;
+		flex: 1;
+		min-width: 0;
+	}
+	.add-update-preview .el-input,
+	.add-update-preview .el-select,
+	.add-update-preview .el-input-number,
+	.add-update-preview .el-date-editor {
+		width: 100%;
+	}
+	.add-update-preview .el-input /deep/ .el-input__inner,
+	.add-update-preview .el-select /deep/ .el-input__inner,
+	.add-update-preview .el-input-number /deep/ .el-input__inner,
+	.add-update-preview .el-date-editor /deep/ .el-input__inner {
+		width: 100%;
+		font-size: 15px;
+		height: 40px;
+		padding-left: 0 !important;
+	}
+	/* 隐藏el-upload的图片列表缩略图 */
+	::v-deep .el-upload-list--picture-card {
+		display: none !important;
+	}
+	/* 隐藏el-upload图片列表中的删除提示 */
+	::v-deep .el-icon-close-tip {
+		display: none !important;
 	}
 </style>

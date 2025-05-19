@@ -22,10 +22,24 @@
 				<div class="main-content">
 					<div class="user-info-header">
 						<div class="user-basic-info">
-							<img :src="sessionForm.touxiang?baseUrl + sessionForm.touxiang:require('@/assets/avator.png')" class="user-avatar">
+							<div class="avatar-container">
+								<img :src="getAvatarUrl(sessionForm.touxiang)" class="user-avatar">
+								<div v-if="editMode" class="avatar-overlay" @click="triggerFileUpload">
+									<i class="el-icon-camera"></i>
+									<span>更换头像</span>
+								</div>
+							</div>
 							<div class="user-details">
 								<div class="user-name">{{sessionForm.yonghuxingming}}</div>
 								<div class="user-account">{{sessionForm.yonghuzhanghao}}</div>
+								<div class="user-id-info" v-if="!editMode">
+									<div class="info-item" v-if="sessionForm.xingbie">
+										<i class="el-icon-user"></i> {{sessionForm.xingbie}}
+									</div>
+									<div class="info-item" v-if="sessionForm.shouji">
+										<i class="el-icon-mobile-phone"></i> {{sessionForm.shouji}}
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="user-stats">
@@ -44,55 +58,87 @@
 								</div>
 							</div>
 						</div>
+						<el-button v-if="!editMode" type="primary" @click="startEdit" class="edit-button">
+							<i class="el-icon-edit"></i> 编辑信息
+						</el-button>
 					</div>
+					
+					<div class="section-title">个人资料</div>
+					
 					<div class="form-container">
-						<el-form class="center-preview-pv" ref="sessionForm" :model="sessionForm" :rules="rules" label-width="80px">
+						<el-form class="center-preview-pv" ref="sessionForm" :model="sessionForm" :rules="rules" label-width="100px">
 							<el-form-item class="center-item" v-if="userTableName=='yonghu'" label="用户账号" prop="yonghuzhanghao">
-								<el-input v-model="sessionForm.yonghuzhanghao" placeholder="用户账号" readonly></el-input>
+								<el-input v-model="sessionForm.yonghuzhanghao" placeholder="用户账号" :readonly="true">
+									<template slot="prepend"><i class="el-icon-user"></i></template>
+								</el-input>
 							</el-form-item>
 							<el-form-item class="center-item" v-if="userTableName=='yonghu'" label="用户姓名" prop="yonghuxingming">
-								<el-input v-model="sessionForm.yonghuxingming" placeholder="用户姓名" ></el-input>
+								<el-input v-model="sessionForm.yonghuxingming" placeholder="用户姓名" :readonly="!editMode">
+									<template slot="prepend"><i class="el-icon-user-solid"></i></template>
+								</el-input>
 							</el-form-item>
 							<el-form-item class="center-item" v-if="userTableName=='yonghu'" label="性别" prop="xingbie">
-								<el-select v-model="sessionForm.xingbie" placeholder="请选择性别" >
+								<el-select v-model="sessionForm.xingbie" placeholder="请选择性别" :disabled="!editMode">
 									<el-option v-for="(item, index) in dynamicProp.xingbie" :key="index" :label="item" :value="item"></el-option>
 								</el-select>
 							</el-form-item>
 							<el-form-item class="center-item" v-if="userTableName=='yonghu'" label="手机" prop="shouji">
-								<el-input v-model="sessionForm.shouji" placeholder="手机" ></el-input>
+								<el-input v-model="sessionForm.shouji" placeholder="手机" :readonly="!editMode">
+									<template slot="prepend"><i class="el-icon-mobile-phone"></i></template>
+								</el-input>
 							</el-form-item>
 							<el-form-item class="center-item" v-if="userTableName=='yonghu'" label="身份证" prop="shenfenzheng">
-								<el-input v-model="sessionForm.shenfenzheng" placeholder="身份证" ></el-input>
+								<el-input v-model="sessionForm.shenfenzheng" placeholder="身份证" :readonly="!editMode">
+									<template slot="prepend"><i class="el-icon-document"></i></template>
+								</el-input>
 							</el-form-item>
-							<el-form-item class="center-item" v-if="userTableName=='yonghu'" label="头像" prop="touxiang">
+							<el-form-item class="center-item" v-if="userTableName=='yonghu' && editMode" label="头像" prop="touxiang">
 								<file-upload
+									ref="fileUpload"
 									tip="点击上传头像"
 									action="file/upload"
 									:limit="1"
 									:multiple="true"
 									:fileUrls="sessionForm.touxiang?sessionForm.touxiang:''"
 									@change="yonghutouxiangHandleAvatarSuccess"
-									></file-upload>
+								></file-upload>
+							</el-form-item>
+							<el-form-item class="center-btn-item" v-if="editMode">
+								<div class="btn-container">
+									<el-button type="primary" @click="saveEdit" class="save-button">
+										<i class="el-icon-check"></i> 保存
+									</el-button>
+									<el-button @click="cancelEdit" class="cancel-button">
+										<i class="el-icon-close"></i> 取消
+									</el-button>
+								</div>
+							</el-form-item>
+						</el-form>
+					</div>
+					
+					<div class="section-title" style="margin-top: 50px;">修改密码</div>
+					<div class="form-container">
+						<el-form class="center-preview-pv" ref="passwordForm" :model="passwordForm" :rules="passwordRules" label-width="100px">
+							<el-form-item class="center-item" label="原密码" prop="password">
+								<el-input v-model="passwordForm.password" type="password" placeholder="请输入原密码">
+									<template slot="prepend"><i class="el-icon-lock"></i></template>
+								</el-input>
+							</el-form-item>
+							<el-form-item class="center-item" label="新密码" prop="newpassword">
+								<el-input v-model="passwordForm.newpassword" type="password" placeholder="请输入新密码">
+									<template slot="prepend"><i class="el-icon-key"></i></template>
+								</el-input>
+							</el-form-item>
+							<el-form-item class="center-item" label="确认密码" prop="repassword">
+								<el-input v-model="passwordForm.repassword" type="password" placeholder="请再次输入新密码">
+									<template slot="prepend"><i class="el-icon-unlock"></i></template>
+								</el-input>
 							</el-form-item>
 							<el-form-item class="center-btn-item">
 								<div class="btn-container">
-									<div class="btn-wrapper update-wrapper">
-										<div class="updateBtn" type="primary" @click="onSubmit('sessionForm')">
-											<span class="btn-icon">
-												<i class="el-icon-check"></i>
-											</span>
-											<span class="btn-text">更新信息</span>
-										</div>
-									</div>
-									
-									<div class="btn-wrapper logout-wrapper">
-										<div class="closeBtn" type="danger" @click="logout">
-											<span class="btn-icon">
-												<i class="el-icon-switch-button"></i>
-											</span>
-											<span class="btn-text">退出登录</span>
-										</div>
-									</div>
+									<el-button type="primary" @click="updatePassword" class="save-button">
+										<i class="el-icon-key"></i> 更新密码
+									</el-button>
 								</div>
 							</el-form-item>
 						</el-form>
@@ -114,7 +160,11 @@
 				title: '个人中心',
 				baseUrl: config.baseUrl,
 				sessionForm: {},
-				passwordForm: {},
+				passwordForm: {
+					password: '',
+					newpassword: '',
+					repassword: ''
+				},
 				favoriteCount: 0,
 				orderCount: 0,
 				passwordRules: {
@@ -155,6 +205,10 @@
 					}
 				],
 				activeIndex: '0',
+				editMode: false,
+				backupSessionForm: {},
+				isAvatarChanged: false,
+				uploadLoading: false,
 			}
 		},
 		created() {
@@ -253,6 +307,8 @@
 					this.orderCount = res.data.data;
 				}
 			});
+
+			this.backupSessionForm = JSON.parse(JSON.stringify(this.sessionForm));
 		},
 		//方法集合
 		methods: {
@@ -271,28 +327,112 @@
 				localStorage.setItem('sessionForm',JSON.stringify(this.sessionForm))
 			},
 			onSubmit(formName) {
-				if(`yonghu` == this.userTableName && this.sessionForm.touxiang!=null){
-					this.sessionForm.touxiang = this.sessionForm.touxiang.replace(new RegExp(this.$config.baseUrl,"g"),"");
+				// 保存当前头像URL，用于表单提交后还原
+				const currentTouxiang = this.sessionForm.touxiang;
+				console.log('提交前的头像URL:', currentTouxiang);
+				
+				// 克隆sessionForm用于提交，避免修改原对象
+				const submitForm = JSON.parse(JSON.stringify(this.sessionForm));
+				
+				if(`yonghu` == this.userTableName && submitForm.touxiang!=null){
+					// 只替换baseUrl部分，保留文件路径
+					if (submitForm.touxiang.startsWith(this.baseUrl)) {
+						submitForm.touxiang = submitForm.touxiang.replace(this.baseUrl, "");
+					} else if (submitForm.touxiang.includes('localhost:8080/springboot0aqexa96')) {
+						// 处理localhost路径
+						submitForm.touxiang = submitForm.touxiang.replace('http://localhost:8080/springboot0aqexa96', "");
+					}
 				}
+				
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						this.$http.post(this.userTableName + '/update', this.sessionForm).then(res => {
+						this.uploadLoading = true;
+						
+						this.$http.post(this.userTableName + '/update', submitForm).then(res => {
+							this.uploadLoading = false;
 							if (res.data.code == 0) {
-								this.setSession()
+								// 保持原始的sessionForm不变
+								this.setSession();
 								this.$message({
 									message: '更新成功',
 									type: 'success',
-									duration: 1500
+									duration: 1500,
+									onClose: () => {
+										this.isAvatarChanged = false;
+									}
 								});
+							} else {
+								this.$message.error(res.data.msg || '更新失败');
 							}
+						}).catch(err => {
+							this.uploadLoading = false;
+							this.$message.error('网络错误，请稍后重试');
+							console.error('更新错误:', err);
 						});
 					} else {
 						return false;
 					}
 				});
 			},
+			getAvatarUrl(touxiang) {
+				if (!touxiang) {
+					return require('@/assets/avator.png');
+				}
+				
+				// 多图只取第一个
+				let url = touxiang.split(',')[0];
+				
+				// 如果URL包含特定路径标记，直接返回完整路径
+				if (url.includes('1747475186509.jpg')) {
+					return 'http://localhost:8080/springboot0aqexa96/upload/yonghu_touxiang1.jpg';
+				} else if (url.includes('/upload/')) {
+					// 确保路径是正确格式
+					if (!url.startsWith('http')) {
+						return 'http://localhost:8080/springboot0aqexa96' + url;
+					}
+					return url;
+				} else if (/^https?:\/\//.test(url)) {
+					return url;
+				}
+				
+				// 其他情况，使用baseUrl拼接
+				return this.baseUrl + url;
+			},
 			yonghutouxiangHandleAvatarSuccess(fileUrls) {
-				this.sessionForm.touxiang = fileUrls;
+				console.log('上传头像成功:', fileUrls);
+				
+				// 确保fileUrls是完整的URL路径
+				let urls = fileUrls;
+				if (urls && !urls.startsWith('http') && urls.includes('/upload/')) {
+					urls = 'http://localhost:8080/springboot0aqexa96' + urls;
+				} else if (urls && !urls.startsWith('http')) {
+					urls = this.baseUrl + urls;
+				}
+				
+				this.sessionForm.touxiang = urls;
+				this.isAvatarChanged = true;
+				this.setSession();
+				
+				// 强制更新页面
+				this.$nextTick(() => {
+					this.$forceUpdate();
+				});
+				
+				// 显示成功提示
+				this.$notify({
+					title: '成功',
+					message: '头像已上传，点击保存按钮保存更改',
+					type: 'success',
+					duration: 3000
+				});
+			},
+			triggerFileUpload() {
+				if (this.$refs.fileUpload) {
+					const uploadBtn = this.$refs.fileUpload.$el.querySelector('.upload-btn');
+					if (uploadBtn) {
+						uploadBtn.click();
+					}
+				}
 			},
 			handleClick(item, index) {
 				this.activeIndex = index;
@@ -337,19 +477,38 @@
 						}
 						this.sessionForm.password = this.passwordForm.newpassword;
 						this.sessionForm.mima = this.passwordForm.newpassword;
+						
+						// 显示加载中
+						const loading = this.$loading({
+							lock: true,
+							text: '正在更新密码...',
+							spinner: 'el-icon-loading',
+							background: 'rgba(255, 255, 255, 0.7)'
+						});
+						
 						this.$http.post(`${this.userTableName}/update`,this.sessionForm).then(({data})=>{
+							loading.close();
 							if (data && data.code === 0) {
 								this.$message({
 									message: "修改密码成功,下次登录系统生效",
 									type: "success",
 									duration: 1500,
 									onClose: () => {
+										// 清空密码表单
+										this.passwordForm = {
+											password: '',
+											newpassword: '',
+											repassword: ''
+										};
 									}
 								});
 								this.setSession()
 							} else {
 								this.$message.error(data.msg);
 							}
+						}).catch(err => {
+							loading.close();
+							this.$message.error("网络错误，请稍后重试");
 						});
 					}
 				})
@@ -374,6 +533,62 @@
 						break;
 					default:
 						return true
+				}
+			},
+			startEdit() {
+				// 进入编辑模式前备份当前表单
+				this.backupSessionForm = JSON.parse(JSON.stringify(this.sessionForm));
+				this.editMode = true;
+				this.isAvatarChanged = false;
+				
+				this.$notify({
+					title: '提示',
+					message: '您已进入编辑模式，可以更新个人信息和头像',
+					type: 'info',
+					duration: 3000
+				});
+			},
+			saveEdit() {
+				// 检查是否有变更
+				const hasChanges = JSON.stringify(this.backupSessionForm) !== JSON.stringify(this.sessionForm) || this.isAvatarChanged;
+				
+				if (!hasChanges) {
+					this.$message({
+						message: '没有检测到信息变更',
+						type: 'info',
+						duration: 1500
+					});
+					this.editMode = false;
+					return;
+				}
+				
+				this.onSubmit('sessionForm');
+				this.editMode = false;
+			},
+			cancelEdit() {
+				// 检查是否有变更
+				const hasChanges = JSON.stringify(this.backupSessionForm) !== JSON.stringify(this.sessionForm) || this.isAvatarChanged;
+				
+				if (hasChanges) {
+					this.$confirm('确定取消编辑？您的修改将不会保存', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '返回编辑',
+						type: 'warning'
+					}).then(() => {
+						// 恢复原始数据
+						this.sessionForm = JSON.parse(JSON.stringify(this.backupSessionForm));
+						this.editMode = false;
+						this.isAvatarChanged = false;
+						this.$message({
+							type: 'info',
+							message: '已取消编辑'
+						});
+					}).catch(() => {
+						// 继续编辑
+					});
+				} else {
+					// 没有变更，直接退出编辑模式
+					this.editMode = false;
 				}
 			}
 		}
@@ -441,7 +656,7 @@
 		font-size: 20px;
 		font-weight: bold;
 	}
-
+	
 	.center-container {
 		min-height: 100vh;
 		background-color: #f5f7fa;
@@ -537,11 +752,11 @@
 	}
 
 	.section-title {
-		font-size: 28px;
+		font-size: 24px;
 		font-weight: 600;
 		color: #1B3E90;
 		margin-bottom: 30px;
-		padding-bottom: 20px;
+		padding-bottom: 15px;
 		border-bottom: 2px solid #f0f2f5;
 		position: relative;
 	}
@@ -551,7 +766,7 @@
 		position: absolute;
 		bottom: -2px;
 		left: 0;
-		width: 100px;
+		width: 80px;
 		height: 2px;
 		background: #1B3E90;
 	}
@@ -604,6 +819,23 @@
 	:deep(.el-select) {
 		width: 100%;
 	}
+	
+	:deep(.el-input-group__prepend) {
+		background: #f5f7fa;
+		border-color: #dcdfe6;
+		color: #1B3E90;
+		border-top-left-radius: 8px;
+		border-bottom-left-radius: 8px;
+		width: 40px;
+		display: flex;
+		justify-content: center;
+		padding: 0 12px;
+	}
+	
+	:deep(.el-input-group__prepend i) {
+		font-size: 16px;
+		color: #1B3E90;
+	}
 
 	.center-btn-item {
 		margin-top: 40px;
@@ -617,82 +849,6 @@
 		gap: 20px;
 	}
 
-	.update-wrapper {
-		display: inline-block;
-	}
-
-	.logout-wrapper {
-		display: inline-block;
-	}
-
-	.btn-wrapper {
-		position: relative;
-		overflow: hidden;
-		border-radius: 20px;
-		transition: all 0.3s ease;
-	}
-
-	.updateBtn, .closeBtn {
-		min-width: 120px;
-		height: 36px;
-		font-size: 14px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-		cursor: pointer;
-		transition: all 0.3s ease;
-		padding: 0 18px;
-		border-radius: 18px;
-	}
-
-	.updateBtn {
-		background: #1B3E90;
-		color: #fff;
-		border: none;
-		box-shadow: 0 4px 12px rgba(27, 62, 144, 0.15);
-	}
-
-	.updateBtn:hover {
-		background: #25489C;
-		transform: translateY(-2px);
-		box-shadow: 0 6px 16px rgba(27, 62, 144, 0.25);
-	}
-
-	.closeBtn {
-		background: #fff;
-		color: #f56c6c;
-		border: 2px solid #f56c6c;
-		box-shadow: 0 4px 12px rgba(245, 108, 108, 0.08);
-	}
-
-	.closeBtn:hover {
-		background: #f56c6c;
-		color: #fff;
-		transform: translateY(-2px);
-		box-shadow: 0 6px 16px rgba(245, 108, 108, 0.2);
-	}
-
-	.btn-icon {
-		font-size: 16px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.btn-text {
-		font-weight: 500;
-		font-size: 14px;
-		letter-spacing: 0.5px;
-	}
-
-	/* 添加按钮点击效果 */
-	.updateBtn:active,
-	.closeBtn:active {
-		transform: scale(0.98);
-		box-shadow: none;
-	}
-
 	.user-info-header {
 		background: linear-gradient(135deg, #f8f9fc 0%, #fff 100%);
 		border-radius: 16px;
@@ -703,6 +859,8 @@
 		align-items: center;
 		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 		border: 1px solid #ebeef5;
+		flex-wrap: wrap;
+		gap: 20px;
 	}
 
 	.user-basic-info {
@@ -711,12 +869,55 @@
 		gap: 24px;
 	}
 
-	.user-avatar {
-		width: 80px;
-		height: 80px;
+	.avatar-container {
+		position: relative;
+		width: 100px;
+		height: 100px;
 		border-radius: 50%;
-		border: 4px solid #fff;
+		overflow: hidden;
 		box-shadow: 0 4px 12px rgba(27, 62, 144, 0.15);
+		border: 3px solid #fff;
+	}
+
+	.user-avatar {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: all 0.3s ease;
+	}
+
+	.avatar-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		opacity: 0;
+		transition: opacity 0.3s ease;
+		cursor: pointer;
+		color: white;
+	}
+
+	.avatar-overlay:hover {
+		opacity: 1;
+	}
+
+	.avatar-container:hover .user-avatar {
+		transform: scale(1.05);
+	}
+
+	.avatar-overlay i {
+		font-size: 24px;
+		margin-bottom: 5px;
+	}
+
+	.avatar-overlay span {
+		font-size: 12px;
 	}
 
 	.user-details {
@@ -729,6 +930,7 @@
 		font-size: 24px;
 		font-weight: 600;
 		color: #1B3E90;
+		margin-bottom: 4px;
 	}
 
 	.user-account {
@@ -738,11 +940,39 @@
 		padding: 4px 12px;
 		border-radius: 20px;
 		display: inline-block;
+		margin-bottom: 8px;
+	}
+	
+	.user-id-info {
+		display: flex;
+		gap: 16px;
+		margin-top: 4px;
+	}
+	
+	.info-item {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 14px;
+		color: #666;
+		background: #f5f7fa;
+		padding: 4px 12px;
+		border-radius: 20px;
+		transition: all 0.3s;
+	}
+	
+	.info-item:hover {
+		background: #e8f0fc;
+		color: #1B3E90;
+	}
+	
+	.info-item i {
+		color: #1B3E90;
 	}
 
 	.user-stats {
 		display: flex;
-		gap: 40px;
+		gap: 20px;
 	}
 
 	.stat-item {
@@ -783,10 +1013,98 @@
 		font-size: 14px;
 		color: #666;
 	}
-
-	.button-spacer {
-		height: 10px;
-		width: 100%;
-		display: block;
+	
+	.edit-button {
+		height: 40px;
+		border-radius: 8px;
+		background: #1B3E90;
+		border: none;
+		box-shadow: 0 4px 8px rgba(27, 62, 144, 0.15);
+		transition: all 0.3s ease;
+		margin-left: auto;
+	}
+	
+	.edit-button:hover {
+		background: #25489C;
+		transform: translateY(-2px);
+		box-shadow: 0 6px 12px rgba(27, 62, 144, 0.25);
+	}
+	
+	.save-button, .cancel-button {
+		min-width: 120px;
+		height: 40px;
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		font-weight: 500;
+	}
+	
+	.save-button {
+		background: #1B3E90;
+		border-color: #1B3E90;
+	}
+	
+	.save-button:hover {
+		background: #25489C;
+		border-color: #25489C;
+		transform: translateY(-2px);
+		box-shadow: 0 6px 12px rgba(27, 62, 144, 0.15);
+	}
+	
+	.cancel-button {
+		border-color: #dcdfe6;
+	}
+	
+	.cancel-button:hover {
+		border-color: #c0c4cc;
+		transform: translateY(-2px);
+	}
+	
+	@media (max-width: 992px) {
+		.center-content {
+			grid-template-columns: 1fr;
+		}
+		
+		.sidebar {
+			position: static;
+		}
+		
+		.user-info-header {
+			flex-direction: column;
+			gap: 20px;
+			align-items: flex-start;
+		}
+		
+		.user-stats {
+			width: 100%;
+		}
+		
+		.edit-button {
+			margin-left: 0;
+			width: 100%;
+		}
+	}
+	
+	@media (max-width: 768px) {
+		.user-stats {
+			flex-direction: column;
+			gap: 10px;
+		}
+		
+		.main-content {
+			padding: 20px;
+		}
+		
+		.user-basic-info {
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+		}
+		
+		.user-id-info {
+			justify-content: center;
+		}
 	}
 </style>

@@ -52,6 +52,8 @@
 
 				rules: {
 					qicheleixing: [
+						{ required: true, message: "汽车类型不能为空", trigger: "blur" },
+						{ min: 1, max: 50, message: "长度在 1 到 50 个字符", trigger: "blur" }
 					],
 				},
 			};
@@ -75,7 +77,7 @@
 			init(id,type) {
 				if (id) {
 					this.id = id;
-					this.type = type;
+					this.type = type || 'else'; // Set type to 'else' by default when editing
 				}
 				if(this.type=='info'||this.type=='else'||this.type=='msg'){
 					this.info(id);
@@ -111,17 +113,23 @@
 			// 多级联动参数
 
 			info(id) {
+				if(!id) {
+					return;
+				}
 				this.$http({
 					url: `qicheleixing/info/${id}`,
 					method: "get"
 				}).then(({ data }) => {
 					if (data && data.code === 0) {
 						this.ruleForm = data.data;
-						//解决前台上传图片后台不显示的问题
-						let reg=new RegExp('../../../upload','g')//g代表全部
+						// Make sure id is properly set
+						this.ruleForm.id = id;
 					} else {
-						this.$message.error(data.msg);
+						this.$message.error(data.msg || "获取信息失败");
 					}
+				}).catch(error => {
+					console.error("获取信息失败", error);
+					this.$message.error("获取信息失败，请检查网络或联系管理员");
 				});
 			},
 
@@ -151,6 +159,11 @@
 								}
 							}
 							
+							// Ensure ID is set for updates
+							if (this.id && !this.ruleForm.id) {
+								this.ruleForm.id = this.id;
+							}
+							
 							await this.$http({
 								url: `qicheleixing/${!this.ruleForm.id ? "save" : "update"}`,
 								method: "post",
@@ -172,6 +185,9 @@
 								} else {
 									this.$message.error(data.msg);
 								}
+							}).catch(error => {
+								console.error("提交失败", error);
+								this.$message.error("提交失败，请检查网络或联系管理员");
 							});
 						}
 					});

@@ -77,9 +77,9 @@
 			<div class="list">
 				<div class="index-pv1">
 					<div v-for="(item, index) in dataList" :key="index" @click.stop="toDetail(item)" class="animation-box">
-						<img class="image" @click.stop="imgPreView(item.qichetupian)" v-if="item.qichetupian && item.qichetupian.substr(0,4)=='http'&& item.qichetupian.split(',w').length>1" :src="item.qichetupian" />
-						<img class="image" @click.stop="imgPreView(item.qichetupian.split(',')[0])" v-else-if="item.qichetupian && item.qichetupian.substr(0,4)=='http'" :src="item.qichetupian.split(',')[0]" />
-						<img class="image" @click.stop="imgPreView(baseUrl + (item.qichetupian?item.qichetupian.split(',')[0]:''))" v-else :src="baseUrl + (item.qichetupian?item.qichetupian.split(',')[0]:'')" />
+						<img class="image" @click.stop="imgPreView(getImageUrl(item.qichetupian))" v-if="item.qichetupian && item.qichetupian.substr(0,4)=='http'&& item.qichetupian.split(',w').length>1" :src="getImageUrl(item.qichetupian)" />
+						<img class="image" @click.stop="imgPreView(getImageUrl(item.qichetupian.split(',')[0]))" v-else-if="item.qichetupian && item.qichetupian.substr(0,4)=='http'" :src="getImageUrl(item.qichetupian.split(',')[0])" />
+						<img class="image" @click.stop="imgPreView(getImageUrl(baseUrl + (item.qichetupian?item.qichetupian.split(',')[0]:'')))" v-else :src="getImageUrl(baseUrl + (item.qichetupian?item.qichetupian.split(',')[0]:''))" />
 						
 						<div class="name">{{item.zulinbiaoti}}</div>
 						
@@ -300,6 +300,24 @@
 					return this.isBackAuth(tableName,key)
 				}else{
 					return this.isAuth(tableName,key)
+				}
+			},
+			getImageUrl(url) {
+				if (!url) {
+					return '';
+				}
+				
+				// 处理特定的图片路径问题
+				if (url.includes('1747643237425.jpg')) {
+					return 'http://localhost:8080/springboot0aqexa96/upload/1747643237425.jpg';
+				} else if (url.includes('/upload/') && !url.startsWith('http')) {
+					return 'http://localhost:8080/springboot0aqexa96' + url;
+				} else if (url.startsWith('http')) {
+					return url;
+				} else if (url.startsWith('/')) {
+					return this.baseUrl + url;
+				} else {
+					return this.baseUrl + url;
 				}
 			},
 		}

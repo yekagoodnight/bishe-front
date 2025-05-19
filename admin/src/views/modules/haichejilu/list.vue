@@ -1,233 +1,306 @@
 <template>
-	<div class="main-content" :style='{"width":"100%","padding":"20px 30px","fontSize":"15px"}'>
+	<div class="main-content" :style='{"width":"100%","padding":"20px 30px","fontSize":"15px","background":"#f5f7fa","borderRadius":"8px"}'>
 		<!-- 列表页 -->
 		<template v-if="showFlag">
-			<el-form class="center-form-pv" :style='{"border":"20px solid #fff","margin":"0 0px 0px","flexWrap":"wrap","background":"#fff","display":"flex","width":"100%","justifyContent":"space-between"}' :inline="true" :model="searchForm">
-				<el-row :style='{"padding":"10px","alignItems":"center","flexWrap":"wrap","background":"none","display":"flex"}' >
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">订单编号</label>
-						<el-input v-model="searchForm.dingdanbianhao" placeholder="订单编号" @keydown.enter.native="search()" clearable></el-input>
-					</div>
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">汽车车牌</label>
-						<el-input v-model="searchForm.qichechepai" placeholder="汽车车牌" @keydown.enter.native="search()" clearable></el-input>
-					</div>
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">汽车类型</label>
-						<el-input v-model="searchForm.qicheleixing" placeholder="汽车类型" @keydown.enter.native="search()" clearable></el-input>
-					</div>
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}' class="select">
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">是否通过</label>
-						<el-select clearable v-model="searchForm.sfsh" placeholder="是否通过">
-							<el-option v-for="(item,index) in sfshOptions" v-bind:key="index" :label="item" :value="item"></el-option>
-						</el-select>
-					</div>
-					<el-button class="search" type="success" @click="search()">
-						<span class="icon iconfont icon-fangdajing02" :style='{"margin":"0 0px","fontSize":"16px","color":"#fff","height":"40px"}'></span>
-						查询
-					</el-button>
-				</el-row>
+			<!-- 搜索卡片 -->
+			<el-card shadow="hover" class="search-card" :style='{"border":"none","padding":"20px","margin":"0 0 25px","borderRadius":"15px","boxShadow":"0 4px 18px 0 rgba(0, 0, 0, 0.1)","background":"linear-gradient(to right, #ffffff, #f8f9fd)","width":"100%"}'>
+				<div class="search-title" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ebeef5;">
+					<i class="el-icon-search" style="font-size: 18px; color: #409EFF; margin-right: 8px;"></i>
+					<span style="font-size: 16px; color: #333; font-weight: 500;">还车记录搜索</span>
+				</div>
+				<el-form class="center-form-pv" :style='{"border":"none","margin":"0","flexWrap":"wrap","background":"none","display":"flex","width":"100%","justifyContent":"flex-start"}' :inline="true" :model="searchForm">
+					<el-row :style='{"padding":"0","alignItems":"center","flexWrap":"wrap","background":"none","display":"flex","width":"100%"}' >
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-tickets" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#409EFF"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">订单编号</label>
+							<el-input v-model="searchForm.dingdanbianhao" size="mini" placeholder="请输入订单编号" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"180px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search" :prefix-icon-style='{"fontSize":"14px","color":"#409EFF","margin":"0 5px 0 0"}'></el-input>
+						</div>
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-truck" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#67C23A"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">汽车车牌</label>
+							<el-input v-model="searchForm.qichechepai" size="mini" placeholder="请输入汽车车牌" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"180px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search" :prefix-icon-style='{"fontSize":"14px","color":"#67C23A","margin":"0 5px 0 0"}'></el-input>
+						</div>
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-s-grid" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#E6A23C"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">汽车类型</label>
+							<el-input v-model="searchForm.qicheleixing" size="mini" placeholder="请输入汽车类型" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"180px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search" :prefix-icon-style='{"fontSize":"14px","color":"#E6A23C","margin":"0 5px 0 0"}'></el-input>
+						</div>
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}' class="select">
+							<i class="el-icon-finished" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#909399"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">是否通过</label>
+							<el-select clearable size="mini" v-model="searchForm.sfsh" placeholder="是否通过" :style='{"borderRadius":"4px","border":"none","width":"180px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}'>
+								<el-option v-for="(item,index) in sfshOptions" v-bind:key="index" :label="item" :value="item"></el-option>
+							</el-select>
+						</div>
+						<el-button class="search-btn" type="primary" @click="search()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(64, 158, 255, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#409EFF","width":"auto","fontSize":"14px","height":"32px","fontWeight":"500"}'>
+							<i class="el-icon-search" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"32px"}'></i>
+							查询
+						</el-button>
+						<el-button class="reset-btn" @click="resetSearch()" :style='{"border":"1px solid #dcdfe6","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(0, 0, 0, 0.05)","margin":"0 10px 0 0","outline":"none","color":"#606266","borderRadius":"8px","background":"#fff","width":"auto","fontSize":"14px","height":"32px","fontWeight":"500"}'>
+							<i class="el-icon-refresh-right" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#606266","height":"32px"}'></i>
+							重置
+						</el-button>
+					</el-row>
 
-				<el-row class="actions" :style='{"padding":"10px","margin":"0px 0","flexWrap":"wrap","background":"none","display":"flex"}'>
-					<el-button class="add" v-if="isAuth('haichejilu','新增')" type="success" @click="addOrUpdateHandler()">
-						<span class="icon iconfont icon-tianjia1" :style='{"margin":"0 2px","fontSize":"14px","color":"#fff","height":"34px"}'></span>
-						添加
-					</el-button>
-					<el-button class="del" v-if="isAuth('haichejilu','删除')" :disabled="dataListSelections.length?false:true" type="danger" @click="deleteHandler()">
-						<span class="icon iconfont icon-shanchu6" :style='{"margin":"0 2px","fontSize":"14px","color":"#fff","height":"34px"}'></span>
-						删除
-					</el-button>
-
-
-					<el-button class="btn18" v-if="isAuth('haichejilu','审核')" :disabled="dataListSelections.length?false:true" type="success" @click="shBatchDialog()">
-						<span class="icon iconfont icon-shenhe9" :style='{"margin":"0 2px","fontSize":"14px","color":"#939393","height":"34px"}'></span>
-						审核
-					</el-button>
-				</el-row>
-			</el-form>
-			<div :style='{"border":"20px solid #fff","padding":"0","color":"#000","background":"#fff","borderWidth":"0 20px 20px","width":"100%","fontSize":"14px"}'>
-				<el-table class="tables"
-					:stripe='false'
-					:style='{"padding":"0px 0","borderColor":"#f6f6f6","borderRadius":"0","borderWidth":"0px 0 0 1px","background":"#fff","width":"100%","fontSize":"inherit","borderStyle":"solid"}' 
-					:border='true'
+					<el-row class="actions" :style='{"padding":"10px 0 0","margin":"10px 0 0","borderTop":"1px dashed #ebeef5","flexWrap":"wrap","background":"none","display":"flex","width":"100%","justifyContent":"flex-start"}'>
+						<el-button class="add-btn" v-if="isAuth('haichejilu','新增')" type="success" @click="addOrUpdateHandler()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(103, 194, 58, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#67C23A","width":"auto","fontSize":"14px","height":"32px","fontWeight":"500"}'>
+							<i class="el-icon-plus" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"32px"}'></i>
+							添加
+						</el-button>
+						<el-button class="del-btn" v-if="isAuth('haichejilu','删除')" :disabled="dataListSelections.length?false:true" type="danger" @click="deleteHandler()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(245, 108, 108, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#F56C6C","width":"auto","fontSize":"14px","height":"32px","fontWeight":"500"}'>
+							<i class="el-icon-delete" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"32px"}'></i>
+							删除
+						</el-button>
+						<el-button class="audit-btn" v-if="isAuth('haichejilu','审核')" :disabled="dataListSelections.length?false:true" type="warning" @click="shBatchDialog()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(230, 162, 60, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#E6A23C","width":"auto","fontSize":"14px","height":"32px","fontWeight":"500"}'>
+							<i class="el-icon-circle-check" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"32px"}'></i>
+							审核
+						</el-button>
+					</el-row>
+				</el-form>
+			</el-card>
+			
+			<!-- 列表卡片 -->
+			<el-card shadow="hover" :style='{"border":"none","padding":"20px","borderRadius":"15px","boxShadow":"0 4px 18px 0 rgba(0, 0, 0, 0.1)","background":"#fff","width":"100%"}'>
+				<div class="table-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ebeef5;">
+					<div class="table-title" style="display: flex; align-items: center;">
+						<i class="el-icon-tickets" style="font-size: 18px; color: #67C23A; margin-right: 8px;"></i>
+						<span style="font-size: 16px; color: #333; font-weight: 500;">还车记录列表</span>
+						<span class="table-count" style="font-size: 13px; color: #909399; margin-left: 8px;">(共 {{totalPage}} 条记录)</span>
+					</div>
+					<div class="table-actions">
+						<el-tooltip content="刷新" placement="top">
+							<el-button size="mini" type="text" icon="el-icon-refresh" circle @click="search()" style="font-size: 16px; color: #909399;"></el-button>
+						</el-tooltip>
+						<el-tooltip content="密度" placement="top">
+							<el-dropdown trigger="click" @command="handleSizeChange">
+								<el-button size="mini" type="text" icon="el-icon-s-grid" circle style="font-size: 16px; color: #909399;"></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item command="medium">默认</el-dropdown-item>
+									<el-dropdown-item command="small">紧凑</el-dropdown-item>
+									<el-dropdown-item command="mini">迷你</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						</el-tooltip>
+					</div>
+				</div>
+				
+				<!-- 表格部分 -->
+				<el-table 
+					class="tables"
+					:stripe='true'
+					:size="tableSize"
+					:style='{"padding":"0","borderColor":"#ebeef5","borderRadius":"12px","borderWidth":"1px","background":"#fff","width":"100%","fontSize":"14px","borderStyle":"solid"}' 
+					:border='false'
 					v-if="isAuth('haichejilu','查看')"
 					:data="dataList"
 					v-loading="dataListLoading"
-				@selection-change="selectionChangeHandler">
-					<el-table-column :resizable='true' type="selection" align="center" width="50"></el-table-column>
-					<el-table-column :resizable='true' :sortable='true' label="序号" type="index" width="50" />
-					<el-table-column :resizable='true' :sortable='true'  
+					@selection-change="selectionChangeHandler"
+					:header-cell-style="{'color':'#333', 'fontWeight':'500', 'fontSize':'13px', 'background-color':'#f5f7fa', 'padding':'8px 0', 'text-align': 'center'}"
+					:cell-style="{'color':'#333', 'fontSize':'13px', 'padding':'8px 0', 'text-align': 'center'}"
+					:fit="true">
+					<el-table-column :resizable='true' type="selection" align="center" width="40"></el-table-column>
+					<el-table-column :resizable='true' :sortable='true' label="序号" type="index" width="40" align="center" :index="indexMethod"></el-table-column>
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true'  
 						prop="dingdanbianhao"
-						label="订单编号">
+						label="订单编号"
+						align="center"
+						width="85">
 						<template slot-scope="scope">
-							{{scope.row.dingdanbianhao}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="qichechepai"
-						label="汽车车牌">
-						<template slot-scope="scope">
-							{{scope.row.qichechepai}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="qicheleixing"
-						label="汽车类型">
-						<template slot-scope="scope">
-							{{scope.row.qicheleixing}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="pinpai"
-						label="品牌">
-						<template slot-scope="scope">
-							{{scope.row.pinpai}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="xinghao"
-						label="型号">
-						<template slot-scope="scope">
-							{{scope.row.xinghao}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="rizujin"
-						label="日租金">
-						<template slot-scope="scope">
-							{{scope.row.rizujin}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="zucheshijian"
-						label="租车时间">
-						<template slot-scope="scope">
-							{{scope.row.zucheshijian}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="haicheshijian"
-						label="还车时间">
-						<template slot-scope="scope">
-							{{scope.row.haicheshijian}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="haichebeizhu"
-						label="还车备注">
-						<template slot-scope="scope">
-							{{scope.row.haichebeizhu}}
-						</template>
-					</el-table-column>
-					<el-table-column  :resizable='true' prop="qichetupian" width="200" label="汽车图片">
-						<template slot-scope="scope">
-							<div v-if="scope.row.qichetupian">
-								<img v-if="scope.row.qichetupian.substring(0,4)=='http'&&scope.row.qichetupian.split(',w').length>1" :src="scope.row.qichetupian" width="100" height="100" style="object-fit: cover" @click="imgPreView(scope.row.qichetupian)">
-								<img v-else-if="scope.row.qichetupian.substring(0,4)=='http'" :src="scope.row.qichetupian.split(',')[0]" width="100" height="100" style="object-fit: cover" @click="imgPreView(scope.row.qichetupian.split(',')[0])">
-								<img v-else :src="$base.url+scope.row.qichetupian.split(',')[0]" width="100" height="100" style="object-fit: cover" @click="imgPreView($base.url+scope.row.qichetupian.split(',')[0])">
+							<div class="order-info" style="justify-content: center;">
+								<i class="el-icon-tickets" style="color: #409EFF; margin-right: 3px; font-size: 12px;"></i>
+								<span>{{scope.row.dingdanbianhao}}</span>
 							</div>
-							<div v-else>无图片</div>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="cheshangzhanghao"
-						label="车商账号">
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true'  
+						prop="qichechepai"
+						label="汽车车牌"
+						align="center"
+						width="75">
 						<template slot-scope="scope">
-							{{scope.row.cheshangzhanghao}}
+							<div class="plate-info" style="justify-content: center;">
+								<span>{{scope.row.qichechepai}}</span>
+							</div>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true'  
+						prop="qicheleixing"
+						label="汽车类型"
+						align="center"
+						width="75">
+						<template slot-scope="scope">
+							<el-tag size="mini" type="info" effect="light">{{scope.row.qicheleixing}}</el-tag>
+						</template>
+					</el-table-column>
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true'  
+						prop="pinpai"
+						label="品牌"
+						align="center"
+						width="65">
+						<template slot-scope="scope">
+							<div class="brand-info" style="justify-content: center;">
+								<span>{{scope.row.pinpai}}</span>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true'  
+						prop="rizujin"
+						label="日租金"
+						align="center"
+						width="60">
+						<template slot-scope="scope">
+							<div class="price-info" style="justify-content: center;">
+								<i class="el-icon-money" style="color: #E6A23C; margin-right: 1px; font-size: 12px;"></i>
+								<span>￥{{scope.row.rizujin}}</span>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true'  
+						prop="zucheshijian"
+						label="租车时间"
+						align="center"
+						width="120">
+						<template slot-scope="scope">
+							<div class="time-info" style="justify-content: center;">
+								<i class="el-icon-time" style="color: #909399; margin-right: 3px; font-size: 12px;"></i>
+								<span>{{scope.row.zucheshijian}}</span>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true'  
+						prop="haicheshijian"
+						label="还车时间"
+						align="center"
+						width="120">
+						<template slot-scope="scope">
+							<div class="time-info" style="justify-content: center;">
+								<i class="el-icon-time" style="color: #909399; margin-right: 3px; font-size: 12px;"></i>
+								<span>{{scope.row.haicheshijian}}</span>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column  
+						:resizable='true' 
+						prop="qichetupian" 
+						width="80" 
+						label="汽车图片" 
+						align="center">
+						<template slot-scope="scope">
+							<div v-if="scope.row.qichetupian" class="image-container">
+								<el-image
+									:src="scope.row.qichetupian && scope.row.qichetupian.substring(0,4)=='http' ? 
+										(scope.row.qichetupian.split(',w').length>1 ? scope.row.qichetupian : scope.row.qichetupian.split(',')[0]) 
+										: $base.url+scope.row.qichetupian.split(',')[0]"
+									:preview-src-list="[scope.row.qichetupian && scope.row.qichetupian.substring(0,4)=='http' ? 
+										(scope.row.qichetupian.split(',w').length>1 ? scope.row.qichetupian : scope.row.qichetupian.split(',')[0]) 
+										: $base.url+scope.row.qichetupian.split(',')[0]]"
+									style="width: 50px; height: 50px; border-radius: 4px; object-fit: cover; cursor: pointer; border: 1px solid #fff; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);"
+								></el-image>
+							</div>
+							<div v-else class="no-image">
+								<i class="el-icon-picture" style="font-size: 16px; color: #909399;"></i>
+							</div>
+						</template>
+					</el-table-column>
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true'  
 						prop="yonghuzhanghao"
-						label="用户账号">
+						label="用户账号"
+						align="center"
+						width="75">
 						<template slot-scope="scope">
-							{{scope.row.yonghuzhanghao}}
+							<div class="user-info" style="justify-content: center;">
+								<i class="el-icon-user" style="color: #409EFF; margin-right: 2px; font-size: 12px;"></i>
+								<span>{{scope.row.yonghuzhanghao}}</span>
+							</div>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="yonghuxingming"
-						label="用户姓名">
+					<el-table-column 
+						:resizable='true' 
+						:sortable='true' 
+						prop="sfsh" 
+						label="审核状态"
+						align="center"
+						width="70">
 						<template slot-scope="scope">
-							{{scope.row.yonghuxingming}}
+							<el-tag v-if="scope.row.sfsh=='否'" type="danger" effect="dark" size="mini">未通过</el-tag>
+							<el-tag v-if="scope.row.sfsh=='待审核'" type="warning" effect="dark" size="mini">待审核</el-tag>
+							<el-tag v-if="scope.row.sfsh=='是'" type="success" effect="dark" size="mini">已通过</el-tag>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true' prop="shhf" label="审核回复" show-overflow-tooltip>
+					<el-table-column 
+						width="120" 
+						label="操作" 
+						align="center">
 						<template slot-scope="scope">
-							<div style="white-space: nowrap;">{{scope.row.shhf}}</div>
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true' prop="sfsh" label="审核状态">
-						<template slot-scope="scope">
-							<el-tag v-if="scope.row.sfsh=='否'" type="danger">未通过</el-tag>
-							<el-tag v-if="scope.row.sfsh=='待审核'" type="warning">待审核</el-tag>
-							<el-tag v-if="scope.row.sfsh=='是'" type="success">通过</el-tag>
-						</template>
-					</el-table-column>
-					
-					<el-table-column width="300" label="操作">
-						<template slot-scope="scope">
-							<el-button class="view" v-if=" isAuth('haichejilu','查看')" type="success" @click="addOrUpdateHandler(scope.row.id,'info')">
-								<span class="icon iconfont icon-tianjia1" :style='{"margin":"0 0px","fontSize":"12px","color":"#fff","height":"40px"}'></span>
-								查看
-							</el-button>
-							<el-button class="edit" v-if=" isAuth('haichejilu','修改')  && scope.row.sfsh=='待审核' " type="success" @click="addOrUpdateHandler(scope.row.id)">
-								<span class="icon iconfont icon-xiugai17" :style='{"margin":"0 0px","fontSize":"14px","color":"#fff","height":"40px"}'></span>
-								修改
-							</el-button>
-
-
-
-
-							<el-button class="del" v-if="isAuth('haichejilu','删除') " type="primary" @click="deleteHandler(scope.row.id )">
-								<span class="icon iconfont icon-shanchu6" :style='{"margin":"0 0px","fontSize":"14px","color":"#fff","height":"40px"}'></span>
-								删除
-							</el-button>
+							<div class="operation-buttons">
+								<el-button type="text" icon="el-icon-view" size="medium" v-if="isAuth('haichejilu','查看')" @click="addOrUpdateHandler(scope.row.id,'info')" class="view-btn" style="color: #409EFF;">查看</el-button>
+								<el-button type="text" icon="el-icon-edit" size="medium" v-if="isAuth('haichejilu','修改') && scope.row.sfsh=='待审核'" @click="addOrUpdateHandler(scope.row.id)" class="edit-btn" style="color: #67C23A;">修改</el-button>
+								<el-button type="text" icon="el-icon-delete" size="medium" v-if="isAuth('haichejilu','删除')" @click="deleteHandler(scope.row.id)" class="delete-btn" style="color: #F56C6C;">删除</el-button>
+							</div>
 						</template>
 					</el-table-column>
 				</el-table>
-			</div>
-			<el-pagination
-				@size-change="sizeChangeHandle"
-				@current-change="currentChangeHandle"
-				:current-page="pageIndex"
-				background
-				:page-sizes="[10, 50, 100, 200]"
-				:page-size="pageSize"
-				:layout="layouts.join()"
-				:total="totalPage"
-				prev-text="< "
-				next-text="> "
-				:hide-on-single-page="false"
-				:style='{"padding":"0 20px 20px","margin":"0px auto","whiteSpace":"nowrap","color":"#333","textAlign":"right","background":"#fff","width":"100%","fontSize":"inherit","position":"relative","fontWeight":"500"}'
-			></el-pagination>
+				
+				<!-- 分页部分 -->
+				<el-pagination
+					@size-change="sizeChangeHandle"
+					@current-change="currentChangeHandle"
+					:current-page="pageIndex"
+					background
+					:page-sizes="[10, 20, 50, 100]"
+					:page-size="pageSize"
+					:layout="layouts.join()"
+					:total="totalPage"
+					prev-text="< "
+					next-text="> "
+					:hide-on-single-page="false"
+					class="custom-pagination"
+					style="padding: 10px 15px; margin: 15px auto; white-space: nowrap; color: #606266; text-align: center; background: #ffffff; border-radius: 8px; width: 98%; font-size: 12px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); border: 1px solid #ebeef5;"
+				></el-pagination>
+			</el-card>
 		</template>
 		
 		<!-- 添加/修改页面  将父组件的search方法传递给子组件-->
 		<add-or-update v-if="addOrUpdateFlag" :parent="this" ref="addOrUpdate"></add-or-update>
 
-
-		
-		<el-dialog :title="this.batchIds.length>1?'批量审核':'审核'" :visible.sync="sfshBatchVisiable" width="50%">
+		<!-- 审核弹窗 -->
+		<el-dialog :title="batchIds.length>1?'批量审核':'审核'" :visible.sync="sfshBatchVisiable" width="45%" :style='{"border":"none","borderRadius":"15px","padding":"20px"}'>
 			<el-form ref="shBatchForm" :model="shBatchForm" :rules="shRules" label-width="80px">
 				<el-form-item label="审核状态" prop="sfsh">
-					<el-select v-model="shBatchForm.sfsh" placeholder="审核状态">
+					<el-select v-model="shBatchForm.sfsh" placeholder="审核状态" size="small" :style='{"borderRadius":"4px","height":"36px"}'>
 						<el-option label="通过" value="是"></el-option>
 						<el-option label="不通过" value="否"></el-option>
 						<el-option label="待审核" value="待审核"></el-option>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="内容" prop="shhf">
-					<el-input type="textarea" :rows="8" v-model="shBatchForm.shhf"></el-input>
+					<el-input type="textarea" :rows="6" v-model="shBatchForm.shhf" :style='{"borderRadius":"4px"}'></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="sfshBatchVisiable=false">取 消</el-button>
-				<el-button type="primary" @click="shBatchHandler">确 定</el-button>
+				<el-button @click="sfshBatchVisiable=false" size="small" :style='{"border":"1px solid #dcdfe6","cursor":"pointer","padding":"0 15px","margin":"0 15px 0 0","outline":"none","color":"#606266","borderRadius":"8px","background":"#fff","width":"auto","fontSize":"14px","height":"32px"}'>取 消</el-button>
+				<el-button type="primary" @click="shBatchHandler" size="small" :style='{"border":"0","cursor":"pointer","padding":"0 15px","margin":"0","outline":"none","color":"#fff","borderRadius":"8px","background":"#409EFF","width":"auto","fontSize":"14px","height":"32px"}'>确 定</el-button>
 			</span>
 		</el-dialog>
 
-
-
-		<el-dialog title="预览图" :visible.sync="previewVisible" width="50%">
+		<!-- 图片预览弹窗 -->
+		<el-dialog title="图片预览" :visible.sync="previewVisible" width="45%" :style='{"border":"none","borderRadius":"15px","padding":"20px"}'>
 			<img :src="previewImg" alt="" style="width: 100%;">
 		</el-dialog>
 	</div>
@@ -255,23 +328,23 @@
 				dataListLoading: false,
 				dataListSelections: [],
 				showFlag: true,
-				sfshVisiable: false,
-				shForm: {},
-				sfshBatchVisiable: false,
+				sfshBatchVisiable:false,
 				shBatchForm: {
-					sfsh:'',
-					shhf:''
+					ids: [],
+					sfsh: '',
+					shhf: ''
 				},
 				shRules: {
-					sfsh:[{ required: true, message: '审核状态不能为空', trigger: 'blur' },],
-					shhf:[{ required: true, message: '审核回复不能为空', trigger: 'blur' },],
+					sfsh: [
+						{ required: true, message: "审核状态不能为空", trigger: "blur" }
+					],
 				},
-				batchIds:[],
-				shList: [],
+				batchIds: [],
 				addOrUpdateFlag:false,
 				layouts: ["total","prev","pager","next","sizes","jumper"],
 				previewImg: '',
 				previewVisible: false,
+				tableSize: 'mini',
 			};
 		},
 		created() {
@@ -317,10 +390,6 @@
 				// this.layouts = arr.join()
 				// this.contents.pageEachNum = 10
 			},
-
-
-
-
 
 			init () {
 				this.sfshOptions = "是,否,待审核".split(',');
@@ -471,660 +540,72 @@
 					});
 				});
 			},
+			// 表格大小改变
+			handleSizeChange(val) {
+				this.tableSize = val;
+			},
 
-
+			// 返回序号
+			indexMethod(index) {
+				return (this.pageIndex - 1) * this.pageSize + index + 1;
+			}
 		}
-
-	};
+	}
 </script>
 <style lang="css" scoped>
-	
-	.center-form-pv {
-		.el-date-editor.el-input {
-			width: auto;
-		}
+	.main-content .search-card .el-card__body {
+		padding: 20px;
 	}
 	
-	.el-input {
-		width: auto;
+	.main-content .operation-buttons .el-button {
+		margin: 0 5px;
+		padding: 4px 8px;
+		font-size: 13px;
 	}
 	
-	.center-form-pv .el-input {
-		width: auto;
-	}
-	.center-form-pv .el-input /deep/ .el-input__inner {
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		padding: 0 12px;
-		color: #666;
-		width: 150px;
-		font-size: 15px;
-		height: 34px;
-	}
-	.center-form-pv .el-select {
-		width: auto;
-	}
-	.center-form-pv .el-select /deep/ .el-input__inner {
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		padding: 0 10px;
-		color: #666;
-		width: 150px;
-		font-size: 15px;
-		height: 34px;
-	}
-	.center-form-pv .el-date-editor {
-		width: auto;
+	.main-content .operation-buttons .el-button.view-btn:hover {
+		color: #409EFF;
+		background: rgba(64, 158, 255, 0.1);
 	}
 	
-	.center-form-pv .el-date-editor /deep/ .el-input__inner {
-		border: 1px solid #ddd;
-		border-radius: 0px;
-		padding: 0 10px 0 30px;
-		color: #666;
-		width: 150px;
-		font-size: 15px;
-		height: 34px;
+	.main-content .operation-buttons .el-button.edit-btn:hover {
+		color: #67C23A;
+		background: rgba(103, 194, 58, 0.1);
 	}
 	
-	.center-form-pv .search {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px 0 5px;
-		color: #fff;
-		background: #1fc3cb;
-		width: auto;
-		font-size: 16px;
-		height: 34px;
+	.main-content .operation-buttons .el-button.delete-btn:hover {
+		color: #F56C6C;
+		background: rgba(245, 108, 108, 0.1);
 	}
 	
-	.center-form-pv .search:hover {
-		opacity: 0.8;
-	}
-	
-	.center-form-pv .actions .add {
-		border: 0px solid #ddd;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px;
-		margin: 4px;
-		color: #fff;
-		background: #1fc3cb;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.center-form-pv .actions .add:hover {
-		opacity: 0.8;
-	}
-	
-	.center-form-pv .actions .del {
-		border: 0px solid #ddd;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px;
-		margin: 4px;
-		color: #fff;
-		background: #be5353;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.center-form-pv .actions .del:hover {
-		opacity: 0.8;
-	}
-	
-	.center-form-pv .actions .statis {
-		border: 0px solid #ddd;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px;
-		margin: 4px;
-		color: #fff;
-		background: #3fc182;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.center-form-pv .actions .statis:hover {
-		opacity: 0.8;
-	}
-	
-	.center-form-pv .actions .btn18 {
-		border: 1px solid #939393;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px;
-		margin: 4px;
-		color: #939393;
-		background: #fff;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.center-form-pv .actions .btn18:hover {
-		opacity: 0.8;
-	}
-	
-	.el-table /deep/ .el-table__header-wrapper thead {
-		color: #999;
-		background: #f7f7f7;
-		font-weight: 500;
-		width: 100%;
-	}
-	
-	.el-table /deep/ .el-table__header-wrapper thead tr {
-		background: none;
-	}
-	
-	.el-table /deep/ .el-table__header-wrapper thead tr th {
-		padding: 8px 0;
-		background: none;
-		border-color: #ddd;
-		border-width: 0 0px 0px 0;
-		border-style: solid;
-		text-align: left;
-	}
-
-	.el-table /deep/ .el-table__header-wrapper thead tr th .cell {
-		padding: 0 0 0 5px;
-		word-wrap: normal;
-		color: #333;
-		white-space: normal;
-		font-weight: bold;
+	.main-content .image-container, .main-content .no-image {
 		display: flex;
-		vertical-align: middle;
-		font-size: 14px;
-		line-height: 24px;
-		text-overflow: ellipsis;
-		word-break: break-all;
-		width: 100%;
+		flex-direction: column;
 		align-items: center;
-		position: relative;
-		min-width: 110px;
-	}
-
-	
-	.el-table /deep/ .el-table__body-wrapper tbody {
-		width: 100%;
-	}
-
-	.el-table /deep/ .el-table__body-wrapper tbody tr {
-		background: #fff;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td {
-		padding: 4px 0;
-		color: #333;
-		background: #fff;
-		font-size: inherit;
-		border-color: #eee;
-		border-width: 0 0px 1px 0;
-		border-style: solid;
-		text-align: left;
-	}
-	
-		
-	.el-table /deep/ .el-table__body-wrapper tbody tr:hover td {
-		padding: 4px 0;
-		color: #333;
-		background: #fcfcfc;
-		border-color: #eee;
-		border-width: 0 0px 1px 0;
-		border-style: solid;
-		text-align: left;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td {
-		padding: 4px 0;
-		color: #333;
-		background: #fff;
-		font-size: inherit;
-		border-color: #eee;
-		border-width: 0 0px 1px 0;
-		border-style: solid;
-		text-align: left;
-	}
-
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .cell {
-		padding: 0 0 0 5px;
-		overflow: hidden;
-		word-break: break-all;
-		white-space: normal;
-		font-size: inherit;
-		line-height: 24px;
-		text-overflow: ellipsis;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .view {
-		border: 0px solid #157ed2;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 5px;
-		margin: 0 5px 5px 0;
-		color: #fff;
-		background: #1fc3cb;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .view:hover {
-		opacity: 0.8;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .add {
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .add:hover {
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .edit {
-		border: 0px solid #157ed2;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 5px;
-		margin: 0 5px 5px 0;
-		color: #fff;
-		background: #24BF74;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .edit:hover {
-		opacity: 0.8;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .del {
-		border: 0px solid #157ed2;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 5px;
-		margin: 0 5px 5px 0;
-		color: #fff;
-		background: #be5353;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .del:hover {
-		opacity: 0.8;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .btn8 {
-		border: 1px solid #939393;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 5px;
-		margin: 4px;
-		color: #939393;
-		background: #fff;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .btn8:hover {
-		opacity: 0.8;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__total {
-		margin: 0 10px 0 0;
-		color: #666;
-		font-weight: 400;
-		display: inline-block;
-		vertical-align: top;
-		font-size: inherit;
-		line-height: 28px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .btn-prev {
-		border: none;
-		border-radius: 2px;
-		padding: 0;
-		margin: 0 5px;
-		color: #666;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: auto;
-		min-width: 35px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .btn-next {
-		border: none;
-		border-radius: 2px;
-		padding: 0;
-		margin: 0 5px;
-		color: #666;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: auto;
-		min-width: 35px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .btn-prev:disabled {
-		border: none;
-		cursor: not-allowed;
-		border-radius: 2px;
-		padding: 0;
-		margin: 0 5px;
-		color: #C0C4CC;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: auto;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .btn-next:disabled {
-		border: none;
-		cursor: not-allowed;
-		border-radius: 2px;
-		padding: 0;
-		margin: 0 5px;
-		color: #C0C4CC;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: auto;
-		height: 28px;
-	}
-
-	.main-content .el-pagination /deep/ .el-pager {
-		padding: 0;
-		margin: 0;
-		display: inline-block;
-		vertical-align: top;
-	}
-
-	.main-content .el-pagination /deep/ .el-pager .number {
-		cursor: pointer;
-		border-radius: 2px;
-		padding: 0 10px;
-		margin: 0;
-		color: #666;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pager .number:hover {
-		cursor: pointer;
-		border-radius: 100%;
-		padding: 0 10px;
-		margin: 0;
-		color: #fff;
-		background: #1fc3cb;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pager .number.active {
-		cursor: default;
-		border-radius: 100%;
-		padding: 0 10px;
-		margin: 0;
-		color: #fff;
-		background: #1fc3cb;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes {
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes .el-input {
-		margin: 0 5px;
-		width: 100px;
-		position: relative;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes .el-input .el-input__inner {
-		border: 1px solid #DCDFE6;
-		cursor: pointer;
-		padding: 0 25px 0 8px;
-		color: #606266;
-		display: inline-block;
-		font-size: 16px;
-		line-height: 28px;
-		border-radius: 3px;
-		outline: 0;
-		background: #FFF;
-		width: 100%;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes .el-input span.el-input__suffix {
-		top: 0;
-		position: absolute;
-		right: 0;
+		justify-content: center;
 		height: 100%;
 	}
 	
-	.main-content .el-pagination /deep/ .el-pagination__sizes .el-input .el-input__suffix .el-select__caret {
-		cursor: pointer;
-		color: #C0C4CC;
-		width: 25px;
-		font-size: 14px;
-		line-height: 28px;
-		text-align: center;
+	.main-content .custom-pagination .el-pagination__total, 
+	.main-content .custom-pagination .el-pagination__jump, 
+	.main-content .custom-pagination .el-pagination__sizes {
+		margin-right: 10px;
 	}
 	
-	.main-content .el-pagination /deep/ .el-pagination__jump {
-		margin: 0 0 0 24px;
-		color: #606266;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		height: 28px;
+	.main-content .custom-pagination .btn-prev, 
+	.main-content .custom-pagination .btn-next {
+		border-radius: 4px;
+		font-weight: 600;
 	}
 	
-	.main-content .el-pagination /deep/ .el-pagination__jump .el-input {
-		border-radius: 3px;
-		padding: 0 2px;
+	.main-content .custom-pagination .el-pager li {
+		border-radius: 4px;
 		margin: 0 2px;
-		display: inline-block;
-		width: 50px;
-		font-size: 14px;
-		line-height: 18px;
-		position: relative;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__jump .el-input .el-input__inner {
-		border: 1px solid #DCDFE6;
-		cursor: pointer;
-		padding: 0 3px;
-		color: #606266;
-		display: inline-block;
-		font-size: 16px;
-		line-height: 28px;
-		border-radius: 3px;
-		outline: 0;
-		background: #FFF;
-		width: 100%;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.one .list1-view {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 15px;
-		margin: 0 5px 5px 0;
-		outline: none;
-		color: #fff;
-		background: #157ed2;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.one .list1-view:hover {
-		opacity: 0.8;
-	}
-	
-	.one .list1-edit {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 15px;
-		margin: 0 5px 5px 0;
-		outline: none;
-		color: #fff;
-		background: #409eff;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.one .list1-edit:hover {
-		opacity: 0.8;
-	}
-	
-	.one .list1-del {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 15px;
-		margin: 0 5px 5px 0;
-		outline: none;
-		color: #fff;
-		background: rgba(255, 0, 0, 1);
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.one .list1-del:hover {
-		opacity: 0.8;
-	}
-	
-	.one .list1-btn8 {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 24px;
-		margin: 0 5px 5px 0;
-		outline: none;
-		color: #fff;
-		background: rgba(255, 128, 0, 1);
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.one .list1-btn8:hover {
-		opacity: 0.8;
-	}
-	
-	.main-content .el-table .el-switch {
-		display: inline-flex;
-		vertical-align: middle;
-		line-height: 30px;
-		position: relative;
-		align-items: center;
-		height: 30px;
-	}
-	.main-content .el-table .el-switch /deep/ .el-switch__label--left {
-		cursor: pointer;
-		margin: 0 10px 0 0;
-		color: #333;
 		font-weight: 500;
-		display: inline-block;
-		vertical-align: middle;
-		font-size: 16px;
-		transition: .2s;
-		height: 30px;
-	}
-	.main-content .el-table .el-switch /deep/ .el-switch__label--right {
-		cursor: pointer;
-		margin: 0 0 0 10px;
-		color: #333;
-		font-weight: 500;
-		display: inline-block;
-		vertical-align: middle;
-		font-size: 16px;
-		transition: .2s;
-		height: 30px;
-	}
-	.main-content .el-table .el-switch /deep/ .el-switch__core {
-		border: 1px solid #75c0d6;
-		cursor: pointer;
-		border-radius: 15px;
-		margin: 0;
-		background: #75c0d6;
-		display: inline-block;
-		width: 42px;
-		box-sizing: border-box;
-		transition: border-color .3s,background-color .3s;
-		height: 20px;
-	}
-	.main-content .el-table .el-switch /deep/ .el-switch__core::after {
-		border-radius: 100%;
-		top: 1px;
-		left: 1px;
-		background: #fff;
-		width: 16px;
-		position: absolute;
-		transition: all .3s;
-		height: 16px;
-	}
-	.main-content .el-table .el-switch.is-checked /deep/ .el-switch__core::after {
-		margin: 0 0 0 -18px;
-		left: 100%;
 	}
 	
-	.main-content .el-table .el-rate /deep/ .el-rate__item {
-		cursor: pointer;
-		display: inline-block;
-		vertical-align: middle;
-		font-size: 0;
-		position: relative;
+	.main-content .custom-pagination .el-pager li.active {
+		background-color: #409EFF;
+		color: #ffffff;
 	}
-	.main-content .el-table .el-rate /deep/ .el-rate__item .el-rate__icon {
-		margin: 0 3px;
-		display: inline-block;
-		font-size: 18px;
-		position: relative;
-		transition: .3s;
-	}
-
 </style>

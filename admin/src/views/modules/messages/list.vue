@@ -1,128 +1,142 @@
 <template>
-	<div class="main-content" :style='{"width":"100%","padding":"20px 30px","fontSize":"15px"}'>
+	<div class="main-content" :style='{"width":"100%","padding":"20px 30px","fontSize":"15px","background":"#f5f7fa","borderRadius":"8px"}'>
 		<!-- 列表页 -->
 		<template v-if="showFlag">
-			<el-form class="center-form-pv" :style='{"border":"20px solid #fff","margin":"0 0px 0px","flexWrap":"wrap","background":"#fff","display":"flex","width":"100%","justifyContent":"space-between"}' :inline="true" :model="searchForm">
-				<el-row :style='{"padding":"10px","alignItems":"center","flexWrap":"wrap","background":"none","display":"flex"}' >
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">用户名</label>
-						<el-input v-model="searchForm.username" placeholder="用户名" @keydown.enter.native="search()" clearable></el-input>
+			<!-- 搜索卡片 -->
+			<el-card shadow="hover" class="search-card" :style='{"border":"none","padding":"20px","margin":"0 0 25px","borderRadius":"15px","boxShadow":"0 4px 18px 0 rgba(0, 0, 0, 0.1)","background":"linear-gradient(to right, #ffffff, #f8f9fd)","width":"100%"}'>
+				<div class="search-title" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ebeef5;">
+					<i class="el-icon-search" style="font-size: 18px; color: #409EFF; margin-right: 8px;"></i>
+					<span style="font-size: 16px; color: #333; font-weight: 500;">留言搜索</span>
+				</div>
+				<el-form class="center-form-pv" :style='{"border":"none","margin":"0","flexWrap":"wrap","background":"none","display":"flex","width":"100%","justifyContent":"flex-start"}' :inline="true" :model="searchForm">
+					<el-row :style='{"padding":"0","alignItems":"center","flexWrap":"wrap","background":"none","display":"flex","width":"100%"}' >
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-user" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#409EFF"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">用户名</label>
+							<el-input v-model="searchForm.username" size="medium" placeholder="请输入用户名" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"180px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search"></el-input>
+						</div>
+						<el-button class="search-btn" type="primary" @click="search()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(64, 158, 255, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#409EFF","width":"auto","fontSize":"14px","height":"36px","fontWeight":"500"}'>
+							<i class="el-icon-search" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"36px"}'></i>
+							查询
+						</el-button>
+						<el-button class="reset-btn" @click="searchForm.username='';search()" :style='{"border":"1px solid #dcdfe6","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(0, 0, 0, 0.05)","margin":"0 10px 0 0","outline":"none","color":"#606266","borderRadius":"8px","background":"#fff","width":"auto","fontSize":"14px","height":"36px","fontWeight":"500"}'>
+							<i class="el-icon-refresh-right" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#606266","height":"36px"}'></i>
+							重置
+						</el-button>
+					</el-row>
+					<el-row class="actions" :style='{"padding":"10px 0 0","margin":"10px 0 0","borderTop":"1px dashed #ebeef5","flexWrap":"wrap","background":"none","display":"flex","width":"100%","justifyContent":"flex-start"}'>
+						<el-button class="add-btn" v-if="isAuth('messages','新增')" type="success" @click="addOrUpdateHandler()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(103, 194, 58, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#67C23A","width":"auto","fontSize":"14px","height":"36px","fontWeight":"500"}'>
+							<i class="el-icon-plus" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"36px"}'></i>
+							添加
+						</el-button>
+						<el-button class="del-btn" v-if="isAuth('messages','删除')" :disabled="dataListSelections.length?false:true" type="danger" @click="deleteHandler()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(245, 108, 108, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#F56C6C","width":"auto","fontSize":"14px","height":"36px","fontWeight":"500"}'>
+							<i class="el-icon-delete" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"36px"}'></i>
+							删除
+						</el-button>
+					</el-row>
+				</el-form>
+			</el-card>
+			<!-- 列表卡片 -->
+			<el-card shadow="hover" :style='{"border":"none","padding":"20px","borderRadius":"15px","boxShadow":"0 4px 18px 0 rgba(0, 0, 0, 0.1)","background":"#fff","width":"100%"}'>
+				<div class="table-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ebeef5;">
+					<div class="table-title" style="display: flex; align-items: center;">
+						<i class="el-icon-message" style="font-size: 18px; color: #409EFF; margin-right: 8px;"></i>
+						<span style="font-size: 16px; color: #333; font-weight: 500;">留言列表</span>
+						<span class="table-count" style="font-size: 13px; color: #909399; margin-left: 8px;">(共 {{totalPage}} 条记录)</span>
 					</div>
-					<el-button class="search" type="success" @click="search()">
-						<span class="icon iconfont icon-fangdajing02" :style='{"margin":"0 0px","fontSize":"16px","color":"#fff","height":"40px"}'></span>
-						查询
-					</el-button>
-				</el-row>
-
-				<el-row class="actions" :style='{"padding":"10px","margin":"0px 0","flexWrap":"wrap","background":"none","display":"flex"}'>
-					<el-button class="add" v-if="isAuth('messages','新增')" type="success" @click="addOrUpdateHandler()">
-						<span class="icon iconfont icon-tianjia1" :style='{"margin":"0 2px","fontSize":"14px","color":"#fff","height":"34px"}'></span>
-						添加
-					</el-button>
-					<el-button class="del" v-if="isAuth('messages','删除')" :disabled="dataListSelections.length?false:true" type="danger" @click="deleteHandler()">
-						<span class="icon iconfont icon-shanchu6" :style='{"margin":"0 2px","fontSize":"14px","color":"#fff","height":"34px"}'></span>
-						删除
-					</el-button>
-
-
-				</el-row>
-			</el-form>
-			<div :style='{"border":"20px solid #fff","padding":"0","color":"#000","background":"#fff","borderWidth":"0 20px 20px","width":"100%","fontSize":"14px"}'>
-				<el-table class="tables"
-					:stripe='false'
-					:style='{"padding":"0px 0","borderColor":"#f6f6f6","borderRadius":"0","borderWidth":"0px 0 0 1px","background":"#fff","width":"100%","fontSize":"inherit","borderStyle":"solid"}' 
-					:border='true'
+					<div class="table-actions">
+						<el-tooltip content="刷新" placement="top">
+							<el-button size="mini" type="text" icon="el-icon-refresh" circle @click="search()" style="font-size: 16px; color: #909399;"></el-button>
+						</el-tooltip>
+					</div>
+				</div>
+				<el-table 
+					class="tables"
+					:stripe='true'
+					:style='{"padding":"0","borderColor":"#ebeef5","borderRadius":"12px","borderWidth":"1px","background":"#fff","width":"100%","fontSize":"14px","borderStyle":"solid"}' 
+					:border='false'
 					v-if="isAuth('messages','查看')"
 					:data="dataList"
 					v-loading="dataListLoading"
-				@selection-change="selectionChangeHandler">
+					@selection-change="selectionChangeHandler"
+					:header-cell-style="{'color':'#333', 'fontWeight':'500', 'fontSize':'14px', 'background-color':'#f5f7fa', 'padding':'12px 0', 'text-align': 'center'}"
+					:cell-style="{'color':'#333', 'fontSize':'14px', 'padding':'10px 0', 'text-align': 'center'}">
 					<el-table-column :resizable='true' type="selection" align="center" width="50"></el-table-column>
-					<el-table-column :resizable='true' :sortable='true' label="序号" type="index" width="50" />
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="username"
-						label="用户名">
+					<el-table-column :resizable='true' :sortable='true' label="序号" type="index" width="60" align="center"></el-table-column>
+					<el-table-column :resizable='true' :sortable='true'  prop="username" label="用户名" align="center" min-width="120">
 						<template slot-scope="scope">
-							{{scope.row.username}}
+							<div class="account-info" style="justify-content: center;">
+								<span class="account-text">{{scope.row.username}}</span>
+							</div>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true' prop="content" label="留言内容">
+					<el-table-column :resizable='true' :sortable='true' prop="content" label="留言内容" align="center">
 						<template slot-scope="scope">
 							<span class="ql-snow ql-editor" v-html="scope.row.content"></span>
 						</template>
 					</el-table-column>
-					<el-table-column  :resizable='true' prop="cpicture" width="200" label="留言图片">
+					<el-table-column  :resizable='true' prop="cpicture" width="200" label="留言图片" align="center">
 						<template slot-scope="scope">
 							<div v-if="scope.row.cpicture">
-								<img v-if="scope.row.cpicture.substring(0,4)=='http'&&scope.row.cpicture.split(',w').length>1" :src="scope.row.cpicture" width="100" height="100" style="object-fit: cover" @click="imgPreView(scope.row.cpicture)">
-								<img v-else-if="scope.row.cpicture.substring(0,4)=='http'" :src="scope.row.cpicture.split(',')[0]" width="100" height="100" style="object-fit: cover" @click="imgPreView(scope.row.cpicture.split(',')[0])">
-								<img v-else :src="$base.url+scope.row.cpicture.split(',')[0]" width="100" height="100" style="object-fit: cover" @click="imgPreView($base.url+scope.row.cpicture.split(',')[0])">
+								<img v-if="scope.row.cpicture.substring(0,4)=='http'&&scope.row.cpicture.split(',w').length>1" :src="scope.row.cpicture" width="100" height="100" style="object-fit: cover; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor:pointer;" @click="imgPreView(scope.row.cpicture)">
+								<img v-else-if="scope.row.cpicture.substring(0,4)=='http'" :src="scope.row.cpicture.split(',')[0]" width="100" height="100" style="object-fit: cover; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor:pointer;" @click="imgPreView(scope.row.cpicture.split(',')[0])">
+								<img v-else :src="$base.url+scope.row.cpicture.split(',')[0]" width="100" height="100" style="object-fit: cover; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor:pointer;" @click="imgPreView($base.url+scope.row.cpicture.split(',')[0])">
 							</div>
-							<div v-else>无图片</div>
+							<div v-else class="no-avatar">
+								<i class="el-icon-picture-outline" style="font-size: 24px; color: #909399;"></i>
+								<span style="font-size: 12px; color: #909399; margin-top: 5px;">无图片</span>
+							</div>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true' prop="reply" label="回复内容">
+					<el-table-column :resizable='true' :sortable='true' prop="reply" label="回复内容" align="center">
 						<template slot-scope="scope">
 							<span class="ql-snow ql-editor" v-html="scope.row.reply"></span>
 						</template>
 					</el-table-column>
-					<el-table-column  :resizable='true' prop="rpicture" width="200" label="回复图片">
+					<el-table-column  :resizable='true' prop="rpicture" width="200" label="回复图片" align="center">
 						<template slot-scope="scope">
 							<div v-if="scope.row.rpicture">
-								<img v-if="scope.row.rpicture.substring(0,4)=='http'&&scope.row.rpicture.split(',w').length>1" :src="scope.row.rpicture" width="100" height="100" style="object-fit: cover" @click="imgPreView(scope.row.rpicture)">
-								<img v-else-if="scope.row.rpicture.substring(0,4)=='http'" :src="scope.row.rpicture.split(',')[0]" width="100" height="100" style="object-fit: cover" @click="imgPreView(scope.row.rpicture.split(',')[0])">
-								<img v-else :src="$base.url+scope.row.rpicture.split(',')[0]" width="100" height="100" style="object-fit: cover" @click="imgPreView($base.url+scope.row.rpicture.split(',')[0])">
+								<img v-if="scope.row.rpicture.substring(0,4)=='http'&&scope.row.rpicture.split(',w').length>1" :src="scope.row.rpicture" width="100" height="100" style="object-fit: cover; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor:pointer;" @click="imgPreView(scope.row.rpicture)">
+								<img v-else-if="scope.row.rpicture.substring(0,4)=='http'" :src="scope.row.rpicture.split(',')[0]" width="100" height="100" style="object-fit: cover; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor:pointer;" @click="imgPreView(scope.row.rpicture.split(',')[0])">
+								<img v-else :src="$base.url+scope.row.rpicture.split(',')[0]" width="100" height="100" style="object-fit: cover; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); cursor:pointer;" @click="imgPreView($base.url+scope.row.rpicture.split(',')[0])">
 							</div>
-							<div v-else>无图片</div>
+							<div v-else class="no-avatar">
+								<i class="el-icon-picture-outline" style="font-size: 24px; color: #909399;"></i>
+								<span style="font-size: 12px; color: #909399; margin-top: 5px;">无图片</span>
+							</div>
 						</template>
 					</el-table-column>
-					<el-table-column width="300" label="操作">
+					<el-table-column width="300" label="操作" align="center">
 						<template slot-scope="scope">
-							<el-button class="view" v-if=" isAuth('messages','查看')" type="success" @click="addOrUpdateHandler(scope.row.id,'info')">
-								<span class="icon iconfont icon-tianjia1" :style='{"margin":"0 0px","fontSize":"12px","color":"#fff","height":"40px"}'></span>
-								查看
-							</el-button>
-							<el-button class="edit" v-if=" isAuth('messages','修改') " type="success" @click="addOrUpdateHandler(scope.row.id)">
-								<span class="icon iconfont icon-xiugai17" :style='{"margin":"0 0px","fontSize":"14px","color":"#fff","height":"40px"}'></span>
-								修改
-							</el-button>
-
-
-
-
-							<el-button class="btn8" v-if="isAuth('messages','回复')" type="success" @click="addOrUpdateHandler(scope.row.id,'msg')">
-								<span class="icon iconfont icon-huifu3" :style='{"margin":"0 0px","fontSize":"14px","color":"#939393","height":"40px"}'></span>
-								回复
-							</el-button>
-							<el-button class="del" v-if="isAuth('messages','删除') " type="primary" @click="deleteHandler(scope.row.id )">
-								<span class="icon iconfont icon-shanchu6" :style='{"margin":"0 0px","fontSize":"14px","color":"#fff","height":"40px"}'></span>
-								删除
-							</el-button>
+							<div class="operation-buttons">
+								<el-button type="text" icon="el-icon-view" size="small" v-if="isAuth('messages','查看')" @click="addOrUpdateHandler(scope.row.id,'info')" class="view-btn">查看</el-button>
+								<el-button type="text" icon="el-icon-edit" size="small" v-if="isAuth('messages','修改')" @click="addOrUpdateHandler(scope.row.id)" class="edit-btn">修改</el-button>
+								<el-button type="text" icon="el-icon-chat-dot-round" size="small" v-if="isAuth('messages','回复')" @click="addOrUpdateHandler(scope.row.id,'msg')" class="reply-btn">回复</el-button>
+								<el-button type="text" icon="el-icon-delete" size="small" v-if="isAuth('messages','删除')" @click="deleteHandler(scope.row.id)" class="delete-btn">删除</el-button>
+							</div>
 						</template>
 					</el-table-column>
 				</el-table>
-			</div>
-			<el-pagination
-				@size-change="sizeChangeHandle"
-				@current-change="currentChangeHandle"
-				:current-page="pageIndex"
-				background
-				:page-sizes="[10, 50, 100, 200]"
-				:page-size="pageSize"
-				:layout="layouts.join()"
-				:total="totalPage"
-				prev-text="< "
-				next-text="> "
-				:hide-on-single-page="false"
-				:style='{"padding":"0 20px 20px","margin":"0px auto","whiteSpace":"nowrap","color":"#333","textAlign":"right","background":"#fff","width":"100%","fontSize":"inherit","position":"relative","fontWeight":"500"}'
-			></el-pagination>
+				<!-- 分页部分 -->
+				<el-pagination
+					@size-change="sizeChangeHandle"
+					@current-change="currentChangeHandle"
+					:current-page="pageIndex"
+					background
+					:page-sizes="[10, 50, 100, 200]"
+					:page-size="pageSize"
+					:layout="layouts.join()"
+					:total="totalPage"
+					prev-text="< "
+					next-text="> "
+					:hide-on-single-page="false"
+					class="custom-pagination"
+				></el-pagination>
+			</el-card>
 		</template>
 		
 		<!-- 添加/修改页面  将父组件的search方法传递给子组件-->
 		<add-or-update v-if="addOrUpdateFlag" :parent="this" ref="addOrUpdate"></add-or-update>
-
-
-
-
 
 		<el-dialog title="预览图" :visible.sync="previewVisible" width="50%">
 			<img :src="previewImg" alt="" style="width: 100%;">
@@ -309,653 +323,160 @@
 	};
 </script>
 <style lang="css" scoped>
-	
-	.center-form-pv {
-		.el-date-editor.el-input {
-			width: auto;
-		}
-	}
-	
-	.el-input {
-		width: auto;
-	}
-	
-	.center-form-pv .el-input {
-		width: auto;
-	}
-	.center-form-pv .el-input /deep/ .el-input__inner {
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		padding: 0 12px;
-		color: #666;
-		width: 150px;
-		font-size: 15px;
-		height: 34px;
-	}
-	.center-form-pv .el-select {
-		width: auto;
-	}
-	.center-form-pv .el-select /deep/ .el-input__inner {
-		border: 1px solid #ddd;
-		border-radius: 4px;
-		padding: 0 10px;
-		color: #666;
-		width: 150px;
-		font-size: 15px;
-		height: 34px;
-	}
-	.center-form-pv .el-date-editor {
-		width: auto;
-	}
-	
-	.center-form-pv .el-date-editor /deep/ .el-input__inner {
-		border: 1px solid #ddd;
-		border-radius: 0px;
-		padding: 0 10px 0 30px;
-		color: #666;
-		width: 150px;
-		font-size: 15px;
-		height: 34px;
-	}
-	
-	.center-form-pv .search {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px 0 5px;
-		color: #fff;
-		background: #1fc3cb;
-		width: auto;
-		font-size: 16px;
-		height: 34px;
-	}
-	
-	.center-form-pv .search:hover {
-		opacity: 0.8;
-	}
-	
-	.center-form-pv .actions .add {
-		border: 0px solid #ddd;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px;
-		margin: 4px;
-		color: #fff;
-		background: #1fc3cb;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.center-form-pv .actions .add:hover {
-		opacity: 0.8;
-	}
-	
-	.center-form-pv .actions .del {
-		border: 0px solid #ddd;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px;
-		margin: 4px;
-		color: #fff;
-		background: #be5353;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.center-form-pv .actions .del:hover {
-		opacity: 0.8;
-	}
-	
-	.center-form-pv .actions .statis {
-		border: 0px solid #ddd;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px;
-		margin: 4px;
-		color: #fff;
-		background: #3fc182;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.center-form-pv .actions .statis:hover {
-		opacity: 0.8;
-	}
-	
-	.center-form-pv .actions .btn18 {
-		border: 1px solid #939393;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 10px;
-		margin: 4px;
-		color: #939393;
-		background: #fff;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.center-form-pv .actions .btn18:hover {
-		opacity: 0.8;
-	}
-	
-	.el-table /deep/ .el-table__header-wrapper thead {
-		color: #999;
-		background: #f7f7f7;
-		font-weight: 500;
+	/* 复制yonghu页面的美化样式 */
+	.search-card {
+		border: none;
+		padding: 20px;
+		margin: 0 0 25px;
+		border-radius: 15px;
+		box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1);
+		background: linear-gradient(to right, #ffffff, #f8f9fd);
 		width: 100%;
+		animation: fadeIn 0.5s ease;
 	}
-	
-	.el-table /deep/ .el-table__header-wrapper thead tr {
-		background: none;
+	.search-title {
+		margin-bottom: 15px;
+		padding-bottom: 10px;
+		border-bottom: 1px solid #ebeef5;
 	}
-	
-	.el-table /deep/ .el-table__header-wrapper thead tr th {
-		padding: 8px 0;
-		background: none;
-		border-color: #ddd;
-		border-width: 0 0px 0px 0;
-		border-style: solid;
-		text-align: left;
+	.operation-buttons .el-button {
+		margin: 0 5px;
+		padding: 4px 8px;
+		font-size: 13px;
+		border-radius: 8px;
+		transition: all 0.3s;
 	}
-
-	.el-table /deep/ .el-table__header-wrapper thead tr th .cell {
-		padding: 0 0 0 5px;
-		word-wrap: normal;
-		color: #333;
-		white-space: normal;
-		font-weight: bold;
+	.operation-buttons .view-btn {
+		color: #409EFF;
+		background: rgba(64, 158, 255, 0.1);
+	}
+	.operation-buttons .view-btn:hover {
+		background: rgba(64, 158, 255, 0.2);
+		box-shadow: 0 2px 8px rgba(64, 158, 255, 0.2);
+		transform: translateY(-2px);
+	}
+	.operation-buttons .edit-btn {
+		color: #67C23A;
+		background: rgba(103, 194, 58, 0.1);
+	}
+	.operation-buttons .edit-btn:hover {
+		background: rgba(103, 194, 58, 0.2);
+		box-shadow: 0 2px 8px rgba(103, 194, 58, 0.2);
+		transform: translateY(-2px);
+	}
+	.operation-buttons .delete-btn {
+		color: #F56C6C;
+		background: rgba(245, 108, 108, 0.1);
+	}
+	.operation-buttons .delete-btn:hover {
+		background: rgba(245, 108, 108, 0.2);
+		box-shadow: 0 2px 8px rgba(245, 108, 108, 0.2);
+		transform: translateY(-2px);
+	}
+	.operation-buttons .reply-btn {
+		color: #E6A23C;
+		background: rgba(230, 162, 60, 0.1);
+	}
+	.operation-buttons .reply-btn:hover {
+		background: rgba(230, 162, 60, 0.2);
+		box-shadow: 0 2px 8px rgba(230, 162, 60, 0.2);
+		transform: translateY(-2px);
+	}
+	.account-info, .name-info, .phone-info, .id-info {
 		display: flex;
-		vertical-align: middle;
-		font-size: 14px;
-		line-height: 24px;
-		text-overflow: ellipsis;
-		word-break: break-all;
-		width: 100%;
 		align-items: center;
-		position: relative;
-		min-width: 110px;
-	}
-
-	
-	.el-table /deep/ .el-table__body-wrapper tbody {
-		width: 100%;
-	}
-
-	.el-table /deep/ .el-table__body-wrapper tbody tr {
-		background: #fff;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td {
-		padding: 4px 0;
-		color: #333;
-		background: #fff;
-		font-size: inherit;
-		border-color: #eee;
-		border-width: 0 0px 1px 0;
-		border-style: solid;
-		text-align: left;
-	}
-	
-		
-	.el-table /deep/ .el-table__body-wrapper tbody tr:hover td {
-		padding: 4px 0;
-		color: #333;
-		background: #fcfcfc;
-		border-color: #eee;
-		border-width: 0 0px 1px 0;
-		border-style: solid;
-		text-align: left;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td {
-		padding: 4px 0;
-		color: #333;
-		background: #fff;
-		font-size: inherit;
-		border-color: #eee;
-		border-width: 0 0px 1px 0;
-		border-style: solid;
-		text-align: left;
-	}
-
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .cell {
-		padding: 0 0 0 5px;
-		overflow: hidden;
-		word-break: break-all;
-		white-space: normal;
-		font-size: inherit;
-		line-height: 24px;
-		text-overflow: ellipsis;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .view {
-		border: 0px solid #157ed2;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 5px;
-		margin: 0 5px 5px 0;
-		color: #fff;
-		background: #1fc3cb;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .view:hover {
-		opacity: 0.8;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .add {
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .add:hover {
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .edit {
-		border: 0px solid #157ed2;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 5px;
-		margin: 0 5px 5px 0;
-		color: #fff;
-		background: #24BF74;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .edit:hover {
-		opacity: 0.8;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .del {
-		border: 0px solid #157ed2;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 5px;
-		margin: 0 5px 5px 0;
-		color: #fff;
-		background: #be5353;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .del:hover {
-		opacity: 0.8;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .btn8 {
-		border: 1px solid #939393;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 5px;
-		margin: 4px;
-		color: #939393;
-		background: #fff;
-		width: auto;
-		font-size: inherit;
-		height: 34px;
-	}
-	
-	.el-table /deep/ .el-table__body-wrapper tbody tr td .btn8:hover {
-		opacity: 0.8;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__total {
-		margin: 0 10px 0 0;
-		color: #666;
-		font-weight: 400;
-		display: inline-block;
-		vertical-align: top;
-		font-size: inherit;
-		line-height: 28px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .btn-prev {
-		border: none;
-		border-radius: 2px;
-		padding: 0;
-		margin: 0 5px;
-		color: #666;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: auto;
-		min-width: 35px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .btn-next {
-		border: none;
-		border-radius: 2px;
-		padding: 0;
-		margin: 0 5px;
-		color: #666;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: auto;
-		min-width: 35px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .btn-prev:disabled {
-		border: none;
-		cursor: not-allowed;
-		border-radius: 2px;
-		padding: 0;
-		margin: 0 5px;
-		color: #C0C4CC;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: auto;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .btn-next:disabled {
-		border: none;
-		cursor: not-allowed;
-		border-radius: 2px;
-		padding: 0;
-		margin: 0 5px;
-		color: #C0C4CC;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: auto;
-		height: 28px;
-	}
-
-	.main-content .el-pagination /deep/ .el-pager {
-		padding: 0;
-		margin: 0;
-		display: inline-block;
-		vertical-align: top;
-	}
-
-	.main-content .el-pagination /deep/ .el-pager .number {
-		cursor: pointer;
-		border-radius: 2px;
 		padding: 0 10px;
-		margin: 0;
-		color: #666;
-		background: none;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
+	}
+	.avatar-container {
 		text-align: center;
-		height: 28px;
 	}
-	
-	.main-content .el-pagination /deep/ .el-pager .number:hover {
-		cursor: pointer;
-		border-radius: 100%;
-		padding: 0 10px;
-		margin: 0;
-		color: #fff;
-		background: #1fc3cb;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		text-align: center;
-		height: 28px;
+	.avatar-container .el-image {
+		transition: all 0.3s;
 	}
-	
-	.main-content .el-pagination /deep/ .el-pager .number.active {
-		cursor: default;
-		border-radius: 100%;
-		padding: 0 10px;
-		margin: 0;
-		color: #fff;
-		background: #1fc3cb;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		text-align: center;
-		height: 28px;
+	.avatar-container .el-image:hover {
+		transform: scale(1.05);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
 	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes {
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes .el-input {
-		margin: 0 5px;
-		width: 100px;
-		position: relative;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes .el-input .el-input__inner {
-		border: 1px solid #DCDFE6;
-		cursor: pointer;
-		padding: 0 25px 0 8px;
-		color: #606266;
-		display: inline-block;
-		font-size: 16px;
-		line-height: 28px;
-		border-radius: 3px;
-		outline: 0;
-		background: #FFF;
-		width: 100%;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes .el-input span.el-input__suffix {
-		top: 0;
-		position: absolute;
-		right: 0;
+	.no-avatar {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 		height: 100%;
 	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__sizes .el-input .el-input__suffix .el-select__caret {
-		cursor: pointer;
-		color: #C0C4CC;
-		width: 25px;
+	.custom-pagination {
+		border-radius: 20px !important;
+		box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
+		background: linear-gradient(145deg, #f5f9ff, #ffffff) !important;
+		padding: 18px 24px !important;
+		width: 96% !important;
+		display: flex !important;
+		justify-content: center !important;
+		align-items: center !important;
+		margin: 30px auto 15px !important;
+	}
+	.custom-pagination .el-pager li {
+		min-width: 36px;
+		height: 36px;
+		line-height: 36px;
 		font-size: 14px;
-		line-height: 28px;
-		text-align: center;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__jump {
-		margin: 0 0 0 24px;
-		color: #606266;
-		display: inline-block;
-		vertical-align: top;
-		font-size: 16px;
-		line-height: 28px;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__jump .el-input {
-		border-radius: 3px;
-		padding: 0 2px;
-		margin: 0 2px;
-		display: inline-block;
-		width: 50px;
-		font-size: 14px;
-		line-height: 18px;
-		position: relative;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.main-content .el-pagination /deep/ .el-pagination__jump .el-input .el-input__inner {
-		border: 1px solid #DCDFE6;
-		cursor: pointer;
-		padding: 0 3px;
-		color: #606266;
-		display: inline-block;
-		font-size: 16px;
-		line-height: 28px;
-		border-radius: 3px;
-		outline: 0;
-		background: #FFF;
-		width: 100%;
-		text-align: center;
-		height: 28px;
-	}
-	
-	.one .list1-view {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 15px;
-		margin: 0 5px 5px 0;
-		outline: none;
-		color: #fff;
-		background: #157ed2;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.one .list1-view:hover {
-		opacity: 0.8;
-	}
-	
-	.one .list1-edit {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 15px;
-		margin: 0 5px 5px 0;
-		outline: none;
-		color: #fff;
-		background: #409eff;
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.one .list1-edit:hover {
-		opacity: 0.8;
-	}
-	
-	.one .list1-del {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 15px;
-		margin: 0 5px 5px 0;
-		outline: none;
-		color: #fff;
-		background: rgba(255, 0, 0, 1);
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.one .list1-del:hover {
-		opacity: 0.8;
-	}
-	
-	.one .list1-btn8 {
-		border: 0;
-		cursor: pointer;
-		border-radius: 4px;
-		padding: 0 24px;
-		margin: 0 5px 5px 0;
-		outline: none;
-		color: #fff;
-		background: rgba(255, 128, 0, 1);
-		width: auto;
-		font-size: 14px;
-		height: 32px;
-	}
-	
-	.one .list1-btn8:hover {
-		opacity: 0.8;
-	}
-	
-	.main-content .el-table .el-switch {
-		display: inline-flex;
-		vertical-align: middle;
-		line-height: 30px;
-		position: relative;
-		align-items: center;
-		height: 30px;
-	}
-	.main-content .el-table .el-switch /deep/ .el-switch__label--left {
-		cursor: pointer;
-		margin: 0 10px 0 0;
-		color: #333;
 		font-weight: 500;
-		display: inline-block;
-		vertical-align: middle;
-		font-size: 16px;
-		transition: .2s;
-		height: 30px;
-	}
-	.main-content .el-table .el-switch /deep/ .el-switch__label--right {
-		cursor: pointer;
-		margin: 0 0 0 10px;
-		color: #333;
-		font-weight: 500;
-		display: inline-block;
-		vertical-align: middle;
-		font-size: 16px;
-		transition: .2s;
-		height: 30px;
-	}
-	.main-content .el-table .el-switch /deep/ .el-switch__core {
-		border: 1px solid #75c0d6;
-		cursor: pointer;
-		border-radius: 15px;
-		margin: 0;
-		background: #75c0d6;
-		display: inline-block;
-		width: 42px;
-		box-sizing: border-box;
-		transition: border-color .3s,background-color .3s;
-		height: 20px;
-	}
-	.main-content .el-table .el-switch /deep/ .el-switch__core::after {
-		border-radius: 100%;
-		top: 1px;
-		left: 1px;
-		background: #fff;
-		width: 16px;
-		position: absolute;
-		transition: all .3s;
-		height: 16px;
-	}
-	.main-content .el-table .el-switch.is-checked /deep/ .el-switch__core::after {
-		margin: 0 0 0 -18px;
-		left: 100%;
-	}
-	
-	.main-content .el-table .el-rate /deep/ .el-rate__item {
-		cursor: pointer;
-		display: inline-block;
-		vertical-align: middle;
-		font-size: 0;
-		position: relative;
-	}
-	.main-content .el-table .el-rate /deep/ .el-rate__item .el-rate__icon {
+		border-radius: 50%;
 		margin: 0 3px;
-		display: inline-block;
-		font-size: 18px;
-		position: relative;
-		transition: .3s;
+		color: #606266;
+		background: #f5f7fa;
+		border: 1px solid transparent;
+		transition: all 0.3s;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 	}
-
+	.custom-pagination .el-pager li.active {
+		color: #fff;
+		font-weight: 600;
+		background: linear-gradient(145deg, #409EFF, #64b0ff);
+		border-color: #409EFF;
+		box-shadow: 0 4px 10px rgba(64, 158, 255, 0.3);
+	}
+	.custom-pagination .el-pagination__total,
+	.custom-pagination .el-pagination__jump {
+		margin: 0 15px;
+		font-weight: 500;
+		padding: 0 18px;
+		border-radius: 20px;
+		height: 36px;
+		line-height: 36px;
+		font-size: 14px;
+		letter-spacing: 0.5px;
+		display: flex;
+		align-items: center;
+	}
+	.custom-pagination .el-pagination__total {
+		background: linear-gradient(145deg, #f6f9fe, #ffffff);
+		color: #409EFF;
+		box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+		border: 1px solid rgba(64, 158, 255, 0.2);
+		font-weight: 600;
+	}
+	.custom-pagination .btn-prev,
+	.custom-pagination .btn-next {
+		min-width: 36px;
+		height: 36px;
+		line-height: 36px;
+		padding: 0;
+		border-radius: 50%;
+		font-weight: bold;
+		border: 1px solid #e0e0e0;
+		background: #fff;
+		margin: 0 5px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+	}
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
 </style>

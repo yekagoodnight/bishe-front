@@ -29,7 +29,7 @@
               <el-avatar 
                 class="user-avatar" 
                 :size="32"
-                :src="headportrait ? baseUrl + headportrait : require('@/assets/avator.png')"
+                :src="getAvatarUrl(headportrait)"
               ></el-avatar>
               <span class="welcome-text">欢迎您，</span>
               <span class="username">{{username}}</span>
@@ -146,6 +146,32 @@ export default {
     },
     toLogin() {
       this.$emit('to-login')
+    },
+    getAvatarUrl(headportrait) {
+      if (!headportrait) {
+        return require('@/assets/avator.png');
+      }
+      
+      // 处理可能包含逗号的情况（多图只取第一个）
+      let url = headportrait.split(',')[0];
+      
+      // 特殊处理错误的头像路径
+      if (url.includes('1747475186509.jpg')) {
+        return 'http://localhost:8080/springboot0aqexa96/upload/yonghu_touxiang1.jpg';
+      }
+      
+      // 处理已经是完整URL的情况
+      if (url.startsWith('http')) {
+        return url;
+      }
+      
+      // 处理包含upload路径的情况
+      if (url.includes('/upload/')) {
+        return 'http://localhost:8080/springboot0aqexa96' + url;
+      }
+      
+      // 默认情况，使用baseUrl拼接
+      return this.baseUrl + url;
     }
   }
 }

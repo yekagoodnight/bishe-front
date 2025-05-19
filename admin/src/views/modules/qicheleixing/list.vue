@@ -97,9 +97,9 @@
 						label="操作"
 						align="center">
 						<template slot-scope="scope">
-							<div class="operation-buttons" style="display: flex; justify-content: center; flex-wrap: wrap;">
-								<el-button type="text" icon="el-icon-edit" size="mini" v-if="isAuth('qicheleixing','修改')" @click="addOrUpdateHandler(scope.row.id)" class="edit-btn" style="margin: 2px 5px; color: #E6A23C;">修改</el-button>
-								<el-button type="text" icon="el-icon-delete" size="mini" v-if="isAuth('qicheleixing','删除')" @click="deleteHandler(scope.row.id)" class="delete-btn" style="margin: 2px 5px; color: #F56C6C;">删除</el-button>
+							<div class="operation-buttons">
+								<el-button type="text" icon="el-icon-edit" size="small" v-if="isAuth('qicheleixing','修改')" @click="addOrUpdateHandler(scope.row.id)" class="edit-btn">修改</el-button>
+								<el-button type="text" icon="el-icon-delete" size="small" v-if="isAuth('qicheleixing','删除')" @click="deleteHandler(scope.row.id)" class="delete-btn">删除</el-button>
 							</div>
 						</template>
 					</el-table-column>
@@ -265,6 +265,14 @@
 						} else {
 							this.$message.error(data.msg);
 						}
+					}).catch(e => {
+						console.error("删除失败", e);
+						this.$message.error("删除失败，请检查网络或联系管理员");
+					});
+				}).catch(() => {
+					this.$message({
+						type: "info",
+						message: "已取消删除"
 					});
 				});
 			},
@@ -293,22 +301,55 @@
   color: #409EFF;
 }
 
-.operation-buttons .el-button--text {
+.operation-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 5px;
+  width: 100%;
+}
+
+.operation-buttons .el-button {
   padding: 4px 8px;
+  margin: 0;
   border-radius: 4px;
   transition: all 0.3s;
+  border: none;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  min-width: 52px;
+  white-space: nowrap;
 }
 
-.operation-buttons .el-button--text:hover {
-  background-color: rgba(64, 158, 255, 0.1);
+.operation-buttons .edit-btn {
+  color: #E6A23C;
+  background: rgba(230, 162, 60, 0.1);
 }
 
-.edit-btn:hover {
+.operation-buttons .edit-btn:hover {
   color: #eebe77 !important;
+  background-color: rgba(230, 162, 60, 0.2);
+  box-shadow: 0 2px 8px rgba(230, 162, 60, 0.2);
+  transform: translateY(-2px);
 }
 
-.delete-btn:hover {
+.operation-buttons .delete-btn {
+  color: #F56C6C;
+  background: rgba(245, 108, 108, 0.1);
+}
+
+.operation-buttons .delete-btn:hover {
   color: #f78989 !important;
+  background-color: rgba(245, 108, 108, 0.2);
+  box-shadow: 0 2px 8px rgba(245, 108, 108, 0.2);
+  transform: translateY(-2px);
+}
+
+.operation-buttons .el-button i {
+  margin-right: 4px;
+  font-size: 14px;
 }
 
 .type-info {

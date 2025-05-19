@@ -4,118 +4,52 @@
 			<div slot="header" class="card-header">
 				<span style="font-size: 18px; font-weight: 500; color: #333;">{{ type == 'info' ? '详情' : (type == 'add' ? '添加' : '修改') }}</span>
 			</div>
-		<el-form
-			class="add-update-preview"
-			ref="ruleForm"
-			:model="ruleForm"
-			:rules="rules"
-				label-width="120px"
-				:style='{"padding":"0","margin":"0 auto"}'
-		>
-				<el-row :gutter="20">
-					<el-col :span="12">
-						<el-form-item class="input" :label="type!='info'?'用户账号':''" prop="yonghuzhanghao" :class="type=='info'?'textinfo':''">
-							<el-input v-if="type!='info'" v-model="ruleForm.yonghuzhanghao" placeholder="用户账号" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.yonghuzhanghao"></el-input>
-							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
-								<div style="font-weight: bold; margin-bottom: 5px;">用户账号:</div>
-								<div style="padding: 0 12px;">{{ruleForm.yonghuzhanghao}}</div>
-							</div>
+			<div v-if="type=='info'" class="info-view">
+				<div class="info-row"><span class="info-label">用户账号：</span><span class="info-value">{{ruleForm.yonghuzhanghao}}</span></div>
+				<div class="info-row"><span class="info-label">密码：</span><span class="info-value">{{ruleForm.mima}}</span></div>
+				<div class="info-row"><span class="info-label">用户姓名：</span><span class="info-value">{{ruleForm.yonghuxingming}}</span></div>
+				<div class="info-row"><span class="info-label">性别：</span><span class="info-value">{{ruleForm.xingbie}}</span></div>
+				<div class="info-row"><span class="info-label">手机：</span><span class="info-value">{{ruleForm.shouji}}</span></div>
+				<div class="info-row"><span class="info-label">身份证：</span><span class="info-value">{{ruleForm.shenfenzheng}}</span></div>
+				<div class="info-row"><span class="info-label">头像：</span>
+					<span class="info-value">
+						<span v-if="ruleForm.touxiang">
+							<el-image :src="getAvatarUrl(ruleForm.touxiang)" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover; margin-left: 10px;"></el-image>
+						</span>
+						<span v-else>无头像</span>
+					</span>
+				</div>
+				<el-button @click="back()" style="border: none; cursor: pointer; padding: 0 20px; color: #fff; border-radius: 4px; background: #909399; font-size: 14px; height: 40px; margin-top: 24px;">返回</el-button>
+			</div>
+			<el-form v-else ref="ruleForm" :model="ruleForm" :rules="rules" label-width="100px" label-position="left" style="margin-top: 10px;">
+				<el-form-item label="用户账号" prop="yonghuzhanghao">
+					<el-input v-model="ruleForm.yonghuzhanghao" placeholder="用户账号" clearable></el-input>
 				</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item class="input" :label="type!='info'?'密码':''" prop="mima" :class="type=='info'?'textinfo':''">
-							<el-input v-if="type!='info'" v-model="ruleForm.mima" placeholder="密码" :type="true ? 'password' : 'text'" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.mima"></el-input>
-							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
-								<div style="font-weight: bold; margin-bottom: 5px;">密码:</div>
-								<div style="padding: 0 12px;">{{ruleForm.mima}}</div>
-							</div>
+				<el-form-item label="密码" prop="mima">
+					<el-input v-model="ruleForm.mima" placeholder="密码" type="password" clearable></el-input>
 				</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item class="input" :label="type!='info'?'用户姓名':''" prop="yonghuxingming" :class="type=='info'?'textinfo':''">
-							<el-input v-if="type!='info'" v-model="ruleForm.yonghuxingming" placeholder="用户姓名" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.yonghuxingming"></el-input>
-							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
-								<div style="font-weight: bold; margin-bottom: 5px;">用户姓名:</div>
-								<div style="padding: 0 12px;">{{ruleForm.yonghuxingming}}</div>
-							</div>
+				<el-form-item label="用户姓名" prop="yonghuxingming">
+					<el-input v-model="ruleForm.yonghuxingming" placeholder="用户姓名" clearable></el-input>
 				</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item class="select" :label="type!='info'?'性别':''" prop="xingbie" :class="type=='info'?'textinfo':''">
-							<el-select v-if="type!='info'" v-model="ruleForm.xingbie" placeholder="请选择性别" :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :disabled="ro.xingbie">
-						<el-option
-							v-for="(item,index) in xingbieOptions"
-							v-bind:key="index"
-							:label="item"
-							:value="item">
-						</el-option>
+				<el-form-item label="性别" prop="xingbie">
+					<el-select v-model="ruleForm.xingbie" placeholder="请选择性别">
+						<el-option v-for="(item,index) in xingbieOptions" :key="index" :label="item" :value="item"></el-option>
 					</el-select>
-							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
-								<div style="font-weight: bold; margin-bottom: 5px;">性别:</div>
-								<div style="padding: 0 12px;">{{ruleForm.xingbie}}</div>
-							</div>
 				</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item class="input" :label="type!='info'?'手机':''" prop="shouji" :class="type=='info'?'textinfo':''">
-							<el-input v-if="type!='info'" v-model="ruleForm.shouji" placeholder="手机" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.shouji"></el-input>
-							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
-								<div style="font-weight: bold; margin-bottom: 5px;">手机:</div>
-								<div style="padding: 0 12px;">{{ruleForm.shouji}}</div>
-							</div>
+				<el-form-item label="手机" prop="shouji">
+					<el-input v-model="ruleForm.shouji" placeholder="手机" clearable></el-input>
 				</el-form-item>
-					</el-col>
-					<el-col :span="12">
-						<el-form-item class="input" :label="type!='info'?'身份证':''" prop="shenfenzheng" :class="type=='info'?'textinfo':''">
-							<el-input v-if="type!='info'" v-model="ruleForm.shenfenzheng" placeholder="身份证" clearable :style='{"width":"100%","padding":"0 12px","margin":"0 0 20px","borderColor":"#dcdfe6","outline":"none","fontSize":"14px","height":"40px","color":"#333","borderRadius":"4px","borderWidth":"1px"}' :readonly="ro.shenfenzheng"></el-input>
-							<div v-else style="font-size: 14px; line-height: 40px; color: #333;">
-								<div style="font-weight: bold; margin-bottom: 5px;">身份证:</div>
-								<div style="padding: 0 12px;">{{ruleForm.shenfenzheng}}</div>
-							</div>
+				<el-form-item label="身份证" prop="shenfenzheng">
+					<el-input v-model="ruleForm.shenfenzheng" placeholder="身份证" clearable></el-input>
 				</el-form-item>
-					</el-col>
-					<el-col :span="24">
-						<el-form-item class="upload" :label="type!='info'?'头像':''" prop="touxiang" :class="type=='info'?'textinfo':''">
-							<template v-if="type!='info' && !ro.touxiang">
-					<file-upload
-						tip="点击上传头像"
-						action="file/upload"
-									:limit="1"
-									:multiple="false"
-						:fileUrls="ruleForm.touxiang?ruleForm.touxiang:''"
-						@change="touxiangUploadChange"
-									:style='{"width":"100%","margin":"0 0 20px"}'
-					></file-upload>
-							</template>
-							<template v-if="type=='info'">
-								<div style="font-size: 14px; line-height: 40px; color: #333;">
-									<div style="font-weight: bold; margin-bottom: 5px;">头像:</div>
-									<div class="avatar-box" v-if="ruleForm.touxiang" style="display: flex; align-items: center;">
-										<el-image 
-											:src="ruleForm.touxiang && ruleForm.touxiang.substring(0,4) == 'http' ? 
-												(ruleForm.touxiang.split(',w').length > 1 ? ruleForm.touxiang : ruleForm.touxiang.split(',')[0]) : 
-												$base.url + ruleForm.touxiang.split(',')[0]"
-											style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-right: 20px;">
-										</el-image>
-									</div>
-									<div v-else>无头像</div>
-								</div>
-							</template>
+				<el-form-item label="头像" prop="touxiang">
+					<file-upload tip="点击上传头像" action="file/upload" :limit="1" :multiple="false" :fileUrls="ruleForm.touxiang?ruleForm.touxiang:''" @change="touxiangUploadChange"></file-upload>
 				</el-form-item>
-					</el-col>
-				</el-row>
-			<el-form-item class="btn">
-					<el-button v-if="type!='info'" type="primary" @click="onSubmit" style="border: none; cursor: pointer; padding: 0 20px; margin: 0 10px 0 0; color: #fff; border-radius: 4px; background: #409EFF; font-size: 14px; height: 40px;">
-					确定
-				</el-button>
-					<el-button v-if="type!='info'" @click="back()" style="border: 1px solid #dcdfe6; cursor: pointer; padding: 0 20px; margin: 0 10px 0 0; color: #333; border-radius: 4px; background: #fff; font-size: 14px; height: 40px;">
-					取消
-				</el-button>
-					<el-button v-if="type=='info'" @click="back()" style="border: none; cursor: pointer; padding: 0 20px; margin: 0 10px 0 0; color: #fff; border-radius: 4px; background: #909399; font-size: 14px; height: 40px;">
-					返回
-				</el-button>
-			</el-form-item>
-		</el-form>
+				<el-form-item>
+					<el-button type="primary" @click="onSubmit" style="border: none; cursor: pointer; padding: 0 20px; color: #fff; border-radius: 4px; background: #409EFF; font-size: 14px; height: 40px;">确定</el-button>
+					<el-button @click="back()" style="border: 1px solid #dcdfe6; cursor: pointer; padding: 0 20px; color: #333; border-radius: 4px; background: #fff; font-size: 14px; height: 40px;">取消</el-button>
+				</el-form-item>
+			</el-form>
 		</el-card>
 	</div>
 </template>
@@ -364,6 +298,32 @@
 			touxiangUploadChange(fileUrls) {
 				this.ruleForm.touxiang = fileUrls;
 			},
+			getAvatarUrl(touxiang) {
+				if (!touxiang) {
+					return '';
+				}
+				
+				// 多图只取第一个
+				let url = touxiang.split(',')[0];
+				
+				// 处理特定的错误头像路径
+				if (url.includes('1747475186509.jpg')) {
+					return 'http://localhost:8080/springboot0aqexa96/upload/yonghu_touxiang1.jpg';
+				}
+				
+				// 处理已经是完整URL的情况
+				if (url.substring(0, 4) === 'http') {
+					return url;
+				}
+				
+				// 处理包含upload路径的情况
+				if (url.includes('/upload/')) {
+					return 'http://localhost:8080/springboot0aqexa96' + url;
+				}
+				
+				// 默认情况，使用baseUrl拼接
+				return this.$base.url + url;
+			},
 		}
 	};
 </script>
@@ -442,4 +402,57 @@
   transform: translateY(-2px);
   opacity: 0.9;
 	}
+
+.info-view {
+  margin-bottom: 10px;
+}
+.info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.info-label {
+  width: 100px;
+  color: #666;
+  font-size: 15px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.info-value {
+  color: #333;
+  font-size: 15px;
+  margin-left: 16px;
+  word-break: break-all;
+}
+.el-form-item .el-input,
+.el-form-item .el-select {
+  width: 100%;
+}
+.el-form-item .el-input__inner {
+  padding-left: 0 !important;
+}
+::v-deep .el-input__inner, ::v-deep .el-select .el-input__inner {
+  padding-left: 0 !important;
+}
+::v-deep .el-form-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 22px;
+}
+::v-deep .el-form-item__label {
+  width: 100px;
+  text-align: right;
+  margin-right: 16px;
+  padding: 0;
+  line-height: 32px;
+}
+::v-deep .el-form-item__content {
+  margin-left: 0 !important;
+  flex: 1;
+  min-width: 0;
+}
+::v-deep .el-input__inner, 
+::v-deep .el-select .el-input__inner {
+  padding-left: 0 !important;
+}
 </style>

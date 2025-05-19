@@ -1,204 +1,176 @@
 <template>
-	<div class="main-content" :style='{"width":"100%","padding":"20px 30px","fontSize":"15px"}'>
+	<div class="main-content" :style='{"width":"100%","padding":"20px 30px","fontSize":"15px","background":"#f5f7fa","borderRadius":"8px"}'>
 		<!-- 列表页 -->
 		<template v-if="showFlag">
-			<el-form class="center-form-pv" :style='{"border":"20px solid #fff","margin":"0 0px 0px","flexWrap":"wrap","background":"#fff","display":"flex","width":"100%","justifyContent":"space-between"}' :inline="true" :model="searchForm">
-				<el-row :style='{"padding":"10px","alignItems":"center","flexWrap":"wrap","background":"none","display":"flex"}' >
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">订单编号</label>
-						<el-input v-model="searchForm.dingdanbianhao" placeholder="订单编号" @keydown.enter.native="search()" clearable></el-input>
-					</div>
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">汽车车牌</label>
-						<el-input v-model="searchForm.qichechepai" placeholder="汽车车牌" @keydown.enter.native="search()" clearable></el-input>
-					</div>
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">汽车类型</label>
-						<el-input v-model="searchForm.qicheleixing" placeholder="汽车类型" @keydown.enter.native="search()" clearable></el-input>
-					</div>
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">品牌</label>
-						<el-input v-model="searchForm.pinpai" placeholder="品牌" @keydown.enter.native="search()" clearable></el-input>
-					</div>
-					<div :style='{"alignItems":"center","margin":"0 10px 0 0","display":"flex"}'>
-						<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#666","display":"inline-block","lineHeight":"40px","fontSize":"inherit","fontWeight":"500","height":"40px"}' class="item-label">型号</label>
-						<el-input v-model="searchForm.xinghao" placeholder="型号" @keydown.enter.native="search()" clearable></el-input>
-					</div>
-					<el-button class="search" type="success" @click="search()">
-						<span class="icon iconfont icon-fangdajing02" :style='{"margin":"0 0px","fontSize":"16px","color":"#fff","height":"40px"}'></span>
-						查询
-					</el-button>
-				</el-row>
+			<!-- 搜索卡片 -->
+			<el-card shadow="hover" class="search-card" :style='{"border":"none","padding":"20px","margin":"0 0 25px","borderRadius":"15px","boxShadow":"0 4px 18px 0 rgba(0, 0, 0, 0.1)","background":"linear-gradient(to right, #ffffff, #f8f9fd)","width":"100%"}'>
+				<div class="search-title" style="margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ebeef5;">
+					<i class="el-icon-search" style="font-size: 18px; color: #409EFF; margin-right: 8px;"></i>
+					<span style="font-size: 16px; color: #333; font-weight: 500;">订单取消搜索</span>
+				</div>
+				<el-form class="center-form-pv" :style='{"border":"none","margin":"0","flexWrap":"wrap","background":"none","display":"flex","width":"100%","justifyContent":"flex-start"}' :inline="true" :model="searchForm">
+					<el-row :style='{"padding":"0","alignItems":"center","flexWrap":"wrap","background":"none","display":"flex","width":"100%"}' >
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-tickets" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#409EFF"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">订单编号</label>
+							<el-input v-model="searchForm.dingdanbianhao" size="medium" placeholder="请输入订单编号" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"150px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search"></el-input>
+						</div>
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-truck" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#67C23A"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">汽车车牌</label>
+							<el-input v-model="searchForm.qichechepai" size="medium" placeholder="请输入汽车车牌" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"150px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search"></el-input>
+						</div>
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-s-grid" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#E6A23C"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">汽车类型</label>
+							<el-input v-model="searchForm.qicheleixing" size="medium" placeholder="请输入汽车类型" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"150px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search"></el-input>
+						</div>
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-s-opportunity" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#E6A23C"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">品牌</label>
+							<el-input v-model="searchForm.pinpai" size="medium" placeholder="请输入品牌" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"150px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search"></el-input>
+						</div>
+						<div :style='{"alignItems":"center","margin":"0 20px 10px 0","background":"#f5f7fa","padding":"10px 15px","borderRadius":"8px","display":"flex","boxShadow":"0 2px 10px rgba(0, 0, 0, 0.05)","border":"1px solid #ebeef5"}'>
+							<i class="el-icon-s-flag" :style='{"margin":"0 5px 0 0","fontSize":"16px","color":"#409EFF"}'></i>
+							<label :style='{"margin":"0 10px 0 0","whiteSpace":"nowrap","color":"#606266","display":"inline-block","lineHeight":"32px","fontSize":"14px","fontWeight":"500","height":"32px"}' class="item-label">型号</label>
+							<el-input v-model="searchForm.xinghao" size="medium" placeholder="请输入型号" @keydown.enter.native="search()" clearable :style='{"borderRadius":"4px","border":"none","width":"150px","padding":"0 12px","backgroundColor":"transparent","boxShadow":"none","outline":"none","fontWeight":"normal"}' prefix-icon="el-icon-search"></el-input>
+						</div>
+						<el-button class="search-btn" type="primary" @click="search()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(64, 158, 255, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#409EFF","width":"auto","fontSize":"14px","height":"36px","fontWeight":"500"}'>
+							<i class="el-icon-search" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"36px"}'></i>
+							查询
+						</el-button>
+						<el-button class="reset-btn" @click="resetSearch()" :style='{"border":"1px solid #dcdfe6","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(0, 0, 0, 0.05)","margin":"0 10px 0 0","outline":"none","color":"#606266","borderRadius":"8px","background":"#fff","width":"auto","fontSize":"14px","height":"36px","fontWeight":"500"}'>
+							<i class="el-icon-refresh-right" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#606266","height":"36px"}'></i>
+							重置
+						</el-button>
+					</el-row>
+					<el-row class="actions" :style='{"padding":"10px 0 0","margin":"10px 0 0","borderTop":"1px dashed #ebeef5","flexWrap":"wrap","background":"none","display":"flex","width":"100%","justifyContent":"flex-start"}'>
+						<el-button class="add-btn" v-if="isAuth('dingdanquxiao','新增')" type="success" @click="addOrUpdateHandler()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(103, 194, 58, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#67C23A","width":"auto","fontSize":"14px","height":"36px","fontWeight":"500"}'>
+							<i class="el-icon-plus" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"36px"}'></i>
+							添加
+						</el-button>
+						<el-button class="del-btn" v-if="isAuth('dingdanquxiao','删除')" :disabled="dataListSelections.length?false:true" type="danger" @click="deleteHandler()" :style='{"border":"0","cursor":"pointer","padding":"0 15px","boxShadow":"0 5px 15px rgba(245, 108, 108, 0.2)","margin":"0 10px 0 0","outline":"none","color":"#fff","borderRadius":"8px","background":"#F56C6C","width":"auto","fontSize":"14px","height":"36px","fontWeight":"500"}'>
+							<i class="el-icon-delete" :style='{"margin":"0 5px 0 0","fontSize":"14px","color":"#fff","height":"36px"}'></i>
+							删除
+						</el-button>
+					</el-row>
+				</el-form>
+			</el-card>
 
-				<el-row class="actions" :style='{"padding":"10px","margin":"0px 0","flexWrap":"wrap","background":"none","display":"flex"}'>
-					<el-button class="add" v-if="isAuth('dingdanquxiao','新增')" type="success" @click="addOrUpdateHandler()">
-						<span class="icon iconfont icon-tianjia1" :style='{"margin":"0 2px","fontSize":"14px","color":"#fff","height":"34px"}'></span>
-						添加
-					</el-button>
-					<el-button class="del" v-if="isAuth('dingdanquxiao','删除')" :disabled="dataListSelections.length?false:true" type="danger" @click="deleteHandler()">
-						<span class="icon iconfont icon-shanchu6" :style='{"margin":"0 2px","fontSize":"14px","color":"#fff","height":"34px"}'></span>
-						删除
-					</el-button>
-
-
-				</el-row>
-			</el-form>
-			<div :style='{"border":"20px solid #fff","padding":"0","color":"#000","background":"#fff","borderWidth":"0 20px 20px","width":"100%","fontSize":"14px"}'>
-				<el-table class="tables"
-					:stripe='false'
-					:style='{"padding":"0px 0","borderColor":"#f6f6f6","borderRadius":"0","borderWidth":"0px 0 0 1px","background":"#fff","width":"100%","fontSize":"inherit","borderStyle":"solid"}' 
-					:border='true'
+			<!-- 列表卡片 -->
+			<el-card shadow="hover" :style='{"border":"none","padding":"20px","borderRadius":"15px","boxShadow":"0 4px 18px 0 rgba(0, 0, 0, 0.1)","background":"#fff","width":"100%"}'>
+				<div class="table-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #ebeef5;">
+					<div class="table-title" style="display: flex; align-items: center;">
+						<i class="el-icon-tickets" style="font-size: 18px; color: #67C23A; margin-right: 8px;"></i>
+						<span style="font-size: 16px; color: #333; font-weight: 500;">订单取消列表</span>
+						<span class="table-count" style="font-size: 13px; color: #909399; margin-left: 8px;">(共 {{totalPage}} 条记录)</span>
+					</div>
+					<div class="table-actions">
+						<el-tooltip content="刷新" placement="top">
+							<el-button size="mini" type="text" icon="el-icon-refresh" circle @click="search()" style="font-size: 16px; color: #909399;"></el-button>
+						</el-tooltip>
+						<el-tooltip content="密度" placement="top">
+							<el-dropdown trigger="click" @command="handleSizeChange">
+								<el-button size="mini" type="text" icon="el-icon-s-grid" circle style="font-size: 16px; color: #909399;"></el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item command="medium">默认</el-dropdown-item>
+									<el-dropdown-item command="small">紧凑</el-dropdown-item>
+									<el-dropdown-item command="mini">迷你</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						</el-tooltip>
+					</div>
+				</div>
+				<el-table
+					class="tables"
+					:stripe="true"
+					:size="tableSize"
+					:style="{padding:'0',borderColor:'#ebeef5',borderRadius:'12px',borderWidth:'1px',background:'#fff',width:'100%',fontSize:'12px',borderStyle:'solid',maxWidth:'100vw',tableLayout:'fixed'}"
+					:border="false"
 					v-if="isAuth('dingdanquxiao','查看')"
 					:data="dataList"
 					v-loading="dataListLoading"
-				@selection-change="selectionChangeHandler">
-					<el-table-column :resizable='true' type="selection" align="center" width="50"></el-table-column>
-					<el-table-column :resizable='true' :sortable='true' label="序号" type="index" width="50" />
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="dingdanbianhao"
-						label="订单编号">
+					@selection-change="selectionChangeHandler"
+					:header-cell-style="{'color':'#333', 'fontWeight':'500', 'fontSize':'12px', 'background-color':'#f5f7fa', 'padding':'4px 0', 'text-align': 'center'}"
+					:cell-style="{'color':'#333', 'fontSize':'12px', 'padding':'4px 0', 'text-align': 'center'}"
+				>
+					<el-table-column type="selection" align="center" width="30" />
+					<el-table-column label="序号" type="index" width="30" align="center" :index="indexMethod" />
+					<el-table-column prop="dingdanbianhao" label="订单编号" align="center" width="60" show-overflow-tooltip>
 						<template slot-scope="scope">
-							{{scope.row.dingdanbianhao}}
+							<span>{{scope.row.dingdanbianhao}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="qichechepai"
-						label="汽车车牌">
+					<el-table-column prop="qichechepai" label="车牌" align="center" width="50" show-overflow-tooltip>
 						<template slot-scope="scope">
-							{{scope.row.qichechepai}}
+							<span>{{scope.row.qichechepai}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="qicheleixing"
-						label="汽车类型">
+					<el-table-column prop="qicheleixing" label="类型" align="center" width="50" show-overflow-tooltip>
 						<template slot-scope="scope">
-							{{scope.row.qicheleixing}}
+							<el-tag size="mini" type="info" effect="light">{{scope.row.qicheleixing}}</el-tag>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="pinpai"
-						label="品牌">
+					<el-table-column prop="qichetupian" label="图" align="center" width="32">
 						<template slot-scope="scope">
-							{{scope.row.pinpai}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="xinghao"
-						label="型号">
-						<template slot-scope="scope">
-							{{scope.row.xinghao}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="nianfen"
-						label="年份">
-						<template slot-scope="scope">
-							{{scope.row.nianfen}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="rizujin"
-						label="日租金">
-						<template slot-scope="scope">
-							{{scope.row.rizujin}}
-						</template>
-					</el-table-column>
-					<el-table-column  :resizable='true' prop="qichetupian" width="200" label="汽车图片">
-						<template slot-scope="scope">
-							<div v-if="scope.row.qichetupian">
-								<img v-if="scope.row.qichetupian.substring(0,4)=='http'&&scope.row.qichetupian.split(',w').length>1" :src="scope.row.qichetupian" width="100" height="100" style="object-fit: cover" @click="imgPreView(scope.row.qichetupian)">
-								<img v-else-if="scope.row.qichetupian.substring(0,4)=='http'" :src="scope.row.qichetupian.split(',')[0]" width="100" height="100" style="object-fit: cover" @click="imgPreView(scope.row.qichetupian.split(',')[0])">
-								<img v-else :src="$base.url+scope.row.qichetupian.split(',')[0]" width="100" height="100" style="object-fit: cover" @click="imgPreView($base.url+scope.row.qichetupian.split(',')[0])">
+							<div v-if="scope.row.qichetupian" class="image-container">
+								<el-image
+									:src="scope.row.qichetupian && scope.row.qichetupian.substring(0,4)=='http' ? 
+										(scope.row.qichetupian.split(',w').length>1 ? scope.row.qichetupian : scope.row.qichetupian.split(',')[0]) 
+										: $base.url+scope.row.qichetupian.split(',')[0]"
+									style="width:20px;height:20px;border-radius:2px;object-fit:cover;"
+								></el-image>
 							</div>
-							<div v-else>无图片</div>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="zucheshijian"
-						label="租车时间">
+					<el-table-column prop="zucheshijian" label="租车" align="center" width="60" show-overflow-tooltip>
 						<template slot-scope="scope">
-							{{scope.row.zucheshijian}}
+							<span>{{scope.row.zucheshijian}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="quxiaoshijian"
-						label="取消时间">
+					<el-table-column prop="quxiaoshijian" label="取消" align="center" width="60" show-overflow-tooltip>
 						<template slot-scope="scope">
-							{{scope.row.quxiaoshijian}}
+							<span>{{scope.row.quxiaoshijian}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="quxiaoyuanyin"
-						label="取消原因">
+					<el-table-column prop="quxiaoyuanyin" label="原因" align="center" width="50" show-overflow-tooltip>
 						<template slot-scope="scope">
-							{{scope.row.quxiaoyuanyin}}
+							<span>{{scope.row.quxiaoyuanyin}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="cheshangzhanghao"
-						label="车商账号">
+					<el-table-column prop="yonghuzhanghao" label="账号" align="center" width="50" show-overflow-tooltip>
 						<template slot-scope="scope">
-							{{scope.row.cheshangzhanghao}}
+							<span>{{scope.row.yonghuzhanghao}}</span>
 						</template>
 					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="yonghuzhanghao"
-						label="用户账号">
+					<el-table-column label="操作" align="center" width="70">
 						<template slot-scope="scope">
-							{{scope.row.yonghuzhanghao}}
-						</template>
-					</el-table-column>
-					<el-table-column :resizable='true' :sortable='true'  
-						prop="yonghuxingming"
-						label="用户姓名">
-						<template slot-scope="scope">
-							{{scope.row.yonghuxingming}}
-						</template>
-					</el-table-column>
-					<el-table-column width="300" label="操作">
-						<template slot-scope="scope">
-							<el-button class="view" v-if=" isAuth('dingdanquxiao','查看')" type="success" @click="addOrUpdateHandler(scope.row.id,'info')">
-								<span class="icon iconfont icon-tianjia1" :style='{"margin":"0 0px","fontSize":"12px","color":"#fff","height":"40px"}'></span>
-								查看
-							</el-button>
-							<el-button class="edit" v-if=" isAuth('dingdanquxiao','修改') " type="success" @click="addOrUpdateHandler(scope.row.id)">
-								<span class="icon iconfont icon-xiugai17" :style='{"margin":"0 0px","fontSize":"14px","color":"#fff","height":"40px"}'></span>
-								修改
-							</el-button>
-
-
-
-
-							<el-button class="del" v-if="isAuth('dingdanquxiao','删除') " type="primary" @click="deleteHandler(scope.row.id )">
-								<span class="icon iconfont icon-shanchu6" :style='{"margin":"0 0px","fontSize":"14px","color":"#fff","height":"40px"}'></span>
-								删除
-							</el-button>
+							<el-button type="text" icon="el-icon-view" size="mini" v-if="isAuth('dingdanquxiao','查看')" @click="addOrUpdateHandler(scope.row.id,'info')" class="view-btn">查看</el-button>
+							<el-button type="text" icon="el-icon-edit" size="mini" v-if="isAuth('dingdanquxiao','修改')" @click="addOrUpdateHandler(scope.row.id)" class="edit-btn">修改</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
-			</div>
-			<el-pagination
-				@size-change="sizeChangeHandle"
-				@current-change="currentChangeHandle"
-				:current-page="pageIndex"
-				background
-				:page-sizes="[10, 50, 100, 200]"
-				:page-size="pageSize"
-				:layout="layouts.join()"
-				:total="totalPage"
-				prev-text="< "
-				next-text="> "
-				:hide-on-single-page="false"
-				:style='{"padding":"0 20px 20px","margin":"0px auto","whiteSpace":"nowrap","color":"#333","textAlign":"right","background":"#fff","width":"100%","fontSize":"inherit","position":"relative","fontWeight":"500"}'
-			></el-pagination>
+				<!-- 分页部分 -->
+				<el-pagination
+					@size-change="sizeChangeHandle"
+					@current-change="currentChangeHandle"
+					:current-page="pageIndex"
+					background
+					:page-sizes="[10, 20, 50, 100]"
+					:page-size="pageSize"
+					:layout="layouts.join()"
+					:total="totalPage"
+					prev-text="< "
+					next-text="> "
+					:hide-on-single-page="false"
+					class="custom-pagination"
+					style="padding: 15px 20px; margin: 20px auto; white-space: nowrap; color: #606266; text-align: center; background: #ffffff; border-radius: 8px; width: 98%; font-size: 13px; box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05); border: 1px solid #ebeef5;"
+				></el-pagination>
+			</el-card>
 		</template>
 		
 		<!-- 添加/修改页面  将父组件的search方法传递给子组件-->
 		<add-or-update v-if="addOrUpdateFlag" :parent="this" ref="addOrUpdate"></add-or-update>
-
-
-
-
 
 		<el-dialog title="预览图" :visible.sync="previewVisible" width="50%">
 			<img :src="previewImg" alt="" style="width: 100%;">
@@ -730,7 +702,7 @@
 		min-width: 35px;
 		height: 28px;
 	}
-	
+
 	.main-content .el-pagination /deep/ .btn-prev:disabled {
 		border: none;
 		cursor: not-allowed;
@@ -1042,4 +1014,50 @@
 		transition: .3s;
 	}
 
+	.main-content .search-card .el-card__body {
+		padding: 20px;
+	}
+	.main-content .operation-buttons .el-button {
+		margin: 0 5px;
+		padding: 4px 8px;
+		font-size: 13px;
+	}
+	.main-content .operation-buttons .el-button.view-btn:hover {
+		color: #409EFF;
+		background: rgba(64, 158, 255, 0.1);
+	}
+	.main-content .operation-buttons .el-button.edit-btn:hover {
+		color: #67C23A;
+		background: rgba(103, 194, 58, 0.1);
+	}
+	.main-content .operation-buttons .el-button.delete-btn:hover {
+		color: #F56C6C;
+		background: rgba(245, 108, 108, 0.1);
+	}
+	.main-content .image-container, .main-content .no-image {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+	}
+	.main-content .custom-pagination .el-pagination__total, 
+	.main-content .custom-pagination .el-pagination__jump, 
+	.main-content .custom-pagination .el-pagination__sizes {
+		margin-right: 10px;
+	}
+	.main-content .custom-pagination .btn-prev, 
+	.main-content .custom-pagination .btn-next {
+		border-radius: 4px;
+		font-weight: 600;
+	}
+	.main-content .custom-pagination .el-pager li {
+		border-radius: 4px;
+		margin: 0 2px;
+		font-weight: 500;
+	}
+	.main-content .custom-pagination .el-pager li.active {
+		background-color: #409EFF;
+		color: #ffffff;
+	}
 </style>
